@@ -19,18 +19,34 @@
    NumberFormat - output
    String - input, output
 */
-import java.text.NumberFormat;
+//import java.text.NumberFormat;
 import java.io.Serializable;
 import java.io.*;
 
 public class Item implements Serializable
 {
-	private String description, model, maker, serialNumber, pictureFileName;
-	private int quantity, yearPurchased;
-	private double price;
+	private String description, maker, serialNumber, pictureFileName;
+	//private String description, model, maker, serialNumber, pictureFileName;
+	//private int quantity, yearPurchased;
+	//private double price;
 	
-	NumberFormat money = NumberFormat.getCurrencyInstance();
+//	NumberFormat money = NumberFormat.getCurrencyInstance();
 	
+	public Item()
+	{
+		description = null;
+		maker = null;
+		serialNumber = null;
+		pictureFileName = null;
+	}
+	public Item(String descript, String make, String serial, String pictureFile)
+	{
+		description = descript;
+		maker = make;
+		serialNumber = serial;
+		pictureFileName = pictureFile;
+	}
+/*
 	public Item()
 	{
 		description = null;
@@ -78,6 +94,7 @@ public class Item implements Serializable
 		price = aPrice;
 		pictureFileName = picFile;
 	}
+	*/
 	public void setPic(String fileName)
 	{
 		pictureFileName = fileName;
@@ -94,14 +111,14 @@ public class Item implements Serializable
 	{
 		return description;
 	} 
-	public void setModel(String input)
+/*	public void setModel(String input)
 	{
 		model = input;
 	}
 	public String getModel()
 	{
 		return model;
-	}
+	}  */
 	public void setMake(String input)
 	{
 		maker = input;
@@ -118,7 +135,7 @@ public class Item implements Serializable
 	{
 		return serialNumber;
 	}
-	public void setQty(int QTY)
+/*	public void setQty(int QTY)
 	{
 		quantity = QTY;
 	} 
@@ -141,7 +158,7 @@ public class Item implements Serializable
 	public double getPrice()
 	{
 		return price;
-	}
+	} */
 	public boolean equals(Item other)
 	{
 		boolean flag;
@@ -151,7 +168,6 @@ public class Item implements Serializable
 //assumes that purchase price, and purchase date do not make an item unique
 		else if ((description.equalsIgnoreCase(other.description))&&
 		(serialNumber.equalsIgnoreCase(other.serialNumber))&&
-		(model.equalsIgnoreCase(other.model))&&
 		(maker.equalsIgnoreCase(other.maker)))
 			flag = true;
 		else
@@ -162,10 +178,7 @@ public class Item implements Serializable
 	}
 	public String toString()
 	{
-		return ("Description:\t"+description+"\nManufacturer:\t"+maker+
-		"\nModel Number:\t"+model+"\nSerial Number:\t"+serialNumber+
-		"\nYear Purchased:\t"+yearPurchased+"\nQuantity:\t"+quantity+
-		"\t\tPurchase Price:\t"+ money.format(price) +
-		"\nPicture file:\t" + pictureFileName + "\n");
+		return ("Title:\t"+description+"\nArtist:\t"+maker+"\nAccession Number:\t"
+				+serialNumber+ "\nPicture file:\t" + pictureFileName + "\n");
 	}
 }
