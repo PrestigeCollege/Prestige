@@ -141,7 +141,7 @@ public class ItemGui extends JFrame
 	private JButton first, second, third, fourth;
 	private JTextField description, make, model, serial, year, price, qty;
 	private JTextField descriptionText, makeText, modelText, serialText,
-					   yearText, priceText, qtyText, pictureText, totalValue;
+					   pictureText;
 	private JLabel imageLabel;
 	private LineBorder trim;
 	private JMenuBar menuBar;
@@ -197,7 +197,7 @@ public class ItemGui extends JFrame
 		JMenuItem fileExport = new JMenuItem("Export");
 		fileExport.addActionListener(new TextFileListener());
 		JMenuItem filePrinter = new JMenuItem("Print"); //TODO look up print interface for Java
-//TODO		filePrinter.addActionListener(new PrintFileListener());
+		filePrinter.addActionListener(new PrintFileListener());
 		file.add(fileOpen);
 		file.add(fileSave);
 		file.add(fileExport);
@@ -205,19 +205,16 @@ public class ItemGui extends JFrame
 		
 		edit = new JMenu("Edit");
 		JMenuItem editAdd = new JMenuItem("Create CR");
+		editAdd.addActionListener(new EditListener());
 //		editAdd.addActionListener(new EditListener());
-		JMenuItem editRemove = new JMenuItem("View CR");
-//TODO
-		editRemove.addActionListener(new EditListener()); //add case to EditListener for viewing CR
-/*		JMenuItem modify = new JMenuItem("Modify");
-		modify.addActionListener(new EditListener());
-		JMenuItem editClear = new JMenuItem("Clear All");
-		editClear.addActionListener(new EditListener());
-		editClear.setActionCommand("Clear");	*/
-		edit.add(editAdd); //create a report
-//		edit.add(modify);
-		edit.add(editRemove);
-//		edit.add(editClear);
+		JMenuItem editView = new JMenuItem("View CR");
+		editView.addActionListener(new EditListener());
+		JMenuItem editNew = new JMenuItem("Add Item"); //For testing
+		editNew.addActionListener(new EditListener()); //For testing
+		edit.add(editAdd);
+		edit.add(editView);
+		edit.add(editNew);
+		
 		
 		search = new JMenu("Search");
 		JMenuItem searchAll = new JMenuItem("Search");
@@ -271,39 +268,7 @@ public class ItemGui extends JFrame
 		//make.setBackground(Color.WHITE);
 		JLabel makeLabel = new JLabel("Artist:");
 		makeLabel.setFont(labelFont);
-		
-/*		model = new JTextField(20);
-		model.setEditable(false);
-		model.setBackground(Color.WHITE);
-		JLabel modelLabel = new JLabel("Model Number:");
-		modelLabel.setFont(labelFont);
-*/		
 
-/*		
-		year = new JTextField(20);
-		year.setEditable(false);
-		year.setBackground(Color.WHITE);
-		JLabel yearLabel = new JLabel("Year Acquired:");
-		yearLabel.setFont(labelFont);
-		
-		price = new JTextField(20);
-		price.setEditable(false);
-		price.setBackground(Color.WHITE);
-		JLabel priceLabel = new JLabel("Original Price:");
-		priceLabel.setFont(labelFont);
-		
-		qty = new JTextField(20);
-		qty.setEditable(false);
-		qty.setBackground(Color.WHITE);
-		JLabel qtyLabel = new JLabel("Available QTY:");
-		qtyLabel.setFont(labelFont);
-
-		totalValue = new JTextField(20);
-		totalValue.setEditable(false);
-		totalValue.setBackground(Color.WHITE);
-		JLabel totalLabel = new JLabel("Total Assets:");
-		totalLabel.setFont(labelFont);
-*/		
 		
 //adds lables and text fields to the JPanel.
 		textPanel.add(serialLabel);
@@ -313,19 +278,7 @@ public class ItemGui extends JFrame
 		textPanel.add(makeLabel);
 		textPanel.add(make);
 		
-/*
-		textPanel.add(modelLabel);
-		textPanel.add(model);
 
-		textPanel.add(yearLabel);
-		textPanel.add(year);
-		textPanel.add(priceLabel);
-		textPanel.add(price);
-		textPanel.add(qtyLabel);
-		textPanel.add(qty);
-		textPanel.add(totalLabel);
-		textPanel.add(totalValue);
-*/
 //add the image panel and text panel to the center panel
 		centerPanel = new JPanel();
 		centerPanel.setLayout(centerLayout);
@@ -341,13 +294,15 @@ public class ItemGui extends JFrame
 		
 //TODO mofify listener functions to support
 		first = new JButton("Search");
-		first.addActionListener(new MovementListener());
+//		first.addActionListener(new MovementListener());
+		first.addActionListener(new SearchListener());
 		second = new JButton("View Mark-Up");
 		second.addActionListener(new MovementListener());
 		third = new JButton("New CR");
-		third.addActionListener(new MovementListener());
+//		third.addActionListener(new MovementListener());
+		third.addActionListener(new AddItemListener() );
 		fourth = new JButton("Print");
-		fourth.addActionListener(new MovementListener());
+		fourth.addActionListener(new PrintFileListener());
 //add the buttons to the button panel		
 		buttonPanel.add(first);
 		buttonPanel.add(second);
@@ -389,6 +344,11 @@ to search before any data is loaded into the program's data structure.*/
 	{
 		JOptionPane.showMessageDialog(null, "You must open a file before "+
 		"attempting this operation.\n","Illegal Operation", 
+		JOptionPane.ERROR_MESSAGE);
+	}
+	private void alert(String arg)
+	{
+		JOptionPane.showMessageDialog(null, arg,"Illegal Operation", 
 		JOptionPane.ERROR_MESSAGE);
 	}
 	
@@ -439,25 +399,28 @@ to search before any data is loaded into the program's data structure.*/
 	{
 /**Creates a JFrame for modification of existing Items.  JFrame displays
  *blank textfields for user data entry.  Information is passed to the
- *try/catch blocks for analysis and verification before being accepted.*/	
+ *try/catch blocks for analysis and verification before being accepted.*/
+		int rows = 5;
+		int columns =2;
+		
 		inputWindow = new JFrame("Add an Item");
-//		inputWindow.setSize(SMALL_WIDTH, SMALL_HEIGHT);
-		inputWindow.setResizable(true);
-		inputWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		inputWindow.setSize(SMALL_WIDTH, SMALL_HEIGHT);
+		inputWindow.setResizable(false);
+		inputWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		inputWindow.setLocationRelativeTo(null);
 		inputWindow.setVisible(true);
 		
 //Specify a layout for the input window and apply it to the window
-		GridLayout inputWindowLayout = new GridLayout(2,2,layoutGap, layoutGap);
+		GridLayout inputWindowLayout = new GridLayout(rows, columns,layoutGap, layoutGap);
 		inputWindow.setLayout(inputWindowLayout);
-		
+//TODO Assign Fields to panels, pannels to JFrame		
 //Create two new JPanels to hold the text and image fields
 		JPanel inputPanel = new JPanel();
 		JPanel imagePanel = new JPanel(); //must be markable
 		
 //create a label to identity data fields
-		JLabel descriptionLabel = new JLabel("Accession Number");
-		descriptionText = new JTextField(30); //TODO must load from current item
+		JLabel serialLabel = new JLabel("Accession Number");
+		serialText = new JTextField(30); //TODO must load from current item
 		
 		JLabel makeLabel = new JLabel("Title");
 		makeText = new JTextField(30);
@@ -467,26 +430,10 @@ to search before any data is loaded into the program's data structure.*/
 		
 		JLabel pictureLabel = new JLabel("Enter the picture file's name");
 		pictureText = new JTextField(30);
+//		JButton addFileName = new JButton("Choose File");
+//		addFileName.addActionListener(new AddItemListner());
 		
-/*		Not needed this project		
-		JLabel serialLabel = new JLabel("Enter the Item's serial number");
-		serialText = new JTextField(30);
-		
-		JLabel yearLabel = new JLabel("Enter the year Item purchased");
-		yearText = new JTextField(30);
-		
-		JLabel priceLabel = new JLabel("Enter the Item's purchase price");
-		priceText = new JTextField(30);
-		
-		JLabel pictureLabel = new JLabel("Enter the picture file's name");
-		pictureText = new JTextField(30);
-		
-		JLabel qtyLabel = new JLabel("Enter the Item's quantity");
-		qtyText = new JTextField(30);
-*/
-//create a submit and a cancel button.
-		JButton markUp = new JButton("Mark Up");
-		markUp.addActionListener(new AddItemListener());
+		JTextField blankField = new JTextField(0);
 		
 		JButton addButton = new JButton("Submit");
 		addButton.addActionListener(new AddItemListener());
@@ -494,113 +441,23 @@ to search before any data is loaded into the program's data structure.*/
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new AddItemListener());
 		
-		inputWindow.add(descriptionLabel);
-		inputWindow.add(descriptionText);
-		inputWindow.add(makeLabel);
-		inputWindow.add(makeText);
-		inputWindow.add(modelLabel);
-		inputWindow.add(modelText);
-/*		inputWindow.add(serialLabel);
-		inputWindow.add(serialText);
-		inputWindow.add(yearLabel);
-		inputWindow.add(yearText);
-		inputWindow.add(priceLabel);
-		inputWindow.add(priceText);
-		inputWindow.add(qtyLabel);
-		inputWindow.add(qtyText);
-*/		inputWindow.add(pictureLabel);
-		inputWindow.add(pictureText);
-		inputWindow.add(markUp);
-		inputWindow.add(addButton);
-		inputWindow.add(cancelButton);
-//		inputWindow.addWindowListener();  //what is this doing?
-		
-
-	}
-	/**Creates a JFrame for modification of existing Items.  JFrame loads the
-	 *data of the Item displayed in the main window.  User is then able to modify
-	 *the existing Item's variables.  Modifications are passed to the try/catch
-	 *blocks for analysis and verification before being accepted.*/	
-/*	
-	private void modifyItem()
-	{	
-
-		inputWindow = new JFrame("Modify Existing Item");
-		inputWindow.setSize(SMALL_WIDTH, SMALL_HEIGHT);
-		inputWindow.setResizable(false);
-		inputWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		
-		GridLayout inputWindowLayout = new GridLayout(9 ,2, 5, 5);
-		inputWindow.setLayout(inputWindowLayout);
-//create a label and a text field, call up the variables of Item displayed	
-		
-		//Description will be the Accession Number for this project
-		JLabel descriptionLabel = new JLabel("Update the Item's description");
-		descriptionText = new JTextField(30);
-		descriptionText.setText(currentItem.getDescription());
-		
-		//Make will be the 
-		JLabel makeLabel = new JLabel("Update the Item's manufacturer");
-		makeText = new JTextField(30);
-		makeText.setText(currentItem.getMake());
-		
-		JLabel modelLabel = new JLabel("Update the Item's model");
-		modelText = new JTextField(30);
-		modelText.setText(currentItem.getModel());
-		
-		JLabel serialLabel = new JLabel("Update the Item's serial number");
-		serialText = new JTextField(30);
-		serialText.setText(currentItem.getSerial());
-		
-		JLabel yearLabel = new JLabel("Enter the year Item purchased");
-		yearText = new JTextField(30);
-		yearText.setText(Integer.toString(currentItem.getDate()));
-		
-		JLabel priceLabel = new JLabel("Enter the Item's purchase price");
-		priceText = new JTextField(30);
-		priceText.setText(Double.toString(currentItem.getPrice()));
-		
-		JLabel pictureLabel = new JLabel("Enter the picture file's name");
-		pictureText = new JTextField(30);
-		pictureText.setText(currentItem.getPic());
-		
-		JLabel qtyLabel = new JLabel("Enter the Item's quantity");
-		qtyText = new JTextField(30);
-		qtyText.setText(Integer.toString(currentItem.getQty()));
-//create a submit and a cancel button.		
-		JButton addButton = new JButton("Submit");
-		addButton.addActionListener(new AddItemListener());
-		
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(new AddItemListener());
-//add all the textfields and lables to the JFrame	
-		inputWindow.add(descriptionLabel);
-		inputWindow.add(descriptionText);
-		inputWindow.add(makeLabel);
-		inputWindow.add(makeText);
-		inputWindow.add(modelLabel);
-		inputWindow.add(modelText);
 		inputWindow.add(serialLabel);
 		inputWindow.add(serialText);
-		inputWindow.add(yearLabel);
-		inputWindow.add(yearText);
-		inputWindow.add(priceLabel);
-		inputWindow.add(priceText);
-		inputWindow.add(qtyLabel);
-		inputWindow.add(qtyText);
+		inputWindow.add(makeLabel);
+		inputWindow.add(makeText);
+		inputWindow.add(modelLabel);
+		inputWindow.add(modelText);
 		inputWindow.add(pictureLabel);
 		inputWindow.add(pictureText);
 		inputWindow.add(addButton);
 		inputWindow.add(cancelButton);
-		
-		inputWindow.setLocationRelativeTo(null);
-		inputWindow.setVisible(true);
-//boolean controls whether Item is a modification or an addition to the
-//PropertyList		
-		modifyNotAdd = true;
-	}
+	}//end of createItem()
 	
-*/
+	/**Creates a JFrame for modification of existing Items.  JFrame loads the
+	 *data of the Item displayed in the main window.  User is then able to modify
+	 *the existing Item's variables.  Modifications are passed to the try/catch
+	 *blocks for analysis and verification before being accepted.*/	
+
 /**Updates JFrame display with new input data.  Parameter location refers to
  * 	an element number in data structure.
  */
@@ -612,27 +469,12 @@ to search before any data is loaded into the program's data structure.*/
 
 		description.setText(currentItem.getDescription());
 		make.setText(currentItem.getMake());
-//		model.setText(currentItem.getModel());
 		serial.setText(currentItem.getSerial());
-/*		year.setText(Integer.toString(currentItem.getDate()));
-		price.setText(money.format(currentItem.getPrice()));
-		qty.setText(Integer.toString(currentItem.getQty()));  */
 		setImage(currentItem.getPic());
 	}
 	
 //TODO investigate why string being passed as parameter.
 	//Declare wipe as local variable?  Do we still need this function?
-	private void clearJFrame(String wipe)
-	{
-//this method is used for clearing JFrame text fields of latent data.
-		description.setText(wipe);
-		make.setText(wipe);
-		model.setText(wipe);
-		serial.setText(wipe);
-		year.setText(wipe);
-		price.setText(wipe);
-		qty.setText(wipe);
-	}
 	
 /**  Prints selected data to a text file when user calls registered events.
  * UserResponse is the filename to be created.  Action only performed if the
@@ -705,7 +547,6 @@ to search before any data is loaded into the program's data structure.*/
 				localList.readFromFile(name.getName());	
 				updateJFrame(0);
 				location = 0;
-//				totalValue.setText(money.format(localList.getTotalValue()));
 				}
 			}//end outer if 
 	
@@ -780,82 +621,39 @@ to search before any data is loaded into the program's data structure.*/
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			int reply; //used for confirming deletions
 			String junk = e.getActionCommand();
 			
 			if(localList != null) //if data structure exists already
 			{
-				if (junk.equals("Add"))
-					createItem();
-
-	/*			else if (junk.equals("Remove"))
-				{					
-					String query = setQuery();
-					int temp = -1;
-					
-					if((query != null)&&(!query.equals("")))
-						temp = localList.searchDataBase(query);
-						
-					if (temp>=0)
-					{
-						
-						updateJFrame(temp);	
-				//confirmation of deletion	
-						reply = confirmDeletion();
-						
-						if (reply == JOptionPane.YES_OPTION)
-						{
-							localList.removeFromDataBase(temp);
-							
-							int newSize = localList.getDataBaseSize();
-							
-							if((newSize>1)&&(temp!=0))
-								updateJFrame(newSize - 1);
-				//updates the JFrame following the deletion
-							else if ((temp == 0)&&(newSize>1))
-								updateJFrame(temp + 1);
-							else if(newSize == 1)
-								updateJFrame(0); //update to remaining at 0
-							else							
-							{//assumes 0 is last remaining element
-								localList.clearDataBase();
-								clearJFrame(" ");
-							}
-							totalValue.setText
-									(money.format(localList.getTotalValue()));						
-						}				
-					}
-					else
-						JOptionPane.showMessageDialog(null, "Item was not "+
-						"found", "Search Result", JOptionPane.PLAIN_MESSAGE);
-				}*/
-/*				else if (junk.equals("Clear"))
+				switch (junk)
 				{
-		//requests confirmation before proceeding with deletion
-					reply = confirmDeletion();
-		//if user replies yes to the previous JOptionPane			
-					if (reply == JOptionPane.YES_OPTION)
-					{						
-						localList.clearDataBase();
-						clearJFrame(" ");
-						totalValue.setText(" ");
-					}
-				}
-				else//Modify event
-				{
-					System.out.println("Modify" + junk);
-					modifyItem();
-				}//end if  */
+					case "Create CR":
+						//stub until defined
+						JOptionPane.showMessageDialog(null,"Create CR not defined yet.",
+						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
+						break;
+					case "View CR":
+						JOptionPane.showMessageDialog(null,"View CR not defined yet.",
+						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
+						break;
+					case "Add Item":
+						createItem();
+						break;
+					default:
+						JOptionPane.showMessageDialog(null,"Something Unexpected Happened",
+						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
+				}//end switch
 			}
-			else
+//This condition creates a new data structure to hold the created item, then creates the item.
+			else 
 			{
-				if (junk.equals("Add"))
+				if (junk.equals("Add Item"))
 				{
 					localList = new PropertyList();
 					createItem();
 				}
 				else
-					alert();
+					alert("I'm falling through");
 			}	
 		}
 	}//end private inner class EditListener	
@@ -958,7 +756,7 @@ to search before any data is loaded into the program's data structure.*/
 		{
 			String junk = e.getActionCommand();
 			
-			if (junk.equals("Submit"))
+			if (junk.equals("Add Item"))
 			{
 //set the user's input as the textfield's text		
 				serialText.setText(serialText.getText());
@@ -966,15 +764,7 @@ to search before any data is loaded into the program's data structure.*/
 				makeText.setText(makeText.getText());
 				pictureText.setText(pictureText.getText().toLowerCase());
 				
-	/*			descriptionText.setText(descriptionText.getText());				  
-				makeText.setText(makeText.getText());
-				modelText.setText(modelText.getText());
-				serialText.setText(serialText.getText());
-				yearText.setText(yearText.getText());
-				priceText.setText(priceText.getText());
-				qtyText.setText(qtyText.getText());
-				pictureText.setText(pictureText.getText().toLowerCase());
- */
+ 
 //adjusting indent for this section because of long line entries
 		String temp, secondAttempt, fileExtension;
 //		int anInt;
@@ -1040,30 +830,6 @@ JFrame will update to display the recent addition.
 		else
 			itemMake = secondAttempt;
 	}
-/*	try
-	{
-		temp = modelText.getText();
-		if((temp == null)||(temp.equals("")))
-			throw new InvalidInputException("Model may not be "+
-			" blank. If none or unknown, state \"none\"");
-		else
-			itemModel = temp;
-	}
-	catch(InvalidInputException itemException)
-	{
-		secondAttempt = JOptionPane.showInputDialog(null, 
-		itemException.getMessage(),"Invalid Input", 
-		JOptionPane.PLAIN_MESSAGE);
-		
-		if((secondAttempt == null)||(secondAttempt.equals("")))
-		{
-			failure();
-			inputWindow.dispose();
-			acceptableInput = false;
-		}
-		else
-			itemModel = secondAttempt;		
-	} */
 	try
 	{
 		temp = serialText.getText();
@@ -1088,93 +854,6 @@ JFrame will update to display the recent addition.
 		else
 			itemSerial = secondAttempt;
 	}
-/*	try
-	{
-		if ((yearText.getText() == null)||(yearText.getText().equals("")))
-			throw new InvalidInputException("Purchase field may not be"+
-			" blank.");
-		else
-			anInt = Integer.parseInt(yearText.getText());
-			
-		if((anInt <1800)||(anInt>2012))
-			throw new InvalidInputException("Date of purchase is"+
-			" outside the acceptable range.");
-		else
-			itemYear = anInt;		
-	}
-	catch(InvalidInputException itemException)
-	{
-		secondAttempt = JOptionPane.showInputDialog(null, 
-		itemException.getMessage(),"Invalid Input", 
-		JOptionPane.PLAIN_MESSAGE);
-		
-		if((secondAttempt == null)||(secondAttempt.equals(""))||
-		(Integer.parseInt(secondAttempt)<1800)||
-		(Integer.parseInt(secondAttempt)<2012))
-		{
-			failure();
-			inputWindow.dispose();
-			acceptableInput = false;
-		}
-		else
-			itemYear = Integer.parseInt(secondAttempt);		
-	}  */
-/*	try
-	{
-		if((priceText.getText() == null)||(priceText.getText().equals("")))
-			throw new InvalidInputException("Price may not be blank.");
-		else
-			aDouble = Double.parseDouble(priceText.getText());
-			
-		if(aDouble<0)
-			throw new InvalidInputException("Purchase price "+
-			"may not be less than zero.");
-		else
-			itemPrice = aDouble;		
-	}
-	catch(InvalidInputException itemException)
-	{
-		secondAttempt = JOptionPane.showInputDialog(null, 
-		itemException.getMessage(),"Invalid Input", 
-		JOptionPane.PLAIN_MESSAGE);
-		
-		if(Double.parseDouble(secondAttempt)<0)
-		{
-			failure();
-			inputWindow.dispose();
-			acceptableInput = false;
-		}
-		else
-			itemPrice = Double.parseDouble(secondAttempt);
-	}	*/
-/*	try
-	{
-		if((qtyText.getText() == null)||(qtyText.getText().equals("")))
-			throw new InvalidInputException("Quantity may not be blank.");
-		else
-			anInt = Integer.parseInt(qtyText.getText());
-			
-		if(anInt<0)
-			throw new InvalidInputException("Quantity may not be negative.");
-		else
-			itemQty = anInt;
-	}//last try
-	catch(InvalidInputException itemException)
-	{
-		secondAttempt = JOptionPane.showInputDialog(null, 
-		itemException.getMessage(),"Invalid Input", 
-		JOptionPane.PLAIN_MESSAGE);
-		
-		if((secondAttempt == null)||(secondAttempt.equals(""))||
-		(Integer.parseInt(secondAttempt)<0))
-		{
-			failure();
-			inputWindow.dispose();
-			acceptableInput = false;
-		}
-		else
-			itemQty = Integer.parseInt(secondAttempt);
-	} */
 	try
 	{
 		temp = pictureText.getText();
@@ -1234,21 +913,13 @@ JFrame will update to display the recent addition.
 	if((acceptableInput)&&(modifyNotAdd == false))
 	{
 		Item newItem = new Item(itemDescr, itemMake, itemSerial,
-		itemPic);
-		//itemModel,itemQty,itemYear, itemPrice, 
+		itemPic); 
 		
 		localList.addToDataBase(newItem);
-	//	totalValue.setText(money.format(localList.getTotalValue()));
+
 		updateJFrame(localList.getDataBaseSize()-1);
 	}
-/*	if((acceptableInput)&&(modifyNotAdd))
-	{
-		currentItem.updateAll(itemDescr, itemModel, itemMake, itemSerial,
-		itemQty,itemYear, itemPrice, itemPic);
-		modifyNotAdd = false;
-		totalValue.setText(money.format(localList.getTotalValue()));
-		updateJFrame(location);
-	} */
+
 	
 	inputWindow.dispose();
 	
