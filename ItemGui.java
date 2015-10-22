@@ -362,6 +362,12 @@ to search before any data is loaded into the program's data structure.*/
 		JOptionPane.showMessageDialog(null, arg,"Illegal Operation", 
 		JOptionPane.ERROR_MESSAGE);
 	}
+	private void alert(String arg, String arg2)
+	{
+		//this is just here to force a commit from Git
+		JOptionPane.showMessageDialog(null, arg, arg2, 
+		JOptionPane.ERROR_MESSAGE);
+	}
 	
 /*Method invoked in response to an exception being thrown and being handled
  * in one of the catch blocks.  Presents a JOptionPane dialog window. Handled by
