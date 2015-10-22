@@ -114,12 +114,12 @@ public class PropertyList implements Serializable
 	//search by description, serialnumber, make and model
 		int itemLocation = -1, i = 0;
 		
-		for(Item element : dataBase) 
+		for(Item element : dataBase)  //getAccessionNumber()
 		{
-			if (query.equalsIgnoreCase(element.getDescription())||
-				query.equalsIgnoreCase(element.getSerial())||
+			if (query.equalsIgnoreCase(element.getTitle())||  
+				query.equalsIgnoreCase(element.getAccessionNumber())||
 				//query.equalsIgnoreCase(element.getModel())||  Not needed
-				query.equalsIgnoreCase(element.getMake()))
+				query.equalsIgnoreCase(element.getArtist()))
 			{
 				itemLocation = i;
 				break;
@@ -150,9 +150,9 @@ public class PropertyList implements Serializable
 			{
 //Item's toString didn't preserve formatting when passed through PrintWriter
 				textOutput.println("Item Number " +item);
-				textOutput.println("Serial Number\t"+element.getSerial());
-				textOutput.println("Title\t"+element.getDescription());
-				textOutput.println("Artist\t"+element.getMake());
+				textOutput.println("Serial Number\t"+element.getAccessionNumber());
+				textOutput.println("Title\t"+element.getTitle());
+				textOutput.println("Artist\t"+element.getArtist());
 /*				textOutput.println("Model Number\t"+element.getModel());
 				textOutput.println("Purchase Date\t"+element.getDate());
 				textOutput.println("Purchase Price\t"+
