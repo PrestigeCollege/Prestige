@@ -129,8 +129,6 @@ import javax.swing.border.LineBorder;
 import java.text.NumberFormat;
 import java.io.*;
 
-
-
 public class ItemGui extends JFrame
 {
 	public static void main(String [] args)
@@ -160,14 +158,12 @@ public class ItemGui extends JFrame
 	private boolean modifyNotAdd = false; //not sure that this is required any more
 	
 	public int layoutGap = 10; //variable for adjusting gap settings in Gridlayout
-	public String userName; //user's login name for timestamp purposes
-	public boolean loggedIn = false; //determines whether or not a user is logged in
 
 //	NumberFormat money = NumberFormat.getCurrencyInstance();
 	
 	public ItemGui()
 	{
-		super("Condition Reports");
+		super("Inventory Management");
 		setSize(WIDTH, HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true); //allows window to be resized
@@ -194,8 +190,6 @@ public class ItemGui extends JFrame
 //Create menuBars, menus and menu Items, attach ActionListeners to each
 //menuItem and add the manuItems to the menu
 		file = new JMenu("File");
-		JMenuItem fileLogin = new JMenuItem("Login");
-		fileLogin.addActionListener(new LoginListener());
 		JMenuItem fileOpen = new JMenuItem("Open");
 		fileOpen.addActionListener(new OpenFileListener());
 		JMenuItem fileSave = new JMenuItem("Save");
@@ -203,12 +197,7 @@ public class ItemGui extends JFrame
 		JMenuItem fileExport = new JMenuItem("Export");
 		fileExport.addActionListener(new TextFileListener());
 		JMenuItem filePrinter = new JMenuItem("Print"); //TODO look up print interface for Java
-<<<<<<< HEAD
-//TODO		filePrinter.addActionListener(new PrintFileListener());
-		file.add(fileLogin);
-=======
 		filePrinter.addActionListener(new PrintFileListener());
->>>>>>> origin/development
 		file.add(fileOpen);
 		file.add(fileSave);
 		file.add(fileExport);
@@ -362,12 +351,6 @@ to search before any data is loaded into the program's data structure.*/
 		JOptionPane.showMessageDialog(null, arg,"Illegal Operation", 
 		JOptionPane.ERROR_MESSAGE);
 	}
-	private void alert(String arg, String arg2)
-	{
-		//this is just here to force a commit from Git
-		JOptionPane.showMessageDialog(null, arg, arg2, 
-		JOptionPane.ERROR_MESSAGE);
-	}
 	
 /*Method invoked in response to an exception being thrown and being handled
  * in one of the catch blocks.  Presents a JOptionPane dialog window. Handled by
@@ -484,9 +467,9 @@ to search before any data is loaded into the program's data structure.*/
 
 		currentItem = localList.getItem(location);
 
-		description.setText(currentItem.getDescription());
-		make.setText(currentItem.getMake());
-		serial.setText(currentItem.getSerial());
+		description.setText(currentItem.getTitle());
+		make.setText(currentItem.getArtist());
+		serial.setText(currentItem.getAccessionNumber());
 		setImage(currentItem.getPic());
 	}
 	
@@ -512,41 +495,7 @@ to search before any data is loaded into the program's data structure.*/
 				alert();
 		}
 	}//end private inner class TextFileListener
-/**  LoginListener allows a user to authenticate before interacting with
- *  the Condition Reports system. Use of other functions will be
- *  disabled until a user has logged in.
- * @author Jonathan
- */
-	private class LoginListener extends JFrame implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
-			//username and password login options (username is global)
-			userName = JOptionPane.showInputDialog(new JFrame(), "Username:");
-			String password = JOptionPane.showInputDialog(new JFrame(), "Password:");
-		
-			//username and password validity check
-			if(userName.length() < 3)
-			{
-				JOptionPane.showMessageDialog(this, "Username was missing or too short. Please try again.", "Error",
-				        JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			else if(password.length() < 3)
-			{
-				JOptionPane.showMessageDialog(this, "Password was missing or too short. Please try again.", "Error",
-				        JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			else
-			{
-				loggedIn = true; //set user to logged in state
-				return;
-			}
-		}
-		
-	}
-/**  OpenFileListener launches a JFileChooser window allowing user to navigate
+/**  OpenFileListener launches a JFileChooser window allowin user to navigate
  *  to the file to load.  Filename and path returned to the calling object.
  *  Filename and path are validated to prevent blank and / or empty values.
  *  Objects from file are loaded into the data structure for manipulation.
