@@ -27,7 +27,7 @@
 import java.util.ArrayList;
 import java.io.*;
 import java.util.*;
-//import java.text.NumberFormat;
+import java.text.NumberFormat;
 import java.io.Serializable;
 
 public class PropertyList implements Serializable
@@ -38,7 +38,7 @@ public class PropertyList implements Serializable
 	private ObjectOutputStream output;
 	private ObjectInputStream inputStream = null;
 	
-//	NumberFormat money = NumberFormat.getCurrencyInstance();
+	NumberFormat money = NumberFormat.getCurrencyInstance();
 	
 	public PropertyList()
 	{
@@ -86,8 +86,7 @@ public class PropertyList implements Serializable
 //	{
 //		return anItem;
 //	}
-/*	Not needed for this project.
-	public double getTotalValue()
+/*	public double getTotalValue()
 	{
 		double totalValue = 0;
 	//method to calculate the current value of all assets	
@@ -101,25 +100,39 @@ public class PropertyList implements Serializable
 			
 		}
 		return totalValue;	
-	}*/
+	} */
 	
-/*  Searches database from beginning to end using linear search.  Users may
- * search by serial, description, make, or model.
- * 	
- */
-	
-//TODO assess best search algorithm given the type of data, sorted, size, etc	
 	public int searchDataBase(String query)
 	{
 	//search by description, serialnumber, make and model
 		int itemLocation = -1, i = 0;
 		
-		for(Item element : dataBase)  //getAccessionNumber()
+		for(Item element : dataBase)
 		{
-			if (query.equalsIgnoreCase(element.getTitle())||  
-				query.equalsIgnoreCase(element.getAccessionNumber())||
-				//query.equalsIgnoreCase(element.getModel())||  Not needed
-				query.equalsIgnoreCase(element.getArtist()))
+			if (query.equalsIgnoreCase(element.getAccessionNumber())||
+				query.equalsIgnoreCase(element.getArtist())||
+//				query.equalsIgnoreCase(element.getModel())||
+				query.equalsIgnoreCase(element.getTitle()))
+			{
+				itemLocation = i;
+				break;
+			}
+			i++;	
+		}
+		//if query not found, a negative returned value can be filtered out
+		return itemLocation;	
+	}	
+/*	public int searchDataBase(String query)
+	{
+	//search by description, serialnumber, make and model
+		int itemLocation = -1, i = 0;
+		
+		for(Item element : dataBase)
+		{
+			if (query.equalsIgnoreCase(element.getDescription())||
+				query.equalsIgnoreCase(element.getSerial())||
+				query.equalsIgnoreCase(element.getModel())||
+				query.equalsIgnoreCase(element.getMake()))
 			{
 				itemLocation = i;
 				break;
@@ -129,9 +142,7 @@ public class PropertyList implements Serializable
 		//if query not found, a negative returned value can be filtered out
 		return itemLocation;	
 	}
-/*  Outputs the summary records of all items in the database. */
-	
-	public void listAllRecords()
+*/	public void listAllRecords()
 	{
 		for(int i = 0; i < dataBase.size(); i++)
 		{
@@ -162,8 +173,8 @@ public class PropertyList implements Serializable
 				textOutput.println("");
 				item++;
 			}
-			textOutput.println("Inventory Items:\t" + item);
-				
+//			textOutput.println("Total Inventory:\t"+
+//											 money.format(getTotalValue()));
 			textOutput.close();
 			System.out.println("File " + fileName + " created.");
 		}
@@ -195,10 +206,6 @@ public class PropertyList implements Serializable
 			System.err.println("(IO)Error creating binary file " + fileName);
 		}	
 	}
-/* Reads input file provided as a string.  Read file contents into data structure.
- * 	
- */
-	
 	public void readFromFile(String fileName)
 	{
 		try

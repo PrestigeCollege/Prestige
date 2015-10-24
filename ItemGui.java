@@ -462,14 +462,14 @@ to search before any data is loaded into the program's data structure.*/
  * 	an element number in data structure.
  */
 	
-	private void updateJFrame(int location)
+	private void updateJFrame(int arg)
 	{
+		System.out.println("value of element item in update JFrame: " + arg);
+		currentItem = localList.getItem(arg);
 
-		currentItem = localList.getItem(location);
-
-		description.setText(currentItem.getTitle());
-		make.setText(currentItem.getArtist());
 		serial.setText(currentItem.getAccessionNumber());
+		make.setText(currentItem.getArtist());
+		description.setText(currentItem.getTitle());
 		setImage(currentItem.getPic());
 	}
 	
@@ -625,7 +625,7 @@ to search before any data is loaded into the program's data structure.*/
 			
 			if(localList != null) //if data structure exists already
 			{
-				switch (junk)
+				switch(junk)
 				{
 					case "Create CR":
 						//stub until defined
