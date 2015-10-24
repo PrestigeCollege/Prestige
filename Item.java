@@ -3,8 +3,11 @@
 	Programmer:			Alexander Fairhurst
 	Date Last Modified: 10/20/2015	 	
 */
+import java.io.Serializable;
 
-public class Item 
+
+
+public class Item implements Serializable
 {
 	public String accessionNumber, artist, title, pictureFileName;
 	
