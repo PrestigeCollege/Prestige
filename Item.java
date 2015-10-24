@@ -6,7 +6,7 @@
 
 public class Item 
 {
-	private String accessionNumber, artist, title, pictureFileName;
+	public String accessionNumber, artist, title, pictureFileName;
 	
 	public Item()
 	{
@@ -22,6 +22,13 @@ public class Item
 		artist = maker;
 		title = description;
 		pictureFileName = pictureFile;
+	}
+	public Item(Item arg)
+	{
+		accessionNumber = arg.getAccessionNumber();
+		artist = arg.getArtist();
+		title = arg.getTitle();
+		pictureFileName = arg.getPic();
 	}
 	
 	public void setAccessionNumber(String accessNum)
@@ -67,5 +74,5 @@ public class Item
 	public String toString()
 	{
 		return ("Accession Number: \t"+accessionNumber+"\nArtist: \t"+artist+"\nTitle: \t"+title+"Picture File"+pictureFileName+"\n");
-	}
+	}	
 }

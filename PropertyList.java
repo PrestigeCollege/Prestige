@@ -86,8 +86,8 @@ public class PropertyList implements Serializable
 //	{
 //		return anItem;
 //	}
-/*	Not needed for this project.
-	public double getTotalValue()
+//	Not needed for this project.
+/*	public double getTotalValue()
 	{
 		double totalValue = 0;
 	//method to calculate the current value of all assets	
@@ -174,19 +174,30 @@ public class PropertyList implements Serializable
 			
 	}
 	public void writeToFile(String fileName)
+//	private void writeObject (ObjectOutputStream out) throws IOException
 	{
+		
+		//TODO figure out how to work in the output file name
 		//removes any unused elements prior to writing to file.
 		dataBase.trimToSize();
+		System.out.println("size of database: " + dataBase.size());
+		System.out.println("DB empty?: "+ dataBase.isEmpty());
+		
 		try
 		{
-			ObjectOutputStream outputStream = new ObjectOutputStream
-										(new FileOutputStream(fileName));
+			ObjectOutputStream outputStream = new ObjectOutputStream (new FileOutputStream(fileName));
 		//write file only if dataBase isn't empty
-			if (!dataBase.isEmpty())
+			if (dataBase.isEmpty() == true)
 			{
-				outputStream.writeObject((ArrayList<Item>)dataBase);
-				outputStream.close();
 				System.out.println("Attempting to write.");
+					for (int i = 0; i < dataBase.size(); i++)
+					{
+						outputStream.writeObject((ArrayList<Item>)dataBase);
+						outputStream.writeObject(dataBase.get(i));
+					}
+
+//					outputStream.writeObject(dataBase);
+				outputStream.close();
 			}
 			System.out.println("WriteToFile complete.");	
 		}
@@ -200,11 +211,13 @@ public class PropertyList implements Serializable
  */
 	
 	public void readFromFile(String fileName)
+//	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
 	{
+		
+		//TODO figure out how to work input file name into this
 		try
 		{
-			ObjectInputStream inputStream = 
-					new ObjectInputStream(new FileInputStream(fileName));
+			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName));
 			
 		 	dataBase	= (ArrayList<Item>)inputStream.readObject();
 	
@@ -223,5 +236,9 @@ public class PropertyList implements Serializable
 		{
 			System.out.println("(IO)Can not find binary file " + fileName);
 		}
+	}
+	private void readObjectNoData() throws ObjectStreamException
+	{
+	
 	}
 }
