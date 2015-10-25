@@ -200,16 +200,16 @@ public class ItemGui extends JFrame
 		JMenuItem fileExport = new JMenuItem("Export");
 		fileExport.addActionListener(new TextFileListener());
 		JMenuItem filePrinter = new JMenuItem("Print"); //TODO look up print interface for Java
-<<<<<<< HEAD
+ 
 //<<<<<<< HEAD
 //TODO		filePrinter.addActionListener(new PrintFileListener());
 		file.add(fileLogin);
 //=======
 		filePrinter.addActionListener(new PrintFileListener());
 //>>>>>>> origin/development
-=======
+ 
 		filePrinter.addActionListener(new PrintFileListener());
->>>>>>> origin/development
+ 
 		file.add(fileOpen);
 		file.add(fileSave);
 		file.add(fileExport);
