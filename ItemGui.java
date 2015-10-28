@@ -123,6 +123,7 @@ End of Methods***
    AddItemListener - input
 */
 import java.awt.*;
+import java.awt.image.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -147,6 +148,7 @@ public class ItemGui extends JFrame
 	private JMenuBar menuBar;
 	private JMenu file, edit, search, help;
 	private ImageIcon currentImage;
+	private BufferedImage markupImage;  //Allows creation of markable raster overlays
 	private Font labelFont, itemFont;
 //variables used in program	
 	private final int WIDTH = 700, SMALL_WIDTH = 375;
@@ -221,7 +223,8 @@ public class ItemGui extends JFrame
 		
 		edit = new JMenu("Edit");
 		JMenuItem editAdd = new JMenuItem("Create CR");
-		editAdd.addActionListener(new EditListener());
+//		editAdd.addActionListener(new EditListener());
+		editAdd.addActionListener(new ReportListener());
 //		editAdd.addActionListener(new EditListener());
 		JMenuItem editView = new JMenuItem("View CR");
 		editView.addActionListener(new EditListener());
@@ -254,6 +257,7 @@ public class ItemGui extends JFrame
 //		currentImage = new ImageIcon("splash.jpg");
 //TODO image isn't displaying
 		currentImage = new ImageIcon("none.jpg");
+//		currentImage = new
 		imageLabel = new JLabel();
 		imageLabel.setIcon(currentImage);
 		
@@ -317,7 +321,7 @@ public class ItemGui extends JFrame
 		third = new JButton("New CR");
 //		third.addActionListener(new MovementListener());
 		third.addActionListener(new ReportListener());
-		third.addActionListener(new AddItemListener() );
+//		third.addActionListener(new AddItemListener() );
 		fourth = new JButton("Print");
 		fourth.addActionListener(new PrintFileListener());
 //add the buttons to the button panel		
@@ -490,6 +494,15 @@ to search before any data is loaded into the program's data structure.*/
 		setImage(currentItem.getPic());
 	}
 	
+	//Takes an Image object and converts it to a Buffered Image, which has
+	//an alpha channel and markup tools
+	private BufferedImage convertImage(ImageIcon arg)
+	{
+		BufferedImage myBuffImage = new BufferedImage(arg.getIconWidth(),
+			arg.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		
+		return myBuffImage;
+	}
 //TODO investigate why string being passed as parameter.
 	//Declare wipe as local variable?  Do we still need this function?
 	
@@ -526,7 +539,8 @@ to search before any data is loaded into the program's data structure.*/
 		{
 			analyzePath();
 		}//end of Open
-		public File getFileOrDirectory()
+/*		hardcoding in file name for development
+ *		public File getFileOrDirectory()
 		{//instantiation of JFileChooser for browsing of file structure,
 		//FILES_AND_DIRECTORIES constant allows user to navigate / view
 		//both files and directories.
@@ -548,10 +562,13 @@ to search before any data is loaded into the program's data structure.*/
 				}	
 			}
 			return fileName;
-		}
+		} */ //hard coding file name for testing remove later
 		public void analyzePath()
 		{
-			File name = getFileOrDirectory();
+
+/*			HARD CODING FILE NAME	
+ *			File name = getFileOrDirectory();
+	
 
 			if(name != null)
 			{
@@ -561,18 +578,20 @@ to search before any data is loaded into the program's data structure.*/
  *ProperyList, set the current location to slot 0 and update the display.
  *calculate the value of the PropertyList.*/
 				localList = new PropertyList();
-				localList.readFromFile(name.getName());	
+				localList.readFromFile("testdata.dat");  //TODO remove later
+//				localList.readFromFile(name.getName());	
 				updateJFrame(0);
 				location = 0;
-				}
-			}//end outer if 
-	
+//				}
+//			}//end outer if 	
+/*	HARDCODING		
 			else //is not a file directory, or user cancels,
 			// generate error message
 			{
 				JOptionPane.showMessageDialog(this,"Aborting request",
 				"Open File Aborted", JOptionPane.ERROR_MESSAGE);
 			}
+*/ //HARDCODING
 		}		
 	}//end private inner class OpenFileListener
 	
@@ -1012,23 +1031,110 @@ JFrame will update to display the recent addition.
 	    {
 	    	public void actionPerformed(ActionEvent e) //new Condition Report requested
 	    	{
-	    		reportWindow = new JFrame("Create Condition Report");
-	    		reportWindow.setSize(SMALL_WIDTH, SMALL_HEIGHT);
-	    		reportWindow.setResizable(true);
-	    		reportWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    		reportWindow.setLocationRelativeTo(null);
+	    		
+	    		reportWindow = new JFrame();
+	    		setTitle("Create Condition Report");
+	    		setSize(WIDTH, HEIGHT);
+	    		setResizable(true);
+	    		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    		setLocationRelativeTo(null);
+	    		
+	    		//need to set a layout
 	    		
 	    		//Specify a gridlayout for the resulting JFrame
-	    		Gridlayout reportWindowLayout = new GridLayout(rows, columns, layoutGap, layoutGap);
+//	    		GridLayout reportWindowLayout = new GridLayout(rows, columns, layoutGap, layoutGap);
+//	    		GridLayout buttons = new GridLayout(1, 2, layoutGap, layoutGap);
 	    		
+	 //Create a JPanel for holding damage conditions, a notes field, and submit/ cancel buttons
 	    		JPanel inputPanel = new JPanel(); // for annotations
-	    		JPanel imagePanel = new JPanel(); //TODO call up the current Item's image and layered markup
+	    		inputPanel.setLayout(new GridLayout(4, 1, 2 *layoutGap, layoutGap) );
 	    		
 	    		JTextField damageLabel = new JTextField("Select any newly discovered damages");
-	    		JComboBox damageCondition = new JComboBox()
-	   
+	    		damageLabel.setEditable(false);
+	    		damageLabel.setFont(itemFont);
+	    		String[] conditions = {"","condition1", "condition2", "condition3", "condition4", "condition5"}; 
+	    		JComboBox damageCondition = new JComboBox(conditions);
+	    		damageCondition.setFont(itemFont);
+	    		damageCondition.setEditable(false);
+	    		//TODO figure out how to return selected conditions
 	    		
-	    	}//end ReportListener
-	    	
+	    		JTextField notesLabel = new JTextField("Enter notes for new damages:");
+	    		notesLabel.setEditable(false);
+	    		notesLabel.setFont(itemFont);
+	    		//JTextArea(rows, col)
+	    		JTextArea notesField = new JTextArea("type here", 6, 40);
+	    //		JScrollPane scroller = new JScrollPane();
+	    		notesField.getPreferredSize();
+	    		notesField.setFont(labelFont);
+	    		notesField.setLineWrap(true);
+	    		notesField.setTabSize(5);
+	    		//returns input in textarea as String?
+	    		String notes = notesField.getText();
+	    		//for testing output
+	    		System.out.println(notes);
+	    		
+	    		inputPanel.add(damageLabel);
+	    		inputPanel.add(damageCondition);
+	    		inputPanel.add(notesLabel);
+	    		inputPanel.add(notesField);
+
+	    		
+	 //Create a panel for displaying image and hosting markup layer   		
+	    		
+	    		JPanel imagePanel = new JPanel(); //TODO call up the current Item's image and layered markup
+	    		imagePanel.setLayout( new GridLayout(1,1,0,0) );
+/*Working on creating a writeable, transparent overlay for the displayed item.  Markup image is of type Buffered
+ *Image.  	    		
+	    http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html#TYPE_4BYTE_ABGR
+	    http://docs.oracle.com/javase/tutorial/2d/images/drawonimage.html
+	    https://www.java.net/node/646586
+*/	    
+	    		markupImage = new BufferedImage(currentImage.getIconWidth(), currentImage.getIconHeight(), 6 )	;
+			//	markupImage.    
+	    		
+	    		
+	    		//TODO Add item Image from currently displayed item
+	    		imagePanel.add(imageLabel);
+//	    		imagePanel.add(markupImage);
+
+	//Create buttons for marking up an image, submitting a Condition Report and canceling the transaction
+
+	    		JButton submit = new JButton("Submit");
+	    		submit.setPreferredSize(new Dimension(200, 100));
+	    		//TODO write new report to Item's queue ....
+	    		//use cancelButton from ItemGui
+	    		JButton cancelButton = new JButton("Cancel");
+	    		cancelButton.setPreferredSize(new Dimension(200, 100));
+	    		cancelButton.addActionListener(new AddItemListener());
+	    		JButton markupButton = new JButton("Mark Up");
+	    		markupButton.setPreferredSize(new Dimension(200, 100));
+	    		//TODO create an actionlistener for markup of images.
+	    		JPanel myButtonPanel = new JPanel();
+	    		myButtonPanel.setLayout( new GridLayout(1,3, 2 * layoutGap, layoutGap) );
+	    		myButtonPanel.add(markupButton, BorderLayout.LINE_START);
+	    		myButtonPanel.add(submit, BorderLayout.CENTER);
+	    		myButtonPanel.add(cancelButton, BorderLayout.LINE_END);
+	    		
+	 //Add all the three panels to the main panel for (formatting purposes)   		
+	    		JPanel mainPanel = new JPanel(new GridLayout(1,2, layoutGap, 0));
+	    		mainPanel.add(imagePanel, BorderLayout.LINE_START);
+	    		mainPanel.add(inputPanel, BorderLayout.LINE_END);
+	    		
+
+	//Add the main panel to the JFrame and make it visible
+	    		add(mainPanel, BorderLayout.PAGE_START);
+	    		add(myButtonPanel, BorderLayout.PAGE_END);
+//	    		mainPanel.add(myButtonPanel, BorderLayout.PAGE_END);
+				pack();
+	    		setVisible(true);
+/** TODO List:
+ *	Figure out how to return CR inputs to the database
+ *  Fix Cancel Button operation
+ *	Add action Listener to the Markup button, will call up drawing tools
+ *  Add action Listener to the Submit button that writes any changes to the Item's Queue 
+ *  Add a vertical scroll bar to the JFrame.			
+*/	   			
+	    		
+	    	}//end ActionListener
 	    }//end ReportListener
 }//end ItemGui
