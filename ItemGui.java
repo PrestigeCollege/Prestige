@@ -136,7 +136,7 @@ public class ItemGui extends JFrame
 		ItemGui window = new ItemGui();
 	}
 //GUI Components
-	private JFrame inputWindow;
+	private JFrame inputWindow, reportWindow;
 	private JPanel textPanel, centerPanel, buttonPanel;
 	private JButton first, second, third, fourth;
 	private JTextField description, make, model, serial, year, price, qty;
@@ -159,6 +159,8 @@ public class ItemGui extends JFrame
 	public String userName; //user's login name for timestamping purposes
 	public boolean loggedIn = false; //determines whether or not a user is logged in
 	public int layoutGap = 10; //variable for adjusting gap settings in Gridlayout
+	
+
 
 //	NumberFormat money = NumberFormat.getCurrencyInstance();
 	
@@ -314,6 +316,7 @@ public class ItemGui extends JFrame
 		second.addActionListener(new MovementListener());
 		third = new JButton("New CR");
 //		third.addActionListener(new MovementListener());
+		third.addActionListener(new ReportListener());
 		third.addActionListener(new AddItemListener() );
 		fourth = new JButton("Print");
 		fourth.addActionListener(new PrintFileListener());
@@ -946,6 +949,11 @@ JFrame will update to display the recent addition.
 //TODO flesh out PrintFileListener to provide print functionality
 	private class PrintFileListener implements ActionListener
 	{
+/*			public string[] damageConditions {"Abrasion", "Accretion", "Adhesive Residue", "Blanching",
+		"Bleeding", "Blister", "Bloom", "Buckling", "Chalking", "Check", "Chip", "Cleavage", 
+	}
+*/		
+		
 		public void actionPerformed(ActionEvent e)
 		{
 			String junk = e.getActionCommand();
@@ -993,5 +1001,34 @@ JFrame will update to display the recent addition.
 	            }
 	        }
 	        
-	    } 
+	    }
+/**  ReportListener launches a new JFrame window displaying an image of the current
+ * item on display, along with an image overlay of all previously reported damage.
+ * The image and overlay are in the right JPane, text fields for anotating new damage
+ * are on the left.  When the CR is submitted, it saves to the data structure housing
+ * other CRs for the same Item.
+ */
+	    private class ReportListener extends JFrame implements ActionListener
+	    {
+	    	public void actionPerformed(ActionEvent e) //new Condition Report requested
+	    	{
+	    		reportWindow = new JFrame("Create Condition Report");
+	    		reportWindow.setSize(SMALL_WIDTH, SMALL_HEIGHT);
+	    		reportWindow.setResizable(true);
+	    		reportWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    		reportWindow.setLocationRelativeTo(null);
+	    		
+	    		//Specify a gridlayout for the resulting JFrame
+	    		Gridlayout reportWindowLayout = new GridLayout(rows, columns, layoutGap, layoutGap);
+	    		
+	    		JPanel inputPanel = new JPanel(); // for annotations
+	    		JPanel imagePanel = new JPanel(); //TODO call up the current Item's image and layered markup
+	    		
+	    		JTextField damageLabel = new JTextField("Select any newly discovered damages");
+	    		JComboBox damageCondition = new JComboBox()
+	   
+	    		
+	    	}//end ReportListener
+	    	
+	    }//end ReportListener
 }//end ItemGui
