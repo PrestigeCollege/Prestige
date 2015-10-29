@@ -228,11 +228,11 @@ public class ItemGui extends JFrame
 //		editAdd.addActionListener(new EditListener());
 		JMenuItem editView = new JMenuItem("View CR");
 		editView.addActionListener(new EditListener());
-		JMenuItem editNew = new JMenuItem("Add Item"); //For testing
-		editNew.addActionListener(new EditListener()); //For testing
+//		JMenuItem editNew = new JMenuItem("Add Item"); //For testing
+//		editNew.addActionListener(new EditListener()); //For testing
 		edit.add(editAdd);
 		edit.add(editView);
-		edit.add(editNew);
+//		edit.add(editNew);
 		
 		
 		search = new JMenu("Search");
@@ -416,12 +416,12 @@ to search before any data is loaded into the program's data structure.*/
 //TODO modify to accept current item's attributes as Parameters
 //TODO implement image overlay and markup
 //TODO determine correct return type for database --probably CR Class
-	private void createItem()
-	{
+//	private void createItem()
+//	{
 /**Creates a JFrame for modification of existing Items.  JFrame displays
  *blank textfields for user data entry.  Information is passed to the
  *try/catch blocks for analysis and verification before being accepted.*/
-		int rows = 5;
+/*		int rows = 5;
 		int columns =2;
 		
 		inputWindow = new JFrame("Add an Item");
@@ -473,7 +473,7 @@ to search before any data is loaded into the program's data structure.*/
 		inputWindow.add(addButton);
 		inputWindow.add(cancelButton);
 	}//end of createItem()
-	
+*/	
 	/**Creates a JFrame for modification of existing Items.  JFrame loads the
 	 *data of the Item displayed in the main window.  User is then able to modify
 	 *the existing Item's variables.  Modifications are passed to the try/catch
@@ -672,16 +672,18 @@ to search before any data is loaded into the program's data structure.*/
 						JOptionPane.showMessageDialog(null,"View CR not defined yet.",
 						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
 						break;
-					case "Add Item":
-						createItem();
-						break;
+//					case "Add Item":
+//						createItem();
+//						break;
 					default:
 						JOptionPane.showMessageDialog(null,"Something Unexpected Happened",
 						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
 				}//end switch
 			}
+			else
+				alert("No Editing before loading data");
 //This condition creates a new data structure to hold the created item, then creates the item.
-			else 
+/*			else 
 			{
 				if (junk.equals("Add Item"))
 				{
@@ -690,7 +692,7 @@ to search before any data is loaded into the program's data structure.*/
 				}
 				else
 					alert("I'm falling through");
-			}	
+			}	*/
 		}
 	}//end private inner class EditListener	
 
@@ -721,7 +723,7 @@ to search before any data is loaded into the program's data structure.*/
 				}
 			}	
 			else
-				alert();
+				alert("Item not found");
 		}
 	}//end private inner class SearchListener
 	
@@ -1018,8 +1020,16 @@ JFrame will update to display the recent addition.
 	                loggedIn = true; //set user to logged in state
 	                return;
 	            }
-	        }
-	        
+	        }  
+	    }
+	    
+	    private class CancelListener extends JFrame implements ActionListener
+	    {
+	    	public void actionPerformed(ActionEvent e)
+	    	{
+	    		System.out.println("In the Cancel Listener");
+	    		dispose();
+	    	}
 	    }
 /**  ReportListener launches a new JFrame window displaying an image of the current
  * item on display, along with an image overlay of all previously reported damage.
@@ -1040,8 +1050,7 @@ JFrame will update to display the recent addition.
 	    			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    			setLocationRelativeTo(null);
 	    		
-	    		//need to set a layout
-	    		
+	    		//need to set a layout	
 	    		
 	 //Create a JPanel for holding damage conditions, a notes field, and submit/ cancel buttons
 		    		JPanel inputPanel = new JPanel(); // for annotations
@@ -1103,7 +1112,7 @@ JFrame will update to display the recent addition.
 	    		//use cancelButton from ItemGui
 		    		JButton cancelButton = new JButton("Cancel");
 		    		cancelButton.setPreferredSize(new Dimension(200, 100));
-	    			cancelButton.addActionListener(new AddItemListener());
+	    			cancelButton.addActionListener(new CancelListener());
 	    			JButton markupButton = new JButton("Mark Up");
 	    			markupButton.setPreferredSize(new Dimension(200, 100));
 	    		//TODO create an actionlistener for markup of images.
@@ -1127,7 +1136,7 @@ JFrame will update to display the recent addition.
 	    			setVisible(true);	
 	    		}
 	    		else
-	    			alert("Must load databases first");
+	    			alert("Must load data file first");
 	    		
 
 /** TODO List:
