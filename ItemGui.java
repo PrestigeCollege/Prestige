@@ -498,8 +498,11 @@ to search before any data is loaded into the program's data structure.*/
 	//an alpha channel and markup tools
 	private BufferedImage convertImage(ImageIcon arg)
 	{
-		BufferedImage myBuffImage = new BufferedImage(arg.getIconWidth(),
+		
+			
+			BufferedImage myBuffImage = new BufferedImage(arg.getIconWidth(),
 			arg.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+
 		
 		return myBuffImage;
 	}
@@ -1143,7 +1146,6 @@ JFrame will update to display the recent addition.
 	    			JButton submit = new JButton("Submit");
 	    			submit.setPreferredSize(new Dimension(200, 100));
 	    		//TODO write new report to Item's queue ....
-	    		//use cancelButton from ItemGui
 		    		JButton cancelButton = new JButton("Cancel");
 		    		cancelButton.setPreferredSize(new Dimension(200, 100));
 	    			cancelButton.addActionListener(new CancelListener());
