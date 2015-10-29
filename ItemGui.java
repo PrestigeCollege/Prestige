@@ -125,10 +125,13 @@ End of Methods***
 import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
+import java.awt.print.*;
+import java.io.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.text.NumberFormat;
-import java.io.*;
+
+
 
 public class ItemGui extends JFrame
 {
@@ -192,8 +195,10 @@ public class ItemGui extends JFrame
 		itemFont = new Font("COURIER", Font.BOLD, 14); //font style for text output
 		trim = (LineBorder)BorderFactory.createLineBorder(Color.BLACK, 2);
 		
+
 //Create menuBars, menus and menu Items, attach ActionListeners to each
 //menuItem and add the manuItems to the menu
+		//File Menu
 		file = new JMenu("File");
 		JMenuItem fileLogin = new JMenuItem("Login");
 		fileLogin.addActionListener(new LoginListener());
@@ -203,46 +208,41 @@ public class ItemGui extends JFrame
 		fileSave.addActionListener(new FileSaveListener());
 		JMenuItem fileExport = new JMenuItem("Export");
 		fileExport.addActionListener(new TextFileListener());
-		JMenuItem filePrinter = new JMenuItem("Print"); //TODO look up print interface for Java
- 
-//<<<<<<< HEAD
-//TODO		filePrinter.addActionListener(new PrintFileListener());
+		JMenuItem filePrinter = new JMenuItem("Print");
+		filePrinter.addActionListener(new PrintFileListener());
+		
 		file.add(fileLogin);
-//=======
-		filePrinter.addActionListener(new PrintFileListener());
-//>>>>>>> origin/development
- 
-		filePrinter.addActionListener(new PrintFileListener());
- 
 		file.add(fileOpen);
 		file.add(fileSave);
 		file.add(fileExport);
 		file.add(filePrinter);
-		file.add(fileLogin);
 		
 		
+		//Edit Menu
 		edit = new JMenu("Edit");
 		JMenuItem editAdd = new JMenuItem("Create CR");
-//		editAdd.addActionListener(new EditListener());
-		editAdd.addActionListener(new ReportListener());
-//		editAdd.addActionListener(new EditListener());
+		editAdd.addActionListener(new EditListener());
 		JMenuItem editView = new JMenuItem("View CR");
 		editView.addActionListener(new EditListener());
-//		JMenuItem editNew = new JMenuItem("Add Item"); //For testing
-//		editNew.addActionListener(new EditListener()); //For testing
+		JMenuItem editNew = new JMenuItem("Add Item"); //For testing
+		editNew.addActionListener(new EditListener()); //For testing
+		
 		edit.add(editAdd);
 		edit.add(editView);
-//		edit.add(editNew);
+		edit.add(editNew);
 		
-		
+		//Search Menu
 		search = new JMenu("Search");
 		JMenuItem searchAll = new JMenuItem("Search");
 		searchAll.addActionListener(new SearchListener());
+		
 		search.add(searchAll);
-//TODO		
+
+		//Help Menu
 		help = new JMenu("help");
 		JMenuItem helpItem = new JMenuItem("Help"); //launches help.html
 		JMenuItem helpAbout = new JMenuItem("About");  //version info
+		
 		help.add(helpItem);
 		help.add(helpAbout);
 		
@@ -967,28 +967,62 @@ JFrame will update to display the recent addition.
 	
 	}//end private inner additem class
 	
-//TODO flesh out PrintFileListener to provide print functionality
-	private class PrintFileListener implements ActionListener
+	
+	/** PrintListener allows printing of CRs
+	 * Implements Java Graphics 2D API to print and access system default printer.
+	 * @author Cody Solley
+	 * **/
+	private class PrintFileListener implements ActionListener, Printable
 	{
-/*			public string[] damageConditions {"Abrasion", "Accretion", "Adhesive Residue", "Blanching",
-		"Bleeding", "Blister", "Bloom", "Buckling", "Chalking", "Check", "Chip", "Cleavage", 
-	}
-*/		
+		public int print(Graphics g, PageFormat pf, int page) throws PrinterException
+		{
+			//Limits to one page, page count starts at 0
+			if (page > 0)
+			{
+				return NO_SUCH_PAGE;
+			}
 		
+			//Need to define print area, so must declare graphic then set coordinates via pageformat to show where to print on the page
+			Graphics2D g2d = (Graphics2D)g;
+			g2d.translate(pf.getImageableX(), pf.getImageableY());
+			
+			//render what we want to print
+			
+			g.drawString(currentItem.toString(), 100, 100);
+		
+			//Must return to indicate that the object is part of the printed document
+			return PAGE_EXISTS;
+		}
+	
 		public void actionPerformed(ActionEvent e)
 		{
 			String junk = e.getActionCommand();
-			
-			//this is a stub until later implementation
 			if(junk.equals("Print"))
 			{
-				//throw a joption pane for now
-				String printAction = JOptionPane.showInputDialog(null, 
-						"Print Chosen.", JOptionPane.PLAIN_MESSAGE);
+				//Set the print job for the CR record, pop up the Print option window
+				PrinterJob job = PrinterJob.getPrinterJob();
+				job.setPrintable(this);
+				
+				//Check for user to click ok, boolean only true if OK clicked, everything else is false
+				boolean ok = job.printDialog();
+				
+				//Execute Print
+				if(ok)
+				{
+					try
+					{
+						job.print();
+					}
+					catch (PrinterException ex)
+					{
+						//generate error popup window
+					}
+				}
 				
 			}
 		}
 	}//end PrintFileListener
+	
 	/**  LoginListener allows a user to authenticate before interacting with
 	*  the Condition Reports system. Use of other functions will be
 	*  disabled until a user has logged in.
