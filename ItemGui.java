@@ -454,7 +454,7 @@ to search before any data is loaded into the program's data structure.*/
 //		JButton addFileName = new JButton("Choose File");
 //		addFileName.addActionListener(new AddItemListner());
 		
-		JTextField blankField = new JTextField(0);
+//		JTextField blankField = new JTextField(0);
 		
 		JButton addButton = new JButton("Submit");
 		addButton.addActionListener(new AddItemListener());
@@ -1031,102 +1031,105 @@ JFrame will update to display the recent addition.
 	    {
 	    	public void actionPerformed(ActionEvent e) //new Condition Report requested
 	    	{
-	    		
-	    		reportWindow = new JFrame();
-	    		setTitle("Create Condition Report");
-	    		setSize(WIDTH, HEIGHT);
-	    		setResizable(true);
-	    		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    		setLocationRelativeTo(null);
+	    		if (localList != null)
+	    		{
+	    			reportWindow = new JFrame();
+	    			setTitle("Create Condition Report");
+	    			setSize(WIDTH, HEIGHT);
+	    			setResizable(true);
+	    			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    			setLocationRelativeTo(null);
 	    		
 	    		//need to set a layout
 	    		
-	    		//Specify a gridlayout for the resulting JFrame
-//	    		GridLayout reportWindowLayout = new GridLayout(rows, columns, layoutGap, layoutGap);
-//	    		GridLayout buttons = new GridLayout(1, 2, layoutGap, layoutGap);
 	    		
 	 //Create a JPanel for holding damage conditions, a notes field, and submit/ cancel buttons
-	    		JPanel inputPanel = new JPanel(); // for annotations
-	    		inputPanel.setLayout(new GridLayout(4, 1, 2 *layoutGap, layoutGap) );
+		    		JPanel inputPanel = new JPanel(); // for annotations
+		    		inputPanel.setLayout(new GridLayout(4, 1, 2 *layoutGap, layoutGap) );
 	    		
-	    		JTextField damageLabel = new JTextField("Select any newly discovered damages");
-	    		damageLabel.setEditable(false);
-	    		damageLabel.setFont(itemFont);
-	    		String[] conditions = {"","condition1", "condition2", "condition3", "condition4", "condition5"}; 
-	    		JComboBox damageCondition = new JComboBox(conditions);
-	    		damageCondition.setFont(itemFont);
-	    		damageCondition.setEditable(false);
+	    			JTextField damageLabel = new JTextField("Select any newly discovered damages");
+	    			damageLabel.setEditable(false);
+	    			damageLabel.setFont(itemFont);
+	    			String[] conditions = {"","condition1", "condition2", "condition3", "condition4", "condition5"}; 
+	    			JComboBox damageCondition = new JComboBox(conditions);
+	    			damageCondition.setFont(itemFont);
+	    			damageCondition.setEditable(false);
 	    		//TODO figure out how to return selected conditions
 	    		
-	    		JTextField notesLabel = new JTextField("Enter notes for new damages:");
-	    		notesLabel.setEditable(false);
-	    		notesLabel.setFont(itemFont);
+	    			JTextField notesLabel = new JTextField("Enter notes for new damages:");
+	    			notesLabel.setEditable(false);
+	    			notesLabel.setFont(itemFont);
 	    		//JTextArea(rows, col)
-	    		JTextArea notesField = new JTextArea("type here", 6, 40);
+		    		JTextArea notesField = new JTextArea("type here", 6, 40);
 	    //		JScrollPane scroller = new JScrollPane();
-	    		notesField.getPreferredSize();
-	    		notesField.setFont(labelFont);
-	    		notesField.setLineWrap(true);
-	    		notesField.setTabSize(5);
+		    		notesField.getPreferredSize();
+	    			notesField.setFont(labelFont);
+	    			notesField.setLineWrap(true);
+	    			notesField.setTabSize(5);
 	    		//returns input in textarea as String?
-	    		String notes = notesField.getText();
+		    		String notes = notesField.getText();
 	    		//for testing output
-	    		System.out.println(notes);
+		    		System.out.println(notes);
 	    		
-	    		inputPanel.add(damageLabel);
-	    		inputPanel.add(damageCondition);
-	    		inputPanel.add(notesLabel);
-	    		inputPanel.add(notesField);
+	    			inputPanel.add(damageLabel);
+	    			inputPanel.add(damageCondition);
+		    		inputPanel.add(notesLabel);
+		    		inputPanel.add(notesField);
 
 	    		
 	 //Create a panel for displaying image and hosting markup layer   		
-	    		
-	    		JPanel imagePanel = new JPanel(); //TODO call up the current Item's image and layered markup
-	    		imagePanel.setLayout( new GridLayout(1,1,0,0) );
+	    	
+	  		  		JPanel imagePanel = new JPanel(); //TODO call up the current Item's image and layered markup
+	    			imagePanel.setLayout( new GridLayout(1,1,0,0) );
 /*Working on creating a writeable, transparent overlay for the displayed item.  Markup image is of type Buffered
  *Image.  	    		
 	    http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html#TYPE_4BYTE_ABGR
 	    http://docs.oracle.com/javase/tutorial/2d/images/drawonimage.html
 	    https://www.java.net/node/646586
 */	    
-	    		markupImage = new BufferedImage(currentImage.getIconWidth(), currentImage.getIconHeight(), 6 )	;
+	    			markupImage = new BufferedImage(currentImage.getIconWidth(), currentImage.getIconHeight(), 6 )	;
 			//	markupImage.    
 	    		
 	    		
 	    		//TODO Add item Image from currently displayed item
-	    		imagePanel.add(imageLabel);
+	    			imagePanel.add(imageLabel);
 //	    		imagePanel.add(markupImage);
 
 	//Create buttons for marking up an image, submitting a Condition Report and canceling the transaction
 
-	    		JButton submit = new JButton("Submit");
-	    		submit.setPreferredSize(new Dimension(200, 100));
+	    			JButton submit = new JButton("Submit");
+	    			submit.setPreferredSize(new Dimension(200, 100));
 	    		//TODO write new report to Item's queue ....
 	    		//use cancelButton from ItemGui
-	    		JButton cancelButton = new JButton("Cancel");
-	    		cancelButton.setPreferredSize(new Dimension(200, 100));
-	    		cancelButton.addActionListener(new AddItemListener());
-	    		JButton markupButton = new JButton("Mark Up");
-	    		markupButton.setPreferredSize(new Dimension(200, 100));
+		    		JButton cancelButton = new JButton("Cancel");
+		    		cancelButton.setPreferredSize(new Dimension(200, 100));
+	    			cancelButton.addActionListener(new AddItemListener());
+	    			JButton markupButton = new JButton("Mark Up");
+	    			markupButton.setPreferredSize(new Dimension(200, 100));
 	    		//TODO create an actionlistener for markup of images.
-	    		JPanel myButtonPanel = new JPanel();
-	    		myButtonPanel.setLayout( new GridLayout(1,3, 2 * layoutGap, layoutGap) );
-	    		myButtonPanel.add(markupButton, BorderLayout.LINE_START);
-	    		myButtonPanel.add(submit, BorderLayout.CENTER);
-	    		myButtonPanel.add(cancelButton, BorderLayout.LINE_END);
+	    			JPanel myButtonPanel = new JPanel();
+	    			myButtonPanel.setLayout( new GridLayout(1,3, 2 * layoutGap, layoutGap) );
+	    			myButtonPanel.add(markupButton, BorderLayout.LINE_START);
+	    			myButtonPanel.add(submit, BorderLayout.CENTER);
+	    			myButtonPanel.add(cancelButton, BorderLayout.LINE_END);
 	    		
 	 //Add all the three panels to the main panel for (formatting purposes)   		
-	    		JPanel mainPanel = new JPanel(new GridLayout(1,2, layoutGap, 0));
-	    		mainPanel.add(imagePanel, BorderLayout.LINE_START);
-	    		mainPanel.add(inputPanel, BorderLayout.LINE_END);
+	    			JPanel mainPanel = new JPanel(new GridLayout(1,2, layoutGap, 0));
+	    			mainPanel.add(imagePanel, BorderLayout.LINE_START);
+	    			mainPanel.add(inputPanel, BorderLayout.LINE_END);
 	    		
 
 	//Add the main panel to the JFrame and make it visible
-	    		add(mainPanel, BorderLayout.PAGE_START);
-	    		add(myButtonPanel, BorderLayout.PAGE_END);
+	    			add(mainPanel, BorderLayout.PAGE_START);
+	    			add(myButtonPanel, BorderLayout.PAGE_END);
 //	    		mainPanel.add(myButtonPanel, BorderLayout.PAGE_END);
-				pack();
-	    		setVisible(true);
+					pack();
+	    			setVisible(true);	
+	    		}
+	    		else
+	    			alert("Must load databases first");
+	    		
+
 /** TODO List:
  *	Figure out how to return CR inputs to the database
  *  Fix Cancel Button operation
