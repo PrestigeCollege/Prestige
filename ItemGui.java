@@ -42,7 +42,7 @@ GUI Components
 	entry using JOptionPane ERROR_MESSAGE dialog.
 	5. Provide a method with uses a JOptionPane YES_NO dialog to allow the
 	user to confirm deletions prior to execution.
-	6. Specify a method which retrieves the name of the currentItem's image
+	6. Specify a method which retrieves the name of the currentItem's ImageIcon
 	file and then passes that name to be displayed on the main JFrame.
 	7. Method createItem() will launch a new JFrame which has labels and
 	textfields for the entry of information pertinent to the creation of a
@@ -54,7 +54,7 @@ GUI Components
 	method calls up the variables of the Item currently displayed in the
 	main JFrame.  The user modifies existing data and submits via submit or
 	cancel buttons.
-	9. Method updateJFrame() is used to update the information and images
+	9. Method updateJFrame() is used to update the information and ImageIcons
 	displayed on the main JFrame.  It calls up the current element's
 	variables and passes them to the JFrame's components.
 	10. The clearJFrame() method uses a String parameter to overwrite the
@@ -171,7 +171,8 @@ public class ItemGui extends JFrame
 	
 	public ItemGui()
 	{
-		super("Inventory Management");
+	//	super("Inventory Management");
+		setTitle("SDMA Condition Reports");
 		setSize(WIDTH, HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true); //allows window to be resized
@@ -255,7 +256,7 @@ public class ItemGui extends JFrame
 		
 //create a lable for displaying ImageIcons on the JFrame		
 //		currentImage = new ImageIcon("splash.jpg");
-//TODO image isn't displaying
+//TODO ImageIcon isn't displaying
 		currentImage = new ImageIcon("none.jpg");
 //		currentImage = new
 		imageLabel = new JLabel();
@@ -299,11 +300,11 @@ public class ItemGui extends JFrame
 		textPanel.add(make);
 		
 
-//add the image panel and text panel to the center panel
+//add the ImageIcon panel and text panel to the center panel
 		centerPanel = new JPanel();
 		centerPanel.setLayout(centerLayout);
 		centerPanel.setBorder(trim);
-//		centerPanel.add(imagePanel);
+//		centerPanel.add(ImageIconPanel);
 		centerPanel.add(imageLabel);
 		centerPanel.add(textPanel);		
 		
@@ -399,22 +400,22 @@ to search before any data is loaded into the program's data structure.*/
 	}
 */
 	
-/*Calls an Item's image by filename. Image is passed to the ImageIcon class
- * constructor and displayed using the ImageLabel class.
+/*Calls an Item's ImageIcon by filename. ImageIcon is passed to the ImageIcon class
+ * constructor and displayed using the ImageIconLabel class.
  */
-	public void setImage(String imageName)
+	public void setImageIcon(String ImageIconName)
 	{	
-		currentImage = new ImageIcon(imageName);
+		currentImage = new ImageIcon(ImageIconName);
 		imageLabel.setIcon(currentImage);
 	}
 
 /*Creates a new CR for item currently displayed.  Launches a a new JFrame for
- * image markup using class (xxxx).  Present's user with a list of condition
+ * ImageIcon markup using class (xxxx).  Present's user with a list of condition
  * codes loaded from the database.  Condition report saved to database as a
- * marked up image, condition codes and any comments.
+ * marked up ImageIcon, condition codes and any comments.
  */  
 //TODO modify to accept current item's attributes as Parameters
-//TODO implement image overlay and markup
+//TODO implement ImageIcon overlay and markup
 //TODO determine correct return type for database --probably CR Class
 //	private void createItem()
 //	{
@@ -435,9 +436,9 @@ to search before any data is loaded into the program's data structure.*/
 		GridLayout inputWindowLayout = new GridLayout(rows, columns,layoutGap, layoutGap);
 		inputWindow.setLayout(inputWindowLayout);
 //TODO Assign Fields to panels, pannels to JFrame		
-//Create two new JPanels to hold the text and image fields
+//Create two new JPanels to hold the text and ImageIcon fields
 		JPanel inputPanel = new JPanel();
-		JPanel imagePanel = new JPanel(); //must be markable
+		JPanel ImageIconPanel = new JPanel(); //must be markable
 		
 //create a label to identity data fields
 		JLabel serialLabel = new JLabel("Accession Number");
@@ -491,20 +492,26 @@ to search before any data is loaded into the program's data structure.*/
 		serial.setText(currentItem.getAccessionNumber());
 		make.setText(currentItem.getArtist());
 		description.setText(currentItem.getTitle());
-		setImage(currentItem.getPic());
+		setImageIcon(currentItem.getPic());
 	}
 	
-	//Takes an Image object and converts it to a Buffered Image, which has
+	//Takes an ImageIcon object and converts it to a Buffered ImageIcon, which has
 	//an alpha channel and markup tools
-	private BufferedImage convertImage(ImageIcon arg)
+	private BufferedImage convertImageIcon(ImageIcon arg)
 	{
+			
+			
+			BufferedImage myBuffImageIcon = new BufferedImage(arg.getIconWidth(),
+			 arg.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+			
+			Graphics2D g2d = (Graphics2D)myBuffImageIcon.getGraphics();
+//			g2d.drawImage(arg, 0, 0, null);
+//			g2d.dispose();
 		
 			
-			BufferedImage myBuffImage = new BufferedImage(arg.getIconWidth(),
-			arg.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 
 		
-		return myBuffImage;
+		return myBuffImageIcon;	
 	}
 //TODO investigate why string being passed as parameter.
 	//Declare wipe as local variable?  Do we still need this function?
@@ -986,8 +993,8 @@ JFrame will update to display the recent addition.
 			}
 		
 			//Need to define print area, so must declare graphic then set coordinates via pageformat to show where to print on the page
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.translate(pf.getImageableX(), pf.getImageableY());
+//			Graphics2D g2d = (Graphics2D)g;
+//			g2d.translate(pf.getImageIconableX(), pf.getImageIconableY());
 			
 			//render what we want to print
 			
@@ -1075,9 +1082,9 @@ JFrame will update to display the recent addition.
 	    		dispose();
 	    	}
 	    }
-/**  ReportListener launches a new JFrame window displaying an image of the current
- * item on display, along with an image overlay of all previously reported damage.
- * The image and overlay are in the right JPane, text fields for anotating new damage
+/**  ReportListener launches a new JFrame window displaying an ImageIcon of the current
+ * item on display, along with an ImageIcon overlay of all previously reported damage.
+ * The ImageIcon and overlay are in the right JPane, text fields for anotating new damage
  * are on the left.  When the CR is submitted, it saves to the data structure housing
  * other CRs for the same Item.
  */
@@ -1130,25 +1137,25 @@ JFrame will update to display the recent addition.
 		    		inputPanel.add(notesField);
 
 	    		
-	 //Create a panel for displaying image and hosting markup layer   		
+	 //Create a panel for displaying ImageIcon and hosting markup layer   		
 	    	
-	  		  		JPanel imagePanel = new JPanel(); //TODO call up the current Item's image and layered markup
+	  		  		JPanel imagePanel = new JPanel(); //TODO call up the current Item's ImageIcon and layered markup
 	    			imagePanel.setLayout( new GridLayout(1,1,0,0) );
-/*Working on creating a writeable, transparent overlay for the displayed item.  Markup image is of type Buffered
- *Image.  	    		
-	    http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html#TYPE_4BYTE_ABGR
-	    http://docs.oracle.com/javase/tutorial/2d/images/drawonimage.html
+/*Working on creating a writeable, transparent overlay for the displayed item.  Markup ImageIcon is of type Buffered
+ *ImageIcon.  	    		
+	    http://docs.oracle.com/javase/7/docs/api/java/awt/ImageIcon/BufferedImage.html#TYPE_4BYTE_ABGR
+	    http://docs.oracle.com/javase/tutorial/2d/ImageIcons/drawonImageIcon.html
 	    https://www.java.net/node/646586
 */	    
 	    			markupImage = new BufferedImage(currentImage.getIconWidth(), currentImage.getIconHeight(), 6 )	;
-			//	markupImage.    
+			//	markupImageIcon.    
 	    		
 	    		
-	    		//TODO Add item Image from currently displayed item
+	    		//TODO Add item ImageIcon from currently displayed item
 	    			imagePanel.add(imageLabel);
-//	    		imagePanel.add(markupImage);
+//	    		ImageIconPanel.add(markupImageIcon);
 
-	//Create buttons for marking up an image, submitting a Condition Report and canceling the transaction
+	//Create buttons for marking up an ImageIcon, submitting a Condition Report and canceling the transaction
 
 	    			JButton submit = new JButton("Submit");
 	    			submit.setPreferredSize(new Dimension(200, 100));
@@ -1158,7 +1165,7 @@ JFrame will update to display the recent addition.
 	    			cancelButton.addActionListener(new CancelListener());
 	    			JButton markupButton = new JButton("Mark Up");
 	    			markupButton.setPreferredSize(new Dimension(200, 100));
-	    		//TODO create an actionlistener for markup of images.
+	    		//TODO create an actionlistener for markup of ImageIcons.
 	    			JPanel myButtonPanel = new JPanel();
 	    			myButtonPanel.setLayout( new GridLayout(1,3, 2 * layoutGap, layoutGap) );
 	    			myButtonPanel.add(markupButton, BorderLayout.LINE_START);
