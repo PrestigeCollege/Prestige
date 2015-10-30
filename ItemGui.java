@@ -145,7 +145,7 @@ public class ItemGui extends JFrame
 	private JLabel imageLabel;
 	private LineBorder trim;
 	private JMenuBar menuBar;
-	private JMenu file, edit, search, help;
+	private JMenu file, edit, search, navigate, other;
 	private ImageIcon currentImage;
 	private Font labelFont, itemFont;
 //variables used in program	
@@ -166,7 +166,7 @@ public class ItemGui extends JFrame
 	
 	public ItemGui()
 	{
-		super("Inventory Management");
+		super("Condition Report System");
 		setSize(WIDTH, HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true); //allows window to be resized
@@ -211,12 +211,12 @@ public class ItemGui extends JFrame
 //>>>>>>> origin/development
  
 		filePrinter.addActionListener(new PrintFileListener());
- 
+		
+		file.add(fileLogin);
 		file.add(fileOpen);
 		file.add(fileSave);
 		file.add(fileExport);
 		file.add(filePrinter);
-		file.add(fileLogin);
 		
 		
 		edit = new JMenu("Edit");
@@ -236,19 +236,39 @@ public class ItemGui extends JFrame
 		JMenuItem searchAll = new JMenuItem("Search");
 		searchAll.addActionListener(new SearchListener());
 		search.add(searchAll);
+		
+//navigate allows a user to cycle through items within the system
+		navigate = new JMenu("Navigate");
+		JMenuItem navigateFirst = new JMenuItem("First");
+		navigateFirst.addActionListener(new MovementListener());
+		JMenuItem navigatePrevious = new JMenuItem("Previous");
+		navigatePrevious.addActionListener(new MovementListener());
+		JMenuItem navigateNext = new JMenuItem("Next");
+		navigateNext.addActionListener(new MovementListener());
+		JMenuItem navigateLast = new JMenuItem("Last");
+		navigateLast.addActionListener(new MovementListener());
+		navigate.add(navigateFirst);
+		navigate.add(navigatePrevious);
+		navigate.add(navigateNext);
+		navigate.add(navigateLast);
+		
+		
 //TODO		
-		help = new JMenu("help");
-		JMenuItem helpItem = new JMenuItem("Help"); //launches help.html
-		JMenuItem helpAbout = new JMenuItem("About");  //version info
-		help.add(helpItem);
-		help.add(helpAbout);
+		other = new JMenu("Other");
+		JMenuItem otherHelp = new JMenuItem("Help"); //assist with program usage
+		otherHelp.addActionListener(new OtherListener());
+		JMenuItem otherAbout = new JMenuItem("About");  //version info
+		otherAbout.addActionListener(new OtherListener());
+		other.add(otherHelp);
+		other.add(otherAbout);
 		
 //creates menubar and adds pulldown menus to it		
 		menuBar = new JMenuBar();
 		menuBar.add(file);
 		menuBar.add(edit);
 		menuBar.add(search);
-		menuBar.add(help);
+		menuBar.add(navigate);
+		menuBar.add(other);
 		
 //create a lable for displaying ImageIcons on the JFrame		
 //		currentImage = new ImageIcon("splash.jpg");
@@ -308,12 +328,12 @@ public class ItemGui extends JFrame
 		buttonPanel.setLayout(buttonLayout);
 //create buttons and actionListeners for each button
 		
-//TODO mofify listener functions to support
+//TODO modify listener functions to support
 		first = new JButton("Search");
 //		first.addActionListener(new MovementListener());
 		first.addActionListener(new SearchListener());
 		second = new JButton("View Mark-Up");
-		second.addActionListener(new MovementListener());
+//		second.addActionListener(new MovementListener());
 		third = new JButton("New CR");
 //		third.addActionListener(new MovementListener());
 		third.addActionListener(new ReportListener());
@@ -707,50 +727,62 @@ to search before any data is loaded into the program's data structure.*/
 	}//end private inner class SearchListener
 	
 /**  Event listener for scrolling through the data structure.  
- *  Click on main window's buttons trigger an event that alters the
+ *  Click on navigation button to trigger an event that alters the
  * 	content of the JFrame.
- * @author James
+ * @author Jonathan & James
  */
 //TODO Adjust MovementListener condition strings to represent new condition.	
 	private class MovementListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
-		{
-			String junk = e.getActionCommand();
-//If arraylist is empty / null, the user cannot use movement buttons			
-			if((localList != null)&&(localList.listIsEmpty()!=true))
-			{
-				//change to case switch
-				if (junk.equals("|<<First"))
+	        {
+				String navSelection = e.getActionCommand();
+				
+				if((localList != null)&&(localList.listIsEmpty()!=true)) 
 				{
-					location = 0;
-					updateJFrame(location);
-				}
-				else if (junk.equals("<Previous"))
-				{
-					if (location != 0)
+					if (navSelection.equals("First"))
 					{
-						location--;
+						location = 0;
 						updateJFrame(location);
 					}
-				}
-				else if (junk.equals("Next>"))
-				{
-					if (location != (localList.getDataBaseSize()-1))
+					else if (navSelection.equals("Previous"))
 					{
-						location++;
-						updateJFrame(location);
+						if (location != 0)
+						{
+							location--;
+							updateJFrame(location);
+						}
+						else
+						{
+							location = localList.getDataBaseSize()-1;
+							updateJFrame(location);
+						}
 					}
+					else if (navSelection.equals("Next"))
+					{
+						if (location != (localList.getDataBaseSize()-1))
+						{
+							location++;
+							updateJFrame(location);
+						}
+						else
+						{
+							location = 0;
+							updateJFrame(location);
+						}
+					}
+					else //last element
+					{
+						location = localList.getDataBaseSize()-1;
+						updateJFrame(location);
+					}	
 				}
-				else //last element
+				else
 				{
-					location = localList.getDataBaseSize()-1;
-					updateJFrame(location);
+					alert("Please open a database file before using navigation.");
 				}
-			}//end outer if
-			else
-				alert();
-		}	
+				
+	        }
 	} //end movementlistener class
 	
 /** AddItemListener is called when user selects create "Condition Report."
@@ -1004,7 +1036,7 @@ JFrame will update to display the recent addition.
 	    }
 /**  ReportListener launches a new JFrame window displaying an image of the current
  * item on display, along with an image overlay of all previously reported damage.
- * The image and overlay are in the right JPane, text fields for anotating new damage
+ * The image and overlay are in the right JPane, text fields for annotating new damage
  * are on the left.  When the CR is submitted, it saves to the data structure housing
  * other CRs for the same Item.
  */
@@ -1031,4 +1063,36 @@ JFrame will update to display the recent addition.
 	    	}//end ReportListener
 	    	
 	    }//end ReportListener
+	    
+/**  OtherListener provides the user with one of two options: help and about.
+* Help details the functionality of the program by opening an html file. Meanwhile, about
+* displays program information, such as the version number.
+* @author Jonathan
+*/
+	    private class OtherListener extends JFrame implements ActionListener
+	    {
+	    	public void actionPerformed(ActionEvent e) //new Condition Report requested
+	    	{
+	    		String navSelection = e.getActionCommand();
+				
+				if (navSelection.equals("Help"))
+				{
+					try
+					{
+						Desktop.getDesktop().open(new File("help.html"));
+					}
+					catch (IOException ex) 
+					{
+					}
+				}
+				else if (navSelection.equals("About"))
+				{
+					JOptionPane.showMessageDialog(null,"Version Number: Beta");
+				}
+				else
+				{
+					alert("An issue was encountered in the Other menu.");
+				}
+	    	}
+	    }//end HelpListener
 }//end ItemGui
