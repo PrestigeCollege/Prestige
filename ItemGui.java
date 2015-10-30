@@ -991,7 +991,14 @@ JFrame will update to display the recent addition.
 			
 			//render what we want to print
 			
-			g.drawString(currentItem.toString(), 100, 100);
+			g.drawString("Accession Number:", 100, 100);
+			g.drawString(currentItem.accessionNumber, 207, 100);
+			g.drawString("Artist:", 100, 125);
+			g.drawString(currentItem.artist, 135, 125);
+			g.drawString("Title:", 100, 150);
+			g.drawString(currentItem.title, 130, 150);
+			g.drawString("Picture File:", 100, 175);
+			g.drawString(currentItem.pictureFileName, 167, 175);
 		
 			//Must return to indicate that the object is part of the printed document
 			return PAGE_EXISTS;
