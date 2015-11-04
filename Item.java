@@ -4,7 +4,7 @@
 	Date Last Modified: 10/20/2015	 	
 */
 import java.io.Serializable;
-
+import java.util.Stack;
 
 
 public class Item implements Serializable
@@ -76,6 +76,14 @@ public class Item implements Serializable
 
 	public String toString()
 	{
-		return ("Accession Number: \t"+accessionNumber+"\nArtist: \t"+artist+"\nTitle: \t"+title+"Picture File"+pictureFileName+"\n");
+		return ("Accession Number: \t"+accessionNumber+"\nArtist: \t"+artist+"\nTitle: \t"+title+"\nPicture File: \t"+pictureFileName+"\n");
 	}	
+		
+	private class ConditionReport extends Item
+	{
+		private int ID, paintingID, userID;
+		private String damage;
+	}
+	
+	Stack<ConditionReport> CR = new Stack<ConditionReport>();
 }
