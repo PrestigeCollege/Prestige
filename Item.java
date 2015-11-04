@@ -1,171 +1,81 @@
-/* CS-112 FINAL PROJECT
-   File Name:          	Item.java
-   Programmer:         	James Watkins
-   Date Last Modified: 	May 19, 2012
-
-   Problem Statement: Define a class to contain the specific details of items
-   which will be used within an inventory management application.  Class must
-   account for image files as well as text and numeric variables.  Enable
-   binary I/O.
-   
-   Overall Plan:
-   1. Define the constructors which will be used to create Item objects.
-   2. Provide mutator and accessor methods for each of an Item's variables.
-   3. Override equals.
-   4. Override toString.
-   5. Make the class serializable to support binary I/O operations.
-  
-   Classes needed and Purpose (Input, Processing, Output)
-   NumberFormat - output
-   String - input, output
+/*	CS 441 Final Project
+	File Name:			Item.java
+	Programmer:			Alexander Fairhurst
+	Date Last Modified: 10/20/2015	 	
 */
-import java.text.NumberFormat;
 import java.io.Serializable;
-import java.io.*;
+
+
 
 public class Item implements Serializable
 {
-	private String description, model, maker, serialNumber, pictureFileName;
-	private int quantity, yearPurchased;
-	private double price;
-	
-	NumberFormat money = NumberFormat.getCurrencyInstance();
+	public String accessionNumber, artist, title, pictureFileName;
 	
 	public Item()
 	{
-		description = null;
-		model = null;
-		maker = null;
-		serialNumber = null;
-		quantity = 0;
-		yearPurchased = 1000;
-		price = 0.0;
+		accessionNumber = null;
+		artist = null;
+		title = null;
 		pictureFileName = null;
 	}
-	public Item(String descr, String aModel, String make, String SN, int QTY,
-				int datePurchase, double aPrice)
+
+	public Item(String accessNum, String maker, String description, String pictureFile)
 	{
-		description = descr;
-		model = aModel;
-		maker = make;
-		serialNumber = SN;
-		quantity = QTY;
-		yearPurchased = datePurchase;
-		price = aPrice;
-		pictureFileName = null;
+		accessionNumber = accessNum;
+		artist = maker;
+		title = description;
+		pictureFileName = pictureFile;
 	}
-	public Item(String descr, String aModel, String make, String SN, int QTY,
-				int datePurchase, double aPrice, String picFile)
+	public Item(Item arg)
 	{
-		description = descr;
-		model = aModel;
-		maker = make;
-		serialNumber = SN;
-		quantity = QTY;
-		yearPurchased = datePurchase;
-		price = aPrice;
-		pictureFileName = picFile;
+		accessionNumber = arg.getAccessionNumber();
+		artist = arg.getArtist();
+		title = arg.getTitle();
+		pictureFileName = arg.getPic();
 	}
-	public void updateAll(String descr, String aModel, String make, 
-	String SN, int QTY, int datePurchase, double aPrice, String picFile)
+	
+	public void setAccessionNumber(String accessNum)
 	{
-		description = descr;
-		model = aModel;
-		maker = make;
-		serialNumber = SN;
-		quantity = QTY;
-		yearPurchased = datePurchase;
-		price = aPrice;
-		pictureFileName = picFile;
+		accessionNumber = accessNum;
 	}
-	public void setPic(String fileName)
+	
+	public String getAccessionNumber()
 	{
-		pictureFileName = fileName;
+		return accessionNumber;
 	}
+	
+	public void setArtist(String maker)
+	{
+		artist = maker;
+	}
+	
+	public String getArtist()
+	{
+		return artist;
+	}
+	
+	public void setTitle(String description)
+	{
+		title = description;
+	}
+	
+	public String getTitle()
+	{
+		return title;
+	}
+	
+	public void setPic(String pictureFile)
+	{
+		pictureFileName = pictureFile;
+	}
+	
 	public String getPic()
 	{
 		return pictureFileName;
-	}			
-	public void setDescription(String descr)
-	{
-		description = descr;
 	}
-	public String getDescription()
-	{
-		return description;
-	} 
-	public void setModel(String input)
-	{
-		model = input;
-	}
-	public String getModel()
-	{
-		return model;
-	}
-	public void setMake(String input)
-	{
-		maker = input;
-	}
-	public String getMake()
-	{
-		return maker;
-	}
-	public void setSerial(String SN)
-	{
-		serialNumber = SN;
-	} 
-	public String getSerial()
-	{
-		return serialNumber;
-	}
-	public void setQty(int QTY)
-	{
-		quantity = QTY;
-	} 
-	public int getQty()
-	{
-		return quantity;
-	}
-	public void setDate(int datePurchase)
-	{
-		yearPurchased = datePurchase;
-	}
-	public int getDate()
-	{
-		return yearPurchased;
-	}
-	public void setPrice(double aPrice) 
-	{
-		price = aPrice;
-	}
-	public double getPrice()
-	{
-		return price;
-	}
-	public boolean equals(Item other)
-	{
-		boolean flag;
-		
-		if (this == other)
-			flag = true;
-//assumes that purchase price, and purchase date do not make an item unique
-		else if ((description.equalsIgnoreCase(other.description))&&
-		(serialNumber.equalsIgnoreCase(other.serialNumber))&&
-		(model.equalsIgnoreCase(other.model))&&
-		(maker.equalsIgnoreCase(other.maker)))
-			flag = true;
-		else
-		//items are not identical
-			flag = false;
-			
-		return flag;	
-	}
+
 	public String toString()
 	{
-		return ("Description:\t"+description+"\nManufacturer:\t"+maker+
-		"\nModel Number:\t"+model+"\nSerial Number:\t"+serialNumber+
-		"\nYear Purchased:\t"+yearPurchased+"\nQuantity:\t"+quantity+
-		"\t\tPurchase Price:\t"+ money.format(price) +
-		"\nPicture file:\t" + pictureFileName + "\n");
-	}
+		return ("Accession Number: \t"+accessionNumber+"\nArtist: \t"+artist+"\nTitle: \t"+title+"Picture File"+pictureFileName+"\n");
+	}	
 }

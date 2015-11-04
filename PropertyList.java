@@ -86,7 +86,7 @@ public class PropertyList implements Serializable
 //	{
 //		return anItem;
 //	}
-	public double getTotalValue()
+/*	public double getTotalValue()
 	{
 		double totalValue = 0;
 	//method to calculate the current value of all assets	
@@ -100,8 +100,29 @@ public class PropertyList implements Serializable
 			
 		}
 		return totalValue;	
-	}
+	} */
+	
 	public int searchDataBase(String query)
+	{
+	//search by description, serialnumber, make and model
+		int itemLocation = -1, i = 0;
+		
+		for(Item element : dataBase)
+		{
+			if (query.equalsIgnoreCase(element.getAccessionNumber())||
+				query.equalsIgnoreCase(element.getArtist())||
+//				query.equalsIgnoreCase(element.getModel())||
+				query.equalsIgnoreCase(element.getTitle()))
+			{
+				itemLocation = i;
+				break;
+			}
+			i++;	
+		}
+		//if query not found, a negative returned value can be filtered out
+		return itemLocation;	
+	}	
+/*	public int searchDataBase(String query)
 	{
 	//search by description, serialnumber, make and model
 		int itemLocation = -1, i = 0;
@@ -121,7 +142,7 @@ public class PropertyList implements Serializable
 		//if query not found, a negative returned value can be filtered out
 		return itemLocation;	
 	}
-	public void listAllRecords()
+*/	public void listAllRecords()
 	{
 		for(int i = 0; i < dataBase.size(); i++)
 		{
@@ -139,21 +160,21 @@ public class PropertyList implements Serializable
 			for(Item element : dataBase)
 			{
 //Item's toString didn't preserve formatting when passed through PrintWriter
-				textOutput.println("Item Number "+item);
-				textOutput.println("Description\t"+element.getDescription());
-				textOutput.println("Manufacturer\t"+element.getMake());
-				textOutput.println("Model Number\t"+element.getModel());
-				textOutput.println("Serial Number\t"+element.getSerial());
+				textOutput.println("Item Number " +item);
+				textOutput.println("Serial Number\t"+element.getAccessionNumber());
+				textOutput.println("Title\t"+element.getTitle());
+				textOutput.println("Artist\t"+element.getArtist());
+/*				textOutput.println("Model Number\t"+element.getModel());
 				textOutput.println("Purchase Date\t"+element.getDate());
 				textOutput.println("Purchase Price\t"+
 										money.format(element.getPrice()));
 				textOutput.println("Quantity Avail.\t"+element.getQty());
-				textOutput.println("Picture File\t" + element.getPic());
+				textOutput.println("Picture File\t" + element.getPic());  */
 				textOutput.println("");
 				item++;
 			}
-			textOutput.println("Total Inventory:\t"+
-											 money.format(getTotalValue()));
+//			textOutput.println("Total Inventory:\t"+
+//											 money.format(getTotalValue()));
 			textOutput.close();
 			System.out.println("File " + fileName + " created.");
 		}
