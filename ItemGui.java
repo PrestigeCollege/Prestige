@@ -42,7 +42,7 @@ GUI Components
 	entry using JOptionPane ERROR_MESSAGE dialog.
 	5. Provide a method with uses a JOptionPane YES_NO dialog to allow the
 	user to confirm deletions prior to execution.
-	6. Specify a method which retrieves the name of the currentItem's image
+	6. Specify a method which retrieves the name of the currentItem's ImageIcon
 	file and then passes that name to be displayed on the main JFrame.
 	7. Method createItem() will launch a new JFrame which has labels and
 	textfields for the entry of information pertinent to the creation of a
@@ -54,7 +54,7 @@ GUI Components
 	method calls up the variables of the Item currently displayed in the
 	main JFrame.  The user modifies existing data and submits via submit or
 	cancel buttons.
-	9. Method updateJFrame() is used to update the information and images
+	9. Method updateJFrame() is used to update the information and ImageIcons
 	displayed on the main JFrame.  It calls up the current element's
 	variables and passes them to the JFrame's components.
 	10. The clearJFrame() method uses a String parameter to overwrite the
@@ -123,11 +123,15 @@ End of Methods***
    AddItemListener - input
 */
 import java.awt.*;
+import java.awt.image.*;
 import java.awt.event.*;
+import java.awt.print.*;
+import java.io.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.text.NumberFormat;
-import java.io.*;
+
+
 
 public class ItemGui extends JFrame
 {
@@ -147,6 +151,7 @@ public class ItemGui extends JFrame
 	private JMenuBar menuBar;
 	private JMenu file, edit, search, navigate, other;
 	private ImageIcon currentImage;
+	private BufferedImage markupImage;  //Allows creation of markable raster overlays
 	private Font labelFont, itemFont;
 //variables used in program	
 	private final int WIDTH = 700, SMALL_WIDTH = 375;
@@ -166,7 +171,12 @@ public class ItemGui extends JFrame
 	
 	public ItemGui()
 	{
+<<<<<<< HEAD
 		super("Condition Report System");
+=======
+	//	super("Inventory Management");
+		setTitle("SDMA Condition Reports");
+>>>>>>> origin/development
 		setSize(WIDTH, HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true); //allows window to be resized
@@ -190,8 +200,10 @@ public class ItemGui extends JFrame
 		itemFont = new Font("COURIER", Font.BOLD, 14); //font style for text output
 		trim = (LineBorder)BorderFactory.createLineBorder(Color.BLACK, 2);
 		
+
 //Create menuBars, menus and menu Items, attach ActionListeners to each
 //menuItem and add the manuItems to the menu
+		//File Menu
 		file = new JMenu("File");
 		JMenuItem fileLogin = new JMenuItem("Login");
 		fileLogin.addActionListener(new LoginListener());
@@ -201,16 +213,14 @@ public class ItemGui extends JFrame
 		fileSave.addActionListener(new FileSaveListener());
 		JMenuItem fileExport = new JMenuItem("Export");
 		fileExport.addActionListener(new TextFileListener());
-		JMenuItem filePrinter = new JMenuItem("Print"); //TODO look up print interface for Java
- 
-//<<<<<<< HEAD
-//TODO		filePrinter.addActionListener(new PrintFileListener());
-		file.add(fileLogin);
-//=======
+		JMenuItem filePrinter = new JMenuItem("Print");
 		filePrinter.addActionListener(new PrintFileListener());
+<<<<<<< HEAD
 //>>>>>>> origin/development
  
 		filePrinter.addActionListener(new PrintFileListener());
+=======
+>>>>>>> origin/development
 		
 		file.add(fileLogin);
 		file.add(fileOpen);
@@ -219,23 +229,26 @@ public class ItemGui extends JFrame
 		file.add(filePrinter);
 		
 		
+		//Edit Menu
 		edit = new JMenu("Edit");
 		JMenuItem editAdd = new JMenuItem("Create CR");
 		editAdd.addActionListener(new EditListener());
-//		editAdd.addActionListener(new EditListener());
 		JMenuItem editView = new JMenuItem("View CR");
 		editView.addActionListener(new EditListener());
 		JMenuItem editNew = new JMenuItem("Add Item"); //For testing
 		editNew.addActionListener(new EditListener()); //For testing
+		
 		edit.add(editAdd);
 		edit.add(editView);
 		edit.add(editNew);
 		
-		
+		//Search Menu
 		search = new JMenu("Search");
 		JMenuItem searchAll = new JMenuItem("Search");
 		searchAll.addActionListener(new SearchListener());
+		
 		search.add(searchAll);
+<<<<<<< HEAD
 		
 //navigate allows a user to cycle through items within the system
 		navigate = new JMenu("Navigate");
@@ -261,6 +274,16 @@ public class ItemGui extends JFrame
 		otherAbout.addActionListener(new OtherListener());
 		other.add(otherHelp);
 		other.add(otherAbout);
+=======
+
+		//Help Menu
+		help = new JMenu("help");
+		JMenuItem helpItem = new JMenuItem("Help"); //launches help.html
+		JMenuItem helpAbout = new JMenuItem("About");  //version info
+		
+		help.add(helpItem);
+		help.add(helpAbout);
+>>>>>>> origin/development
 		
 //creates menubar and adds pulldown menus to it		
 		menuBar = new JMenuBar();
@@ -272,8 +295,9 @@ public class ItemGui extends JFrame
 		
 //create a lable for displaying ImageIcons on the JFrame		
 //		currentImage = new ImageIcon("splash.jpg");
-//TODO image isn't displaying
+//TODO ImageIcon isn't displaying
 		currentImage = new ImageIcon("none.jpg");
+//		currentImage = new
 		imageLabel = new JLabel();
 		imageLabel.setIcon(currentImage);
 		
@@ -315,11 +339,11 @@ public class ItemGui extends JFrame
 		textPanel.add(make);
 		
 
-//add the image panel and text panel to the center panel
+//add the ImageIcon panel and text panel to the center panel
 		centerPanel = new JPanel();
 		centerPanel.setLayout(centerLayout);
 		centerPanel.setBorder(trim);
-//		centerPanel.add(imagePanel);
+//		centerPanel.add(ImageIconPanel);
 		centerPanel.add(imageLabel);
 		centerPanel.add(textPanel);		
 		
@@ -337,7 +361,7 @@ public class ItemGui extends JFrame
 		third = new JButton("New CR");
 //		third.addActionListener(new MovementListener());
 		third.addActionListener(new ReportListener());
-		third.addActionListener(new AddItemListener() );
+//		third.addActionListener(new AddItemListener() );
 		fourth = new JButton("Print");
 		fourth.addActionListener(new PrintFileListener());
 //add the buttons to the button panel		
@@ -415,29 +439,29 @@ to search before any data is loaded into the program's data structure.*/
 	}
 */
 	
-/*Calls an Item's image by filename. Image is passed to the ImageIcon class
- * constructor and displayed using the ImageLabel class.
+/*Calls an Item's ImageIcon by filename. ImageIcon is passed to the ImageIcon class
+ * constructor and displayed using the ImageIconLabel class.
  */
-	public void setImage(String imageName)
+	public void setImageIcon(String ImageIconName)
 	{	
-		currentImage = new ImageIcon(imageName);
+		currentImage = new ImageIcon(ImageIconName);
 		imageLabel.setIcon(currentImage);
 	}
 
 /*Creates a new CR for item currently displayed.  Launches a a new JFrame for
- * image markup using class (xxxx).  Present's user with a list of condition
+ * ImageIcon markup using class (xxxx).  Present's user with a list of condition
  * codes loaded from the database.  Condition report saved to database as a
- * marked up image, condition codes and any comments.
+ * marked up ImageIcon, condition codes and any comments.
  */  
 //TODO modify to accept current item's attributes as Parameters
-//TODO implement image overlay and markup
+//TODO implement ImageIcon overlay and markup
 //TODO determine correct return type for database --probably CR Class
-	private void createItem()
-	{
+//	private void createItem()
+//	{
 /**Creates a JFrame for modification of existing Items.  JFrame displays
  *blank textfields for user data entry.  Information is passed to the
  *try/catch blocks for analysis and verification before being accepted.*/
-		int rows = 5;
+/*		int rows = 5;
 		int columns =2;
 		
 		inputWindow = new JFrame("Add an Item");
@@ -451,9 +475,9 @@ to search before any data is loaded into the program's data structure.*/
 		GridLayout inputWindowLayout = new GridLayout(rows, columns,layoutGap, layoutGap);
 		inputWindow.setLayout(inputWindowLayout);
 //TODO Assign Fields to panels, pannels to JFrame		
-//Create two new JPanels to hold the text and image fields
+//Create two new JPanels to hold the text and ImageIcon fields
 		JPanel inputPanel = new JPanel();
-		JPanel imagePanel = new JPanel(); //must be markable
+		JPanel ImageIconPanel = new JPanel(); //must be markable
 		
 //create a label to identity data fields
 		JLabel serialLabel = new JLabel("Accession Number");
@@ -470,7 +494,7 @@ to search before any data is loaded into the program's data structure.*/
 //		JButton addFileName = new JButton("Choose File");
 //		addFileName.addActionListener(new AddItemListner());
 		
-		JTextField blankField = new JTextField(0);
+//		JTextField blankField = new JTextField(0);
 		
 		JButton addButton = new JButton("Submit");
 		addButton.addActionListener(new AddItemListener());
@@ -489,7 +513,7 @@ to search before any data is loaded into the program's data structure.*/
 		inputWindow.add(addButton);
 		inputWindow.add(cancelButton);
 	}//end of createItem()
-	
+*/	
 	/**Creates a JFrame for modification of existing Items.  JFrame loads the
 	 *data of the Item displayed in the main window.  User is then able to modify
 	 *the existing Item's variables.  Modifications are passed to the try/catch
@@ -507,9 +531,27 @@ to search before any data is loaded into the program's data structure.*/
 		serial.setText(currentItem.getAccessionNumber());
 		make.setText(currentItem.getArtist());
 		description.setText(currentItem.getTitle());
-		setImage(currentItem.getPic());
+		setImageIcon(currentItem.getPic());
 	}
 	
+	//Takes an ImageIcon object and converts it to a Buffered ImageIcon, which has
+	//an alpha channel and markup tools
+	private BufferedImage convertImageIcon(ImageIcon arg)
+	{
+			
+			
+			BufferedImage myBuffImageIcon = new BufferedImage(arg.getIconWidth(),
+			 arg.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+			
+			Graphics2D g2d = (Graphics2D)myBuffImageIcon.getGraphics();
+//			g2d.drawImage(arg, 0, 0, null);
+//			g2d.dispose();
+		
+			
+
+		
+		return myBuffImageIcon;	
+	}
 //TODO investigate why string being passed as parameter.
 	//Declare wipe as local variable?  Do we still need this function?
 	
@@ -546,7 +588,8 @@ to search before any data is loaded into the program's data structure.*/
 		{
 			analyzePath();
 		}//end of Open
-		public File getFileOrDirectory()
+/*		hardcoding in file name for development
+ *		public File getFileOrDirectory()
 		{//instantiation of JFileChooser for browsing of file structure,
 		//FILES_AND_DIRECTORIES constant allows user to navigate / view
 		//both files and directories.
@@ -568,10 +611,13 @@ to search before any data is loaded into the program's data structure.*/
 				}	
 			}
 			return fileName;
-		}
+		} */ //hard coding file name for testing remove later
 		public void analyzePath()
 		{
-			File name = getFileOrDirectory();
+
+/*			HARD CODING FILE NAME	
+ *			File name = getFileOrDirectory();
+	
 
 			if(name != null)
 			{
@@ -581,18 +627,20 @@ to search before any data is loaded into the program's data structure.*/
  *ProperyList, set the current location to slot 0 and update the display.
  *calculate the value of the PropertyList.*/
 				localList = new PropertyList();
-				localList.readFromFile(name.getName());	
+				localList.readFromFile("testdata.dat");  //TODO remove later
+//				localList.readFromFile(name.getName());	
 				updateJFrame(0);
 				location = 0;
-				}
-			}//end outer if 
-	
+//				}
+//			}//end outer if 	
+/*	HARDCODING		
 			else //is not a file directory, or user cancels,
 			// generate error message
 			{
 				JOptionPane.showMessageDialog(this,"Aborting request",
 				"Open File Aborted", JOptionPane.ERROR_MESSAGE);
 			}
+*/ //HARDCODING
 		}		
 	}//end private inner class OpenFileListener
 	
@@ -673,16 +721,18 @@ to search before any data is loaded into the program's data structure.*/
 						JOptionPane.showMessageDialog(null,"View CR not defined yet.",
 						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
 						break;
-					case "Add Item":
-						createItem();
-						break;
+//					case "Add Item":
+//						createItem();
+//						break;
 					default:
 						JOptionPane.showMessageDialog(null,"Something Unexpected Happened",
 						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
 				}//end switch
 			}
+			else
+				alert("No Editing before loading data");
 //This condition creates a new data structure to hold the created item, then creates the item.
-			else 
+/*			else 
 			{
 				if (junk.equals("Add Item"))
 				{
@@ -691,7 +741,7 @@ to search before any data is loaded into the program's data structure.*/
 				}
 				else
 					alert("I'm falling through");
-			}	
+			}	*/
 		}
 	}//end private inner class EditListener	
 
@@ -722,7 +772,7 @@ to search before any data is loaded into the program's data structure.*/
 				}
 			}	
 			else
-				alert();
+				alert("Item not found");
 		}
 	}//end private inner class SearchListener
 	
@@ -978,28 +1028,69 @@ JFrame will update to display the recent addition.
 	
 	}//end private inner additem class
 	
-//TODO flesh out PrintFileListener to provide print functionality
-	private class PrintFileListener implements ActionListener
+	
+	/** PrintListener allows printing of CRs
+	 * Implements Java Graphics 2D API to print and access system default printer.
+	 * @author Cody Solley
+	 * **/
+	private class PrintFileListener implements ActionListener, Printable
 	{
-/*			public string[] damageConditions {"Abrasion", "Accretion", "Adhesive Residue", "Blanching",
-		"Bleeding", "Blister", "Bloom", "Buckling", "Chalking", "Check", "Chip", "Cleavage", 
-	}
-*/		
+		public int print(Graphics g, PageFormat pf, int page) throws PrinterException
+		{
+			//Limits to one page, page count starts at 0
+			if (page > 0)
+			{
+				return NO_SUCH_PAGE;
+			}
 		
+			//Need to define print area, so must declare graphic then set coordinates via pageformat to show where to print on the page
+//			Graphics2D g2d = (Graphics2D)g;
+//			g2d.translate(pf.getImageIconableX(), pf.getImageIconableY());
+			
+			//render what we want to print
+			
+			g.drawString("Accession Number:", 100, 100);
+			g.drawString(currentItem.accessionNumber, 207, 100);
+			g.drawString("Artist:", 100, 125);
+			g.drawString(currentItem.artist, 135, 125);
+			g.drawString("Title:", 100, 150);
+			g.drawString(currentItem.title, 130, 150);
+			g.drawString("Picture File:", 100, 175);
+			g.drawString(currentItem.pictureFileName, 167, 175);
+		
+			//Must return to indicate that the object is part of the printed document
+			return PAGE_EXISTS;
+		}
+	
 		public void actionPerformed(ActionEvent e)
 		{
 			String junk = e.getActionCommand();
-			
-			//this is a stub until later implementation
 			if(junk.equals("Print"))
 			{
-				//throw a joption pane for now
-				String printAction = JOptionPane.showInputDialog(null, 
-						"Print Chosen.", JOptionPane.PLAIN_MESSAGE);
+				//Set the print job for the CR record, pop up the Print option window
+				PrinterJob job = PrinterJob.getPrinterJob();
+				job.setPrintable(this);
+				
+				//Check for user to click ok, boolean only true if OK clicked, everything else is false
+				boolean ok = job.printDialog();
+				
+				//Execute Print
+				if(ok)
+				{
+					try
+					{
+						job.print();
+					}
+					catch (PrinterException ex)
+					{
+						//generate error popup window
+					}
+				}
 				
 			}
 		}
 	}//end PrintFileListener
+	
 	/**  LoginListener allows a user to authenticate before interacting with
 	*  the Condition Reports system. Use of other functions will be
 	*  disabled until a user has logged in.
@@ -1031,12 +1122,26 @@ JFrame will update to display the recent addition.
 	                loggedIn = true; //set user to logged in state
 	                return;
 	            }
-	        }
-	        
+	        }  
 	    }
+	    
+	    private class CancelListener extends JFrame implements ActionListener
+	    {
+	    	public void actionPerformed(ActionEvent e)
+	    	{
+	    		System.out.println("In the Cancel Listener");
+	    		dispose();
+	    	}
+	    }
+<<<<<<< HEAD
 /**  ReportListener launches a new JFrame window displaying an image of the current
  * item on display, along with an image overlay of all previously reported damage.
  * The image and overlay are in the right JPane, text fields for annotating new damage
+=======
+/**  ReportListener launches a new JFrame window displaying an ImageIcon of the current
+ * item on display, along with an ImageIcon overlay of all previously reported damage.
+ * The ImageIcon and overlay are in the right JPane, text fields for anotating new damage
+>>>>>>> origin/development
  * are on the left.  When the CR is submitted, it saves to the data structure housing
  * other CRs for the same Item.
  */
@@ -1044,24 +1149,112 @@ JFrame will update to display the recent addition.
 	    {
 	    	public void actionPerformed(ActionEvent e) //new Condition Report requested
 	    	{
-	    		reportWindow = new JFrame("Create Condition Report");
-	    		reportWindow.setSize(SMALL_WIDTH, SMALL_HEIGHT);
-	    		reportWindow.setResizable(true);
-	    		reportWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    		reportWindow.setLocationRelativeTo(null);
+	    		if (localList != null)
+	    		{
+	    			reportWindow = new JFrame();
+	    			setTitle("Create Condition Report");
+	    			setSize(WIDTH, HEIGHT);
+	    			setResizable(true);
+	    			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    			setLocationRelativeTo(null);
 	    		
-	    		//Specify a gridlayout for the resulting JFrame
-	    		Gridlayout reportWindowLayout = new GridLayout(rows, columns, layoutGap, layoutGap);
+	    		//need to set a layout	
 	    		
-	    		JPanel inputPanel = new JPanel(); // for annotations
-	    		JPanel imagePanel = new JPanel(); //TODO call up the current Item's image and layered markup
+	 //Create a JPanel for holding damage conditions, a notes field, and submit/ cancel buttons
+		    		JPanel inputPanel = new JPanel(); // for annotations
+		    		inputPanel.setLayout(new GridLayout(4, 1, 2 *layoutGap, layoutGap) );
 	    		
-	    		JTextField damageLabel = new JTextField("Select any newly discovered damages");
-	    		JComboBox damageCondition = new JComboBox()
-	   
+	    			JTextField damageLabel = new JTextField("Select any newly discovered damages");
+	    			damageLabel.setEditable(false);
+	    			damageLabel.setFont(itemFont);
+	    			String[] conditions = {"","condition1", "condition2", "condition3", "condition4", "condition5"}; 
+	    			JComboBox damageCondition = new JComboBox(conditions);
+	    			damageCondition.setFont(itemFont);
+	    			damageCondition.setEditable(false);
+	    		//TODO figure out how to return selected conditions
 	    		
-	    	}//end ReportListener
+	    			JTextField notesLabel = new JTextField("Enter notes for new damages:");
+	    			notesLabel.setEditable(false);
+	    			notesLabel.setFont(itemFont);
+	    		//JTextArea(rows, col)
+		    		JTextArea notesField = new JTextArea("type here", 6, 40);
+	    //		JScrollPane scroller = new JScrollPane();
+		    		notesField.getPreferredSize();
+	    			notesField.setFont(labelFont);
+	    			notesField.setLineWrap(true);
+	    			notesField.setTabSize(5);
+	    		//returns input in textarea as String?
+		    		String notes = notesField.getText();
+	    		//for testing output
+		    		System.out.println(notes);
+	    		
+	    			inputPanel.add(damageLabel);
+	    			inputPanel.add(damageCondition);
+		    		inputPanel.add(notesLabel);
+		    		inputPanel.add(notesField);
+
+	    		
+	 //Create a panel for displaying ImageIcon and hosting markup layer   		
 	    	
+	  		  		JPanel imagePanel = new JPanel(); //TODO call up the current Item's ImageIcon and layered markup
+	    			imagePanel.setLayout( new GridLayout(1,1,0,0) );
+/*Working on creating a writeable, transparent overlay for the displayed item.  Markup ImageIcon is of type Buffered
+ *ImageIcon.  	    		
+	    http://docs.oracle.com/javase/7/docs/api/java/awt/ImageIcon/BufferedImage.html#TYPE_4BYTE_ABGR
+	    http://docs.oracle.com/javase/tutorial/2d/ImageIcons/drawonImageIcon.html
+	    https://www.java.net/node/646586
+*/	    
+	    			markupImage = new BufferedImage(currentImage.getIconWidth(), currentImage.getIconHeight(), 6 )	;
+			//	markupImageIcon.    
+	    		
+	    		
+	    		//TODO Add item ImageIcon from currently displayed item
+	    			imagePanel.add(imageLabel);
+//	    		ImageIconPanel.add(markupImageIcon);
+
+	//Create buttons for marking up an ImageIcon, submitting a Condition Report and canceling the transaction
+
+	    			JButton submit = new JButton("Submit");
+	    			submit.setPreferredSize(new Dimension(200, 100));
+	    		//TODO write new report to Item's queue ....
+		    		JButton cancelButton = new JButton("Cancel");
+		    		cancelButton.setPreferredSize(new Dimension(200, 100));
+	    			cancelButton.addActionListener(new CancelListener());
+	    			JButton markupButton = new JButton("Mark Up");
+	    			markupButton.setPreferredSize(new Dimension(200, 100));
+	    		//TODO create an actionlistener for markup of ImageIcons.
+	    			JPanel myButtonPanel = new JPanel();
+	    			myButtonPanel.setLayout( new GridLayout(1,3, 2 * layoutGap, layoutGap) );
+	    			myButtonPanel.add(markupButton, BorderLayout.LINE_START);
+	    			myButtonPanel.add(submit, BorderLayout.CENTER);
+	    			myButtonPanel.add(cancelButton, BorderLayout.LINE_END);
+	    		
+	 //Add all the three panels to the main panel for (formatting purposes)   		
+	    			JPanel mainPanel = new JPanel(new GridLayout(1,2, layoutGap, 0));
+	    			mainPanel.add(imagePanel, BorderLayout.LINE_START);
+	    			mainPanel.add(inputPanel, BorderLayout.LINE_END);
+	    		
+
+	//Add the main panel to the JFrame and make it visible
+	    			add(mainPanel, BorderLayout.PAGE_START);
+	    			add(myButtonPanel, BorderLayout.PAGE_END);
+//	    		mainPanel.add(myButtonPanel, BorderLayout.PAGE_END);
+					pack();
+	    			setVisible(true);	
+	    		}
+	    		else
+	    			alert("Must load data file first");
+	    		
+
+/** TODO List:
+ *	Figure out how to return CR inputs to the database
+ *  Fix Cancel Button operation
+ *	Add action Listener to the Markup button, will call up drawing tools
+ *  Add action Listener to the Submit button that writes any changes to the Item's Queue 
+ *  Add a vertical scroll bar to the JFrame.			
+*/	   			
+	    		
+	    	}//end ActionListener
 	    }//end ReportListener
 	    
 /**  OtherListener provides the user with one of two options: help and about.
