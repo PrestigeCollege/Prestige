@@ -1,0 +1,62 @@
+Abrasion
+Accretion
+Adhesive Residue
+Blanching
+Bleeding
+Blister
+Bloom
+Buckling/Undulation/Draw
+Chalking
+Check
+Chip
+Cleavage/Cupping/Tenting
+Cockling
+Corrosion
+Crack
+Crackle
+Crazing
+Crease
+Delamination
+Dent
+Dimpling 
+Discoloration
+Dishing
+Distortion
+Draw
+Dry Rot
+Embrittlement
+Fill
+Flaking
+Fold
+Foxing
+Frilling
+Gouge
+Ground
+Impasto
+Inclusion
+Inpainting
+Loss
+Mildew
+Missing Element
+Mold
+Overpainting
+Paint Layer
+Patina
+Pest Damage
+Pitting 
+Scratch
+Sheen
+Shrinkage
+Silvering
+Soil
+Split
+Stain
+Stretcher Crease
+Tarnish
+Tear
+Varnish
+Warp
+Wear
+Weeping
+Wrinkling
+Other
