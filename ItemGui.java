@@ -129,8 +129,6 @@ import java.awt.print.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import java.text.NumberFormat;
-
 
 
 public class ItemGui extends JFrame
@@ -149,7 +147,7 @@ public class ItemGui extends JFrame
 	private JLabel imageLabel;
 	private LineBorder trim;
 	private JMenuBar menuBar;
-	private JMenu file, edit, search, navigate, other;
+	private JMenu file, edit, search, navigate, help, other;
 	private ImageIcon currentImage;
 	private BufferedImage markupImage;  //Allows creation of markable raster overlays
 	private Font labelFont, itemFont;
@@ -171,12 +169,11 @@ public class ItemGui extends JFrame
 	
 	public ItemGui()
 	{
-<<<<<<< HEAD
+
 		super("Condition Report System");
-=======
+
 	//	super("Inventory Management");
 		setTitle("SDMA Condition Reports");
->>>>>>> origin/development
 		setSize(WIDTH, HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true); //allows window to be resized
@@ -190,10 +187,6 @@ public class ItemGui extends JFrame
 		GridLayout centerLayout = new GridLayout(1,2,layoutGap,layoutGap);
 //layout for button panel along bottom of JFrame
 		GridLayout buttonLayout = new GridLayout(1, 4, layoutGap, layoutGap);
-//		GridLayout buttonLayout = new GridLayout(1,5, layoutGap, layoutGap);
-//		GridLayout buttonLayoutCenter = new GridLayout(1,2, layoutGap, layoutGap); //layout for CR markup and save
-//layout for text area
-//		GridLayout textAreaLayout = new GridLayout(9,2,5,5);  old
 		GridLayout textAreaLayout = new GridLayout(6,1,(layoutGap /2), (layoutGap/2)); //layout for text output fields and titles
 //set a font profile for JFrame
 		labelFont = new Font("COURIER", Font.PLAIN, 12); //font style for text headings
@@ -215,12 +208,9 @@ public class ItemGui extends JFrame
 		fileExport.addActionListener(new TextFileListener());
 		JMenuItem filePrinter = new JMenuItem("Print");
 		filePrinter.addActionListener(new PrintFileListener());
-<<<<<<< HEAD
-//>>>>>>> origin/development
+
  
 		filePrinter.addActionListener(new PrintFileListener());
-=======
->>>>>>> origin/development
 		
 		file.add(fileLogin);
 		file.add(fileOpen);
@@ -248,7 +238,6 @@ public class ItemGui extends JFrame
 		searchAll.addActionListener(new SearchListener());
 		
 		search.add(searchAll);
-<<<<<<< HEAD
 		
 //navigate allows a user to cycle through items within the system
 		navigate = new JMenu("Navigate");
@@ -274,7 +263,6 @@ public class ItemGui extends JFrame
 		otherAbout.addActionListener(new OtherListener());
 		other.add(otherHelp);
 		other.add(otherAbout);
-=======
 
 		//Help Menu
 		help = new JMenu("help");
@@ -283,7 +271,6 @@ public class ItemGui extends JFrame
 		
 		help.add(helpItem);
 		help.add(helpAbout);
->>>>>>> origin/development
 		
 //creates menubar and adds pulldown menus to it		
 		menuBar = new JMenuBar();
@@ -294,10 +281,7 @@ public class ItemGui extends JFrame
 		menuBar.add(other);
 		
 //create a lable for displaying ImageIcons on the JFrame		
-//		currentImage = new ImageIcon("splash.jpg");
-//TODO ImageIcon isn't displaying
 		currentImage = new ImageIcon("none.jpg");
-//		currentImage = new
 		imageLabel = new JLabel();
 		imageLabel.setIcon(currentImage);
 		
@@ -354,14 +338,10 @@ public class ItemGui extends JFrame
 		
 //TODO modify listener functions to support
 		first = new JButton("Search");
-//		first.addActionListener(new MovementListener());
 		first.addActionListener(new SearchListener());
 		second = new JButton("View Mark-Up");
-//		second.addActionListener(new MovementListener());
 		third = new JButton("New CR");
-//		third.addActionListener(new MovementListener());
 		third.addActionListener(new ReportListener());
-//		third.addActionListener(new AddItemListener() );
 		fourth = new JButton("Print");
 		fourth.addActionListener(new PrintFileListener());
 //add the buttons to the button panel		
@@ -384,16 +364,12 @@ public class ItemGui extends JFrame
 		
 		return fileName;
 	}
-/*Searches database by accession number.  Will need to know if any specific error /content
- * checking is required. i.e. is there a specific format for Accession Reports.
- * 
+/*Searches database by accession number. Return any records matching the query 
+ * in any member value.
  * Returns a string value to calling function.
  */
-	
 	private String setQuery()
 	{
-//Collect information from a user to use in searches and deletions.		
-
 		String query = JOptionPane.showInputDialog(null, "Enter the Accession "+
 		"Number to search.\n", "Search Input", JOptionPane.PLAIN_MESSAGE);
 		
@@ -423,21 +399,7 @@ to search before any data is loaded into the program's data structure.*/
 		"aborting data entry.", "Invalid Input Exception",
 		JOptionPane.ERROR_MESSAGE);
 	}
-/*	This function is not required for this project.
- * 
- * private int confirmDeletion()
-	{
-//Creates a JOptionPane dialog box to get user confirmation before deleting
-//item(s)		
-		String message = "To continue select \"OK\"";
-		String title = "Confirm Deleletion";
-		
-		int answer = JOptionPane.showConfirmDialog(null, message, title,
-					JOptionPane.OK_CANCEL_OPTION);
-					
-		return answer;
-	}
-*/
+
 	
 /*Calls an Item's ImageIcon by filename. ImageIcon is passed to the ImageIcon class
  * constructor and displayed using the ImageIconLabel class.
@@ -447,78 +409,6 @@ to search before any data is loaded into the program's data structure.*/
 		currentImage = new ImageIcon(ImageIconName);
 		imageLabel.setIcon(currentImage);
 	}
-
-/*Creates a new CR for item currently displayed.  Launches a a new JFrame for
- * ImageIcon markup using class (xxxx).  Present's user with a list of condition
- * codes loaded from the database.  Condition report saved to database as a
- * marked up ImageIcon, condition codes and any comments.
- */  
-//TODO modify to accept current item's attributes as Parameters
-//TODO implement ImageIcon overlay and markup
-//TODO determine correct return type for database --probably CR Class
-//	private void createItem()
-//	{
-/**Creates a JFrame for modification of existing Items.  JFrame displays
- *blank textfields for user data entry.  Information is passed to the
- *try/catch blocks for analysis and verification before being accepted.*/
-/*		int rows = 5;
-		int columns =2;
-		
-		inputWindow = new JFrame("Add an Item");
-		inputWindow.setSize(SMALL_WIDTH, SMALL_HEIGHT);
-		inputWindow.setResizable(false);
-		inputWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		inputWindow.setLocationRelativeTo(null);
-		inputWindow.setVisible(true);
-		
-//Specify a layout for the input window and apply it to the window
-		GridLayout inputWindowLayout = new GridLayout(rows, columns,layoutGap, layoutGap);
-		inputWindow.setLayout(inputWindowLayout);
-//TODO Assign Fields to panels, pannels to JFrame		
-//Create two new JPanels to hold the text and ImageIcon fields
-		JPanel inputPanel = new JPanel();
-		JPanel ImageIconPanel = new JPanel(); //must be markable
-		
-//create a label to identity data fields
-		JLabel serialLabel = new JLabel("Accession Number");
-		serialText = new JTextField(30); //TODO must load from current item
-		
-		JLabel makeLabel = new JLabel("Title");
-		makeText = new JTextField(30);
-		
-		JLabel modelLabel = new JLabel("Artist");
-		modelText = new JTextField(30);
-		
-		JLabel pictureLabel = new JLabel("Enter the picture file's name");
-		pictureText = new JTextField(30);
-//		JButton addFileName = new JButton("Choose File");
-//		addFileName.addActionListener(new AddItemListner());
-		
-//		JTextField blankField = new JTextField(0);
-		
-		JButton addButton = new JButton("Submit");
-		addButton.addActionListener(new AddItemListener());
-		
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(new AddItemListener());
-		
-		inputWindow.add(serialLabel);
-		inputWindow.add(serialText);
-		inputWindow.add(makeLabel);
-		inputWindow.add(makeText);
-		inputWindow.add(modelLabel);
-		inputWindow.add(modelText);
-		inputWindow.add(pictureLabel);
-		inputWindow.add(pictureText);
-		inputWindow.add(addButton);
-		inputWindow.add(cancelButton);
-	}//end of createItem()
-*/	
-	/**Creates a JFrame for modification of existing Items.  JFrame loads the
-	 *data of the Item displayed in the main window.  User is then able to modify
-	 *the existing Item's variables.  Modifications are passed to the try/catch
-	 *blocks for analysis and verification before being accepted.*/	
-
 /**Updates JFrame display with new input data.  Parameter location refers to
  * 	an element number in data structure.
  */
@@ -533,26 +423,6 @@ to search before any data is loaded into the program's data structure.*/
 		description.setText(currentItem.getTitle());
 		setImageIcon(currentItem.getPic());
 	}
-	
-	//Takes an ImageIcon object and converts it to a Buffered ImageIcon, which has
-	//an alpha channel and markup tools
-	private BufferedImage convertImageIcon(ImageIcon arg)
-	{
-			
-			
-			BufferedImage myBuffImageIcon = new BufferedImage(arg.getIconWidth(),
-			 arg.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-			
-			Graphics2D g2d = (Graphics2D)myBuffImageIcon.getGraphics();
-//			g2d.drawImage(arg, 0, 0, null);
-//			g2d.dispose();
-		
-			
-
-		
-		return myBuffImageIcon;	
-	}
-//TODO investigate why string being passed as parameter.
 	//Declare wipe as local variable?  Do we still need this function?
 	
 /**  Prints selected data to a text file when user calls registered events.
@@ -713,7 +583,7 @@ to search before any data is loaded into the program's data structure.*/
 				switch(junk)
 				{
 					case "Create CR":
-						//stub until defined
+						new ReportListener();
 						JOptionPane.showMessageDialog(null,"Create CR not defined yet.",
 						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
 						break;
@@ -831,7 +701,6 @@ to search before any data is loaded into the program's data structure.*/
 				{
 					alert("Please open a database file before using navigation.");
 				}
-				
 	        }
 	} //end movementlistener class
 	
@@ -841,192 +710,7 @@ to search before any data is loaded into the program's data structure.*/
  * @author James
  *
  */
-//TODO modularize try catch blocks with a function
-//TODO update case variables in blocks
-	private class AddItemListener implements ActionListener
-	{
-		String itemDescr, itemMake, itemSerial , itemPic;
-		
-		//, itemModel; 
-		//int itemYear, itemQty;
-		//double itemPrice;
 
-		public void actionPerformed(ActionEvent e)
-		{
-			String junk = e.getActionCommand();
-			
-			if (junk.equals("Add Item"))
-			{
-//set the user's input as the textfield's text		
-				serialText.setText(serialText.getText());
-				descriptionText.setText(descriptionText.getText());
-				makeText.setText(makeText.getText());
-				pictureText.setText(pictureText.getText().toLowerCase());
-				
- 
-//adjusting indent for this section because of long line entries
-		String temp, secondAttempt, fileExtension;
-//		int anInt;
-//		double aDouble;
-		boolean acceptableInput = true;
-		
-/*logic for each of the following try-catch pairs is as follows:
-A user's input is collected from the text field and copied to a type
-appropriate variable.  The input is analyzed agains an acceptable range of
-responses. If the input does not satisfy the input criteria, a exception is
-thrown with a specific message identifying the error.  The exception is
-passed to a JOption dialog box which allows the user one attempt to correct
-their mistake.  If the user again fails to satisfy the input requirements,
-the input sesion is terminated and the information is discarded. If the user
-meets all requirement, the information is fed into a constructor and added
-to the PropertyList ArrayList and the current assets value is updated. The
-JFrame will update to display the recent addition.
-*/
-	try
-	{	
-		temp = descriptionText.getText();
-		if((temp == null)||(temp.equals("")))
-			throw new InvalidInputException("Description may not be blank");
-		else
-			itemDescr = temp;
-	}
-	catch (InvalidInputException itemException)
-	{
-		secondAttempt = JOptionPane.showInputDialog(null, 
-		itemException.getMessage(),"Invalid Input", 
-		JOptionPane.PLAIN_MESSAGE);
-		
-		if((secondAttempt == null)||(secondAttempt.equals("")))
-		{
-			failure();
-			inputWindow.dispose();
-			acceptableInput = false;
-		}
-		else
-			itemDescr = secondAttempt;
-	}	
-	try
-	{
-		temp = makeText.getText();
-		if((temp == null)||(temp.equals("")))
-			throw new InvalidInputException("Make may not be "+
-			"blank. If none or unknown, state \"none\"");
-		else
-			itemMake = temp;
-	}
-	catch(InvalidInputException itemException)
-	{
-		secondAttempt = JOptionPane.showInputDialog(null, 
-		itemException.getMessage(),"Invalid Input", 
-		JOptionPane.PLAIN_MESSAGE);
-		
-		if((secondAttempt == null)||(secondAttempt.equals("")))
-		{
-			failure();
-			inputWindow.dispose();
-			acceptableInput = false;
-		}
-		else
-			itemMake = secondAttempt;
-	}
-	try
-	{
-		temp = serialText.getText();
-		if((temp == null)||(temp.equals("")))
-			throw new InvalidInputException("Serial number may not "+
-			"be blank. If none or unknown, state \"none\"");
-		else
-			itemSerial = temp;	
-	}
-	catch(InvalidInputException itemException)
-	{
-		secondAttempt = JOptionPane.showInputDialog(null, 
-		itemException.getMessage(),"Invalid Input", 
-		JOptionPane.PLAIN_MESSAGE);
-		
-		if((secondAttempt== null)||(secondAttempt.equals(" ")))
-		{
-			failure();
-			inputWindow.dispose();
-			acceptableInput = false;
-		}
-		else
-			itemSerial = secondAttempt;
-	}
-	try
-	{
-		temp = pictureText.getText();
-			
-		if((temp!=null)&&(!temp.equals("")))
-		{
-			if(temp.equalsIgnoreCase("none"))
-				temp = temp.toLowerCase()+".jpg";
-		
-			fileExtension = temp.substring(temp.length()-3, temp.length());
-			
-			if((fileExtension.equals("jpg"))||(fileExtension.equals("gif"))
-			||(fileExtension.equals("png")))
-				itemPic = temp;
-				
-			else
-				throw new InvalidInputException("File must be in format"+
-				" .jpg, .gif, or .png");	
-		}
-		else
-			throw new InvalidInputException("Picture file cannot be "+
-			"blank. If no picture, state \"none\".");
-	}
-	catch(InvalidInputException itemException)
-	{
-		secondAttempt = JOptionPane.showInputDialog(null, 
-		itemException.getMessage(),"Invalid Input", 
-		JOptionPane.PLAIN_MESSAGE);
-		
-		if((secondAttempt!=null)&&(!secondAttempt.equals("")))
-		{		
-			if (secondAttempt.equalsIgnoreCase("none"))
-				secondAttempt = secondAttempt.toLowerCase()+".jpg";
-				
-			fileExtension = secondAttempt.substring(secondAttempt.length()-3,
-													 secondAttempt.length());
-			
-			if((fileExtension.equals("jpg"))||(fileExtension.equals("gif"))
-			||(fileExtension.equals("png")))
-				itemPic = secondAttempt;								
-				
-			else
-			{
-				failure();
-				inputWindow.dispose();
-				acceptableInput = false;				
-			}
-		}
-		else
-		{
-			failure();
-			inputWindow.dispose();
-			acceptableInput = false;			
-		}
-	}//last catch
-	
-	if((acceptableInput)&&(modifyNotAdd == false))
-	{
-		Item newItem = new Item(itemDescr, itemMake, itemSerial,
-		itemPic); 
-		
-		localList.addToDataBase(newItem);
-		updateJFrame(localList.getDataBaseSize()-1);
-	}
-
-	
-	inputWindow.dispose();
-	
-	}//end if statement
-		else
-			inputWindow.dispose();
-	}//end method
-	
-	}//end private inner additem class
 	
 	
 	/** PrintListener allows printing of CRs
@@ -1124,25 +808,10 @@ JFrame will update to display the recent addition.
 	            }
 	        }  
 	    }
-//Was playing with this Cancel Listener to figure out how to add functionality to the
-//Cancel button on the frames...It doesn't work right now.	    
-	    private class CancelListener extends JFrame implements ActionListener
-	    {
-	    	public void actionPerformed(ActionEvent e)
-	    	{
-	    		System.out.println("In the Cancel Listener");
-	    		dispose();
-	    	}
-	    }
-<<<<<<< HEAD
-/**  ReportListener launches a new JFrame window displaying an image of the current
- * item on display, along with an image overlay of all previously reported damage.
- * The image and overlay are in the right JPane, text fields for annotating new damage
-=======
+
 /**  ReportListener launches a new JFrame window displaying an ImageIcon of the current
  * item on display, along with an ImageIcon overlay of all previously reported damage.
  * The ImageIcon and overlay are in the right JPane, text fields for anotating new damage
->>>>>>> origin/development
  * are on the left.  When the CR is submitted, it saves to the data structure housing
  * other CRs for the same Item.
  */
@@ -1155,10 +824,10 @@ JFrame will update to display the recent addition.
 
 /** TODO List:
  *	Figure out how to return CR inputs to the database
- *  Fix Cancel Button operation
- *	Add action Listener to the Markup button, will call up drawing tools
+ *  Fix Cancel Button operation --Done
+ *	Add Action Listener to Cancel Button -- No longer Required
  *  Add action Listener to the Submit button that writes any changes to the Item's Queue 
- *  Add a vertical scroll bar to the JFrame.			
+ *  Add a vertical scroll bar to the JFrame. --Maybe			
 */	   			
 	    		
 	    	}//end ActionListener
