@@ -222,7 +222,7 @@ public class ItemGui extends JFrame
 		//Edit Menu
 		edit = new JMenu("Edit");
 		JMenuItem editAdd = new JMenuItem("Create CR");
-		editAdd.addActionListener(new EditListener());
+		editAdd.addActionListener(new ReportListener());
 		JMenuItem editView = new JMenuItem("View CR");
 		editView.addActionListener(new EditListener());
 		JMenuItem editNew = new JMenuItem("Add Item"); //For testing

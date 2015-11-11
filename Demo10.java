@@ -34,7 +34,7 @@ public class Demo10 extends JFrame
   final static boolean shouldWeightX = true;
   final static boolean RIGHT_TO_LEFT = false;
   private static int numberOfConditions = 62 ;//supplied by client
-  public static Color ink = Color.RED;
+  public static Color ink = new Color(255,0,0);
 
    
   public Demo10 (String imageFileName)
@@ -183,6 +183,7 @@ public class Demo10 extends JFrame
 
       GStyle routeStyle = new GStyle();
    	  routeStyle.setForegroundColor (new Color (255, 0, 0));
+	  routeStyle.setForegroundColor(ink);
       routeStyle.setLineWidth (4);
       routeStyle.setAntialiased (true);
       route_.setStyle (routeStyle);
@@ -205,15 +206,15 @@ public class Demo10 extends JFrame
     		{
     			case "green":
     				System.out.println("Green event fired");
-    				ink = Color.GREEN;
+    				ink = new Color(0, 255, 0);
     				break;
     			case "red":
     				System.out.println("Red event fired");
-    				ink = Color.RED;
+    				ink = new Color(255, 0, 0);
     				break;
     			case "yellow":
     				System.out.println("Yellow event fired");
-    				ink = Color.YELLOW;
+    				ink = new Color(255, 255, 0);
     				break;
     			case "Submit":
     				System.out.println("Submit event fired");
