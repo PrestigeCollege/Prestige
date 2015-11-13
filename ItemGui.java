@@ -729,12 +729,16 @@ to search before any data is loaded into the program's data structure.*/
 			//render what we want to print
 			
 			g.drawString("Accession Number:", 100, 100);
+			//TODO reference member variables by function
 			g.drawString(currentItem.accessionNumber, 207, 100);
 			g.drawString("Artist:", 100, 125);
+			//TODO reference member variables by function
 			g.drawString(currentItem.artist, 135, 125);
 			g.drawString("Title:", 100, 150);
+			//TODO reference member varialbe by function
 			g.drawString(currentItem.title, 130, 150);
 			g.drawString("Picture File:", 100, 175);
+			//TODO reference member varialbe by function
 			g.drawString(currentItem.pictureFileName, 167, 175);
 		
 			//Must return to indicate that the object is part of the printed document

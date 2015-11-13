@@ -1,16 +1,23 @@
 /*	CS 441 Final Project
 	File Name:			Item.java
 	Programmer:			Alexander Fairhurst
-	Date Last Modified: 10/20/2015	 	
+	Date Last Modified: 11/3/2015	 	
 */
 import java.io.Serializable;
-
+import java.util.Stack;
 
 
 public class Item implements Serializable
 {
+<<<<<<< HEAD
 	public String accessionNumber, artist, title, pictureFileName;
 	//public Stack<ConditionReport> myReports;
+=======
+	private Stack<ConditionReport> CR = new Stack<ConditionReport>();
+
+	//The line below this was public
+	private String accessionNumber, artist, title, pictureFileName;
+>>>>>>> origin/development
 	
 	public Item()
 	{
@@ -85,10 +92,4 @@ public class Item implements Serializable
 	{
 		return ("Accession Number: \t"+accessionNumber+"\nArtist: \t"+artist+"\nTitle: \t"+title+"\nPicture File: \t"+pictureFileName+"\n");
 	}	
-		
-	private class ConditionReport
-	{
-		private int ID, paintingID, userID;
-		private String damage;
-	}
 }
