@@ -9,15 +9,12 @@ import java.util.Stack;
 
 public class Item implements Serializable
 {
-<<<<<<< HEAD
 	public String accessionNumber, artist, title, pictureFileName;
 	//public Stack<ConditionReport> myReports;
-=======
 	private Stack<ConditionReport> CR = new Stack<ConditionReport>();
 
 	//The line below this was public
 	private String accessionNumber, artist, title, pictureFileName;
->>>>>>> origin/development
 	
 	public Item()
 	{
