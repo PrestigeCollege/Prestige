@@ -175,10 +175,6 @@ public class ItemGui extends JFrame
 	public boolean loggedIn = false; //determines whether or not a user is logged in
 	public int layoutGap = 10; //variable for adjusting gap settings in Gridlayout
 	
-
-
-//	NumberFormat money = NumberFormat.getCurrencyInstance();
-	
 	public ItemGui()
 	{
 
@@ -532,6 +528,37 @@ to search before any data is loaded into the program's data structure.*/
  *  (i.e. not blank) and a file name provided.
  * @author James
  */
+ 
+ /**  Method createReport() launches a JFRame for collecting information relevant to
+  * the damages on a particular inventory item.  Image of item is despalyed and is
+  * markable.  A pull down menu lists all the condition codes established by the org.
+  * A text area allows the input of free text and clarifying information. On submit,
+  * the report is stamped with the date, time and submitting user; all information 
+  * input by user is put into a ConditionReport Constructor.  The CR object is pushed
+  * to the Item's stack and the JFRame calls its dispose() method. 
+  * Returns Condition Report object.
+  */
+  
+  
+	{
+		//ConditionReport myReport = null	
+		//Construct a GUI window using Demo10's information	
+			
+		
+		
+		/*TODO On Submit
+		 * 1. get system data and time
+		 * 2. get user's login information
+		 * 3. get image markup information
+		 * 4. get condition code set
+		 * 5. read all input from textarea
+		 * 6. Submit all to ConditionReport constructor
+		 */
+		//TODO determine the datatypes to supply to constructor	
+		//myReport = new ConditionReport()
+		//return Codition report to currentItem, Item must push to stack	
+	}//end of createReport()
+  
 	public class FileSaveListener extends JFrame implements ActionListener
 	{
 		private File fileName;
