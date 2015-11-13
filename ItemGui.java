@@ -1,26 +1,31 @@
-/* CS-112 FINAL PROJECT
+/* CS-441 Software Engineering FINAL PROJECT
    File Name:          	ItemGui.java
-   Programmer:         	James Watkins
-   Date Last Modified: 	May 19, 2012
+   Programmer:         	Alex Fairhurst
+   						John Leack
+   						Will Nelson
+   						Cody Solley
+   						James Wakins
+   Date Last Modified: 	Nov. 12 2015
 
-   Problem Statement: Define a Gui interface which allows a user to track
-   and view items of class Item.  Use a PropertyList ArrayList for
-   managing and containing the Items.  User must be able to navigate through,
-   add to, and remove items from the PropertyList ArrayList.  User must be
-   protected from program failures through input filtering and exception
-   handling.
+   Problem Statement: Define a Gui interface which allows a user search a
+   database of art items and submit condition reports for each item.
+   condition reports will display a markable image of the item, display the
+   organization's damage codes and have a field for general notes pertaining
+   to the damage recorded.  When a user submits a condition report, the date,
+   time, and user's username are appended to the condition report.  On exit
+   the program must synchronize its local data to its main database.
    
 GUI Components
    1. Create a main JFrame with a BorderLayout and a menuBar.
-   2. Populate the menuBar with menus: File, Edit and Search.
-   3. The File menu will allow the user to load files, save files and export
-   the contents of a file to a .txt file.
-   4. The Edit menu must allow the user to add Items to the database, remove
-   single Items from the database, modify existing Items and clear the entire
-   database.
+   2. Populate the menuBar with menus: File, Edit, Navigate, Search, and Help.
+   3. The File menu enables user login, loading files, saving files, and printing
+   	  reports.  The ability to Export files may be added in later releases.
+   4. The Edit menu allows the viewing and creation of condition reports.
    5. Create a Panel to be applied to the CENTER region of the JFrame, divide
    the JPanel into 1 row and two columns.
-   6. On the left column, add a JLable for displaying pictures of Items.
+   5. The search menu permits a search by accession number, artist or title.
+   7. The navigation menu allows a user to move through all returned results.
+//TODO - update the rest of the header
    7. The Right Column of the will be subdivided into two columns and 9 rows.
    These subdivision will be used for labeling and displaying the variables
    associated with the item displayed. One row will be used for displaying
@@ -232,12 +237,9 @@ public class ItemGui extends JFrame
 		editAdd.addActionListener(new ReportListener());
 		JMenuItem editView = new JMenuItem("View CR");
 		editView.addActionListener(new EditListener());
-		JMenuItem editNew = new JMenuItem("Add Item"); //For testing
-		editNew.addActionListener(new EditListener()); //For testing
 		
 		edit.add(editAdd);
 		edit.add(editView);
-		edit.add(editNew);
 		
 		//Search Menu
 		search = new JMenu("Search");
@@ -607,9 +609,6 @@ to search before any data is loaded into the program's data structure.*/
 						JOptionPane.showMessageDialog(null,"View CR not defined yet.",
 						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
 						break;
-//					case "Add Item":
-//						createItem();
-//						break;
 					default:
 						JOptionPane.showMessageDialog(null,"Something Unexpected Happened",
 						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
@@ -617,17 +616,6 @@ to search before any data is loaded into the program's data structure.*/
 			}
 			else
 				alert("No Editing before loading data");
-//This condition creates a new data structure to hold the created item, then creates the item.
-/*			else 
-			{
-				if (junk.equals("Add Item"))
-				{
-					localList = new PropertyList();
-					createItem();
-				}
-				else
-					alert("I'm falling through");
-			}	*/
 		}
 	}//end private inner class EditListener	
 
@@ -719,15 +707,6 @@ to search before any data is loaded into the program's data structure.*/
 				}
 	        }
 	} //end movementlistener class
-	
-/** AddItemListener is called when user selects create "Condition Report."
- *  All input fields are required.  Users are given three attempts to 
- *  correct any exceptions that are thrown.  
- * @author James
- *
- */
-
-	
 	
 	/** PrintListener allows printing of CRs
 	 * Implements Java Graphics 2D API to print and access system default printer.
