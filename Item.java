@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class Item implements Serializable
 {
 	public String accessionNumber, artist, title, pictureFileName;
+	//public Stack<ConditionReport> myReports;
 	
 	public Item()
 	{
@@ -17,6 +18,7 @@ public class Item implements Serializable
 		artist = null;
 		title = null;
 		pictureFileName = null;
+		//myreports
 	}
 
 	public Item(String accessNum, String maker, String description, String pictureFile)
@@ -33,6 +35,8 @@ public class Item implements Serializable
 		title = arg.getTitle();
 		pictureFileName = arg.getPic();
 	}
+	
+	//Add constructor that takes a ConditionReport Element and pushes to stack
 	
 	public void setAccessionNumber(String accessNum)
 	{
@@ -53,6 +57,9 @@ public class Item implements Serializable
 	{
 		return artist;
 	}
+	
+	//add method to pop an element
+	//ad method to verify if stack is empty, return boolean
 	
 	public void setTitle(String description)
 	{

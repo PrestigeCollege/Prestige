@@ -130,6 +130,13 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+//imports for bringing in Demo10 as a method
+import java.util.Scanner;
+
+//libraries created by Jacob Dreyer
+//http://www.java2s.com/Code/Java/Advanced-Graphics/DragandDrawDemo.htm
+import no.geosoft.cc.geometry.Geometry;
+import no.geosoft.cc.graphics.*;
 
 public class ItemGui extends JFrame
 {
@@ -423,7 +430,16 @@ to search before any data is loaded into the program's data structure.*/
 		description.setText(currentItem.getTitle());
 		setImageIcon(currentItem.getPic());
 	}
-	//Declare wipe as local variable?  Do we still need this function?
+/** Method createCR() launches a new JFRame for the currently displayed item.  A markable image
+ * of the current item is presented.  A pull down menu allows classification of the damages
+ * identified. A text area allows for the input of text remarks for the damages identified. 
+ * On submit, information from markup, condition fields, text area, submitting user and a
+ * date time stamp are submitted as a new CR for the current Item.
+ */
+ //insert function for generating condition report here
+ //based on Demo10
+ //TODO - need Item Stack for holding CR Item
+ //TODO - CR may need to be declared as a public class, not private inne
 	
 /**  Prints selected data to a text file when user calls registered events.
  * UserResponse is the filename to be created.  Action only performed if the
