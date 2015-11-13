@@ -1,7 +1,7 @@
 /*	CS 441 Final Project
 	File Name:			Item.java
 	Programmer:			Alexander Fairhurst
-	Date Last Modified: 11/3/2015	 	
+	Date Last Modified: 11/12/2015	 	
 */
 import java.io.Serializable;
 import java.util.Stack;
@@ -9,8 +9,6 @@ import java.util.Stack;
 
 public class Item implements Serializable
 {
-	public String accessionNumber, artist, title, pictureFileName;
-	//public Stack<ConditionReport> myReports;
 	private Stack<ConditionReport> CR = new Stack<ConditionReport>();
 
 	//The line below this was public
@@ -23,8 +21,10 @@ public class Item implements Serializable
 		title = null;
 		pictureFileName = null;
 		//myreports
+		CR = null;
 	}
 
+	//Extend this constructor so that it takes a condition report and pushes it to the stack
 	public Item(String accessNum, String maker, String description, String pictureFile)
 	{
 		accessionNumber = accessNum;
@@ -32,6 +32,7 @@ public class Item implements Serializable
 		title = description;
 		pictureFileName = pictureFile;
 	}
+
 	public Item(Item arg)
 	{
 		accessionNumber = arg.getAccessionNumber();
@@ -40,7 +41,8 @@ public class Item implements Serializable
 		pictureFileName = arg.getPic();
 	}
 	
-	//Add constructor that takes a ConditionReport Element and pushes to stack
+	//add method to pop an element
+	//add method to verify if stack is empty, return boolean
 	
 	public void setAccessionNumber(String accessNum)
 	{
@@ -61,9 +63,6 @@ public class Item implements Serializable
 	{
 		return artist;
 	}
-	
-	//add method to pop an element
-	//ad method to verify if stack is empty, return boolean
 	
 	public void setTitle(String description)
 	{
