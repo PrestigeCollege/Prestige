@@ -241,14 +241,18 @@ public class ItemGui extends JFrame
 		edit.add(editAdd);
 		edit.add(editView);
 		
-		//Search Menu
+/* Create a Search menu for JMenuBar.  Add a menu item to search against
+ * all available fields.  Search results are loaded int to interface for
+ * review / manipulation
+ */
 		search = new JMenu("Search");
 		JMenuItem searchAll = new JMenuItem("Search");
 		searchAll.addActionListener(new SearchListener());
-		
 		search.add(searchAll);
 		
-//navigate allows a user to cycle through items within the system
+/* Create Navigate Menu for JMenuBar.  Add menu items for traversing
+ * results returned from query.  
+ */		
 		navigate = new JMenu("Navigate");
 		JMenuItem navigateFirst = new JMenuItem("First");
 		navigateFirst.addActionListener(new MovementListener());
@@ -272,14 +276,6 @@ public class ItemGui extends JFrame
 		otherAbout.addActionListener(new OtherListener());
 		other.add(otherHelp);
 		other.add(otherAbout);
-
-		//Help Menu
-		help = new JMenu("help");
-		JMenuItem helpItem = new JMenuItem("Help"); //launches help.html
-		JMenuItem helpAbout = new JMenuItem("About");  //version info
-		
-		help.add(helpItem);
-		help.add(helpAbout);
 		
 //creates menubar and adds pulldown menus to it		
 		menuBar = new JMenuBar();
@@ -304,24 +300,23 @@ public class ItemGui extends JFrame
 		//Serial Number == Accession Number this project
 		serial = new JTextField(20);
 		serial.setEditable(false);
-		//serial.setBackground(Color.WHITE);
+	//	serial.setBackground(Color.WHITE);
 		JLabel serialLabel = new JLabel("Accession Number");
 		serialLabel.setFont(labelFont);
 		
 		//Description == Title of Art this project
 		description = new JTextField(20);
 		description.setEditable(false);
-		//description.setBackground(Color.WHITE);
+//		description.setBackground(Color.WHITE);
 		JLabel descriptionLabel = new JLabel("Title:");
 		descriptionLabel.setFont(labelFont);
 		
 		//Make == Artist this project
 		make = new JTextField(20);
 		make.setEditable(false);
-		//make.setBackground(Color.WHITE);
+//		make.setBackground(Color.WHITE);
 		JLabel makeLabel = new JLabel("Artist:");
 		makeLabel.setFont(labelFont);
-
 		
 //adds lables and text fields to the JPanel.
 		textPanel.add(serialLabel);
@@ -728,18 +723,18 @@ to search before any data is loaded into the program's data structure.*/
 			
 			//render what we want to print
 			
-			g.drawString("Accession Number:", 100, 100);
+//			g.drawString("Accession Number:", 100, 100);
 			//TODO reference member variables by function
-			g.drawString(currentItem.accessionNumber, 207, 100);
-			g.drawString("Artist:", 100, 125);
+//			g.drawString(currentItem.accessionNumber, 207, 100);
+//			g.drawString("Artist:", 100, 125);
 			//TODO reference member variables by function
-			g.drawString(currentItem.artist, 135, 125);
-			g.drawString("Title:", 100, 150);
+//			g.drawString(currentItem.artist, 135, 125);
+//			g.drawString("Title:", 100, 150);
 			//TODO reference member varialbe by function
-			g.drawString(currentItem.title, 130, 150);
-			g.drawString("Picture File:", 100, 175);
+//			g.drawString(currentItem.title, 130, 150);
+//			g.drawString("Picture File:", 100, 175);
 			//TODO reference member varialbe by function
-			g.drawString(currentItem.pictureFileName, 167, 175);
+//			g.drawString(currentItem.pictureFileName, 167, 175);
 		
 			//Must return to indicate that the object is part of the printed document
 			return PAGE_EXISTS;

@@ -11,10 +11,10 @@ public class Item implements Serializable
 {
 	public String accessionNumber, artist, title, pictureFileName;
 	//public Stack<ConditionReport> myReports;
-	private Stack<ConditionReport> CR = new Stack<ConditionReport>();
+//	private Stack<ConditionReport> CR = new Stack<ConditionReport>();
 
 	//The line below this was public
-	private String accessionNumber, artist, title, pictureFileName;
+//	private String accessionNumber, artist, title, pictureFileName;
 	
 	public Item()
 	{
@@ -39,9 +39,7 @@ public class Item implements Serializable
 		title = arg.getTitle();
 		pictureFileName = arg.getPic();
 	}
-	
-	//Add constructor that takes a ConditionReport Element and pushes to stack
-	
+		
 	public void setAccessionNumber(String accessNum)
 	{
 		accessionNumber = accessNum;
