@@ -171,7 +171,7 @@ public class ItemGui extends JFrame
 	private int location;
 	private String fileName;
 	private boolean modifyNotAdd = false; //not sure that this is required any more
-	public String userName; //user's login name for timestamping purposes
+	public String loginName; //user's login name for timestamping purposes
 	public boolean loggedIn = false; //determines whether or not a user is logged in
 	public int layoutGap = 10; //variable for adjusting gap settings in Gridlayout
 	
@@ -228,8 +228,8 @@ public class ItemGui extends JFrame
 		
 		
 		//Edit Menu
-		edit = new JMenu("Edit");
-		JMenuItem editAdd = new JMenuItem("Create CR");
+		edit = new JMenu("CR");
+		JMenuItem editAdd = new JMenuItem("New CR");
 		editAdd.addActionListener(new ReportListener());
 		JMenuItem editView = new JMenuItem("View CR");
 		editView.addActionListener(new EditListener());
@@ -282,7 +282,7 @@ public class ItemGui extends JFrame
 		menuBar.add(other);
 		
 //create a lable for displaying ImageIcons on the JFrame		
-		currentImage = new ImageIcon("none.jpg");
+		currentImage = new ImageIcon("null.jpg");
 		imageLabel = new JLabel();
 		imageLabel.setIcon(currentImage);
 		
@@ -389,6 +389,7 @@ to search before any data is loaded into the program's data structure.*/
 		JOptionPane.ERROR_MESSAGE);
 	}
 	
+	
 /*Method invoked in response to an exception being thrown and being handled
  * in one of the catch blocks.  Presents a JOptionPane dialog window. Handled by
  * Invalid Input Exception.
@@ -465,6 +466,12 @@ to search before any data is loaded into the program's data structure.*/
 		
 		public void actionPerformed(ActionEvent e)
 		{
+			/*if (loggedIn == false)
+			{
+				 alert("You must log-in first.");
+	             return;
+			}*/
+			
 			analyzePath();
 		}//end of Open
 /*		hardcoding in file name for development
@@ -616,15 +623,21 @@ to search before any data is loaded into the program's data structure.*/
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			/*if (loggedIn == false)
+			{
+				 alert("You must log-in first.");
+	             return;
+			}*/
+			
 			String junk = e.getActionCommand();
 			
 			if(localList != null) //if data structure exists already
 			{
 				switch(junk)
 				{
-					case "Create CR":
+					case "New CR":
 						new ReportListener();
-						JOptionPane.showMessageDialog(null,"Create CR not defined yet.",
+						JOptionPane.showMessageDialog(null,"New CR not defined yet.",
 						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
 						break;
 					case "View CR":
@@ -648,8 +661,15 @@ to search before any data is loaded into the program's data structure.*/
  */
 	private class SearchListener implements ActionListener
 	{
+		
 		public void actionPerformed(ActionEvent e)
 		{
+			/*if (loggedIn == false)
+			{
+				 alert("You must log-in first.");
+	             return;
+			}*/
+			
 			if (localList != null)
 			{//uses JOptionPane to collect user's search criteria
 				String userInput = setQuery();
@@ -769,6 +789,12 @@ to search before any data is loaded into the program's data structure.*/
 	
 		public void actionPerformed(ActionEvent e)
 		{
+			/*if (loggedIn == false)
+			{
+				 alert("You must log-in first.");
+	             return;
+			}*/
+			
 			String junk = e.getActionCommand();
 			if(junk.equals("Print"))
 			{
@@ -806,27 +832,28 @@ to search before any data is loaded into the program's data structure.*/
 	        public void actionPerformed(ActionEvent e)
 	        {
 	            //username and password login options (username is global)
-	            userName = JOptionPane.showInputDialog(new JFrame(), "Username:");
-	            String password = JOptionPane.showInputDialog(new JFrame(), "Password:");
-	        
-	            //username and password validity check
-	            if(userName.length() < 3)
+	            loginName = JOptionPane.showInputDialog(new JFrame(), "Username:");
+	            
+	            //loginname validity check
+	            if(loginName.length() < 5)
 	            {
 	                JOptionPane.showMessageDialog(this, "Username was missing or too short. Please try again.", "Error",
 	                        JOptionPane.ERROR_MESSAGE);
 	                return;
 	            }
-	            else if(password.length() < 3)
+	            
+	            String password = JOptionPane.showInputDialog(new JFrame(), "Password:");
+	        
+	            //password validity check
+	            if(password.length() < 5)
 	            {
 	                JOptionPane.showMessageDialog(this, "Password was missing or too short. Please try again.", "Error",
 	                        JOptionPane.ERROR_MESSAGE);
 	                return;
 	            }
-	            else
-	            {
-	                loggedIn = true; //set user to logged in state
-	                return;
-	            }
+
+	            loggedIn = true; //set user to logged in state
+	            return;
 	        }  
 	    }
 
@@ -840,6 +867,11 @@ to search before any data is loaded into the program's data structure.*/
 	    {
 	    	public void actionPerformed(ActionEvent e) //new Condition Report requested
 	    	{
+	    		/*if (loggedIn == false)
+				{
+					 alert("You must log-in first.");
+		             return;
+				}*/
 	    		
 	    		Demo10 myMarkup = new Demo10(currentItem.getPic());
 
