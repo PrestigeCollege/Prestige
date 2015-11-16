@@ -1,6 +1,7 @@
-import java.io.File;
+import java.io.File; //TODO - delete after integration
 import java.awt.*;
 import javax.swing.*;
+import java.util.Date;
 
 //import ItemGui.OtherListener; //commented out due to error during "New CR"
 
@@ -33,10 +34,6 @@ public class Demo10 extends JFrame
   private GSegment  route_;
   private int[]     xy_;
   public String selectedCondition; //condition selected in drop down box
-//  static variables for use with BorderBagLayout
-  final static boolean shouldFill = true;
-  final static boolean shouldWeightX = true;
-  final static boolean RIGHT_TO_LEFT = false;
   private static int numberOfConditions = 62 ;//supplied by client
   public String conditionSourceFile = "DamageCodes.txt";  //input file for damage conditions
    
@@ -198,11 +195,13 @@ public class Demo10 extends JFrame
     			 *new ConditionReport object.  Push CR to current Item's 
     			 *stack of CRs. */
     			case "Submit": 
-    				System.out.println(selectedCondition);
-    				//ConditionReport currentReport = new ConditionReport(); //create object
-    				//currentReport.damage = selectedCondition;
-    				//currentReport.userName = loginName;
-    				//currentReport.date = Date(); //may need adjustment
+    				System.out.println(selectedCondition); //TODO - delete on integration
+    				ConditionReport currentReport = new ConditionReport(
+    					selectedCondition, "loginName", "my notes", new Date(),
+    					 scene_); //create object
+ 					//TODO - look at replacing Date() with Calendar low priority
+ 					//TODO - add this Condiiton report to Item's stack using
+ 					//addConditionReport(ConditionReport report)
     				break;
     			case "Cancel": //close window without saving changes
     				dispose();
