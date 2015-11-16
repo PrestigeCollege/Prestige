@@ -38,6 +38,7 @@ public class Demo10 extends JFrame
   final static boolean shouldWeightX = true;
   final static boolean RIGHT_TO_LEFT = false;
   private static int numberOfConditions = 62 ;//supplied by client
+  public String conditionSourceFile = "DamageCodes.txt";  //input file for damage conditions
    
   public Demo10 (String imageFileName)
   {
@@ -81,7 +82,7 @@ public class Demo10 extends JFrame
     //as a JComboBox.
     String [] conditions = new String[numberOfConditions];
     try{
-    	Scanner input = new Scanner(new File ("DamageCodes.txt"));
+    	Scanner input = new Scanner(new File (conditionSourceFile));
     	int counter = 0;
     	while(input.hasNext())
     	{
@@ -104,6 +105,8 @@ public class Demo10 extends JFrame
     JPanel textPanel = new JPanel();
    	textPanel.add(new JLabel("Enter damage remarks here:"), BorderLayout.PAGE_START);
    	JTextArea textarea = new JTextArea(5, 40);
+   	textarea.setLineWrap(true);
+   	textarea.setTabSize(5);
    	textPanel.add(textarea);
  	
   	JPanel buttonPanel2 = new JPanel(new GridLayout(1,2, 10, 10));
@@ -191,24 +194,25 @@ public class Demo10 extends JFrame
     		String junk = e.getActionCommand();
     		switch(junk)
     		{
-    			case "Submit":
+    			/*On submit, collect user input from JFRame; use to create 
+    			 *new ConditionReport object.  Push CR to current Item's 
+    			 *stack of CRs. */
+    			case "Submit": 
     				System.out.println(selectedCondition);
     				//ConditionReport currentReport = new ConditionReport(); //create object
     				//currentReport.damage = selectedCondition;
     				//currentReport.userName = loginName;
     				//currentReport.date = Date(); //may need adjustment
     				break;
-    			case "Cancel":
-    				System.out.println("Cancel event fired");
+    			case "Cancel": //close window without saving changes
     				dispose();
-    				//dispose of CR window
     				break;
     			default:
     				System.out.println("Something went wrong.");
     			
     		}//end switch
     	}//end actionPerformed()
-    }//end colorListener
+    }//end ButtonListener
 
  /** ColorListener allows a user to select the color type to draw with
   * inside the condition report image area.

@@ -161,7 +161,7 @@ public class ItemGui extends JFrame
 	private JMenuBar menuBar;
 	private JMenu file, edit, search, navigate, help, other;
 	private ImageIcon currentImage;
-	private BufferedImage markupImage;  //Allows creation of markable raster overlays
+//	private BufferedImage markupImage;  //Allows creation of markable raster overlays
 	private Font labelFont, itemFont;
 //variables used in program	
 	private final int WIDTH = 700, SMALL_WIDTH = 375;
