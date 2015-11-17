@@ -33,53 +33,74 @@ public class Demo10 extends JFrame
   private GScene    scene_;
   private GSegment  route_;
   private int[]     xy_;
+
   public String selectedCondition; //condition selected in drop down box
+
+//  static variables for use with BorderBagLayout
+  final static boolean shouldFill = true;
+  final static boolean shouldWeightX = true;
+  final static boolean RIGHT_TO_LEFT = false;
+
   private static int numberOfConditions = 62 ;//supplied by client
-  public String conditionSourceFile = "DamageCodes.txt";  //input file for damage conditions
+  public static Color ink = new Color(255,0,0);
+
    
   public Demo10 (String imageFileName)
   {
   	super ("Create markup for condition report");
-    String imageFile = imageFileName;     
-    setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE); 	
-    getContentPane().setLayout (new BorderLayout());
-    getContentPane().add (new JLabel ("Draw line on map using mouse button 1"), BorderLayout.PAGE_START);
      
+    String imageFile = imageFileName; 
+        
+    setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
+    
+      	
+    getContentPane().setLayout (new BorderLayout());
+
+    getContentPane().add (new JLabel ("Draw line on map using mouse button 1"), BorderLayout.PAGE_START);
+    
+        
     // Create the graphic canvas
     GWindow window = new GWindow();
     getContentPane().add (window.getCanvas(), BorderLayout.CENTER);
     
+    
     // Create scene with default viewport and world extent settings
     scene_ = new GScene (window);
-  
+   
+
     // Create a graphic object
-    GObject object = new TestObject (imageFileName);
+    GObject object = new TestObject (imageFile);
     scene_.add (object);
     
     //Create a JPanel for condition pulldown and Radio Buttons
     JPanel inputPanel = new JPanel(new BorderLayout());
+    
    	JPanel menuPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-    JRadioButton redRadio = new JRadioButton("Red", true);
-  	redRadio.addActionListener(new ColorListener());
-    JRadioButton yellowRadio = new JRadioButton("Yellow");
- 	yellowRadio.addActionListener(new ColorListener());
-    JRadioButton greenRadio = new JRadioButton("Green");
-  	greenRadio.addActionListener(new ColorListener());
+    JRadioButton redRadio = new JRadioButton("red", true);
+  	redRadio.addActionListener(new ButtonListener());
+    JRadioButton yellowRadio = new JRadioButton("yellow");
+ 	yellowRadio.addActionListener(new ButtonListener());
+    JRadioButton greenRadio = new JRadioButton("green");
+  	greenRadio.addActionListener(new ButtonListener());
    	ButtonGroup myButtons = new ButtonGroup();
    	myButtons.add(redRadio);
     myButtons.add(yellowRadio);
     myButtons.add(greenRadio);
-       
+    
+    
     JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 0, 0));
     buttonPanel.add(redRadio);
     buttonPanel.add(yellowRadio);
     buttonPanel.add(greenRadio);
 
+    //TODO add event for changing markup color {red, yellow, green}
+     
+     
     //Read in damage codes from DamageCodes.txt, populate to an array, display array
     //as a JComboBox.
     String [] conditions = new String[numberOfConditions];
     try{
-    	Scanner input = new Scanner(new File (conditionSourceFile));
+    	Scanner input = new Scanner(new File ("DamageCodes.txt"));
     	int counter = 0;
     	while(input.hasNext())
     	{
@@ -96,16 +117,15 @@ public class Demo10 extends JFrame
     JComboBox damages = new JComboBox(conditions);
  	menuPanel.add(buttonPanel);
  	menuPanel.add(damages);
- 	damages.addActionListener(new DamagesListener());
-    //inputPanel.add(menuPanel, BorderLayout.PAGE_START);
+   // inputPanel.add(menuPanel, BorderLayout.PAGE_START);
     
     JPanel textPanel = new JPanel();
-   	textPanel.add(new JLabel("Enter damage remarks here:"), BorderLayout.PAGE_START);
+   	textPanel.add(new JLabel("Enter damage remarks here."), BorderLayout.PAGE_START);
+   	//TODO - figure out how to limit text input to the space provided. Low priority
    	JTextArea textarea = new JTextArea(5, 40);
-   	textarea.setLineWrap(true);
-   	textarea.setTabSize(5);
    	textPanel.add(textarea);
- 	
+
+   	
   	JPanel buttonPanel2 = new JPanel(new GridLayout(1,2, 10, 10));
    	JButton button1 = new JButton("Submit");
    	button1.addActionListener(new ButtonListener());
@@ -114,6 +134,7 @@ public class Demo10 extends JFrame
    	buttonPanel2.add(button1, BorderLayout.LINE_START);
   	buttonPanel2.add(button2, BorderLayout.LINE_END);
 
+  	
 	//add the radio buttons and the jcombo box to the JPanel	
     inputPanel.add(menuPanel, BorderLayout.PAGE_START);
    	inputPanel.add(textPanel, BorderLayout.CENTER);
@@ -153,9 +174,9 @@ public class Demo10 extends JFrame
    * Defines the geometry and presentation for a sample
    * graphic object.
    */   
-  public class TestObject extends GObject
+  private class TestObject extends GObject
   {
-    public GSegment segment_;
+    private GSegment segment_;
     
     TestObject (String imageFileName)
     {
@@ -170,9 +191,9 @@ public class Demo10 extends JFrame
       addSegment (route_);
 
       GStyle routeStyle = new GStyle();
-   	  //routeStyle.setForegroundColor (new Color (255, 0, 0)); removed for testing
-	  routeStyle.setForegroundColor(Color.RED);
-      routeStyle.setLineWidth (2);
+   	  routeStyle.setForegroundColor (new Color (255, 0, 0));
+	  routeStyle.setForegroundColor(ink);
+      routeStyle.setLineWidth (4);
       routeStyle.setAntialiased (true);
       route_.setStyle (routeStyle);
     }
@@ -185,6 +206,7 @@ public class Demo10 extends JFrame
   
    private class ButtonListener implements ActionListener
     {
+    	
     	
     	public void actionPerformed(ActionEvent e)
     	{
@@ -225,51 +247,34 @@ public class Demo10 extends JFrame
       		String colorSelect = e.getActionCommand();
     		switch(colorSelect)
     		{
-    			case "Green":
+    			case "green":
+
     				System.out.println("Green event fired");
-    			    GStyle style1 = new GStyle();
-    			    style1.setForegroundColor(Color.GREEN);
-    			    style1.setLineWidth (2);
-    			    style1.setAntialiased (true);
-    			    route_.setStyle (style1);
+    				ink = new Color(0, 255, 0);
     				break;
-    			case "Red":
+    			case "red":
     				System.out.println("Red event fired");
-    			    GStyle style2 = new GStyle();
-    			    style2.setForegroundColor(Color.RED);
-    			    style2.setLineWidth (2);
-    			    style2.setAntialiased (true);
-    			    route_.setStyle (style2);
+    				ink = new Color(255, 0, 0);
     				break;
-    			case "Yellow":
+    			case "yellow":
     				System.out.println("Yellow event fired");
-    			    GStyle style3 = new GStyle();
-    			    style3.setForegroundColor(Color.YELLOW);
-    			    style3.setLineWidth (2);
-    			    style3.setAntialiased (true);
-    			    route_.setStyle (style3);
+    				ink = new Color(255, 255, 0);
+    				break;
+    			case "Submit":
+    				System.out.println("Submit event fired");
+    				//TODO add a method to capture data from condition codes, text area, sysemt
+    				//user and date
+    				break;
+    			case "Cancel":
+    				System.out.println("Cancel event fired");
+    				dispose();
+    				//dispose of CR window
     				break;
     			default:
-    				System.out.println("Something went wrong.");
+    				System.out.println("Someting Wong");
     			
     		}//end switch
-      	}//end actionPerformed()
-      }//end ColorListener()
-   
-/** DamagesListener allows a user to select the type of condition or damages
- * have occurred at the selected spot from a list of 62 items in a drop
- * down box.
- * @author Jonathan
- */
-   private class DamagesListener implements ActionListener
-   {
-   	
-   	public void actionPerformed(ActionEvent e)
-   	{
-   		JComboBox cb = (JComboBox)e.getSource();
-   		String sc = (String)cb.getSelectedItem();
-   		selectedCondition = sc;		
-   	}//end actionPerformed()
-   }//end DamagesListener()
-   
+    	}//end actionPerformed()
+    }//end colorListener
+
 }

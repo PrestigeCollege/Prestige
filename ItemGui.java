@@ -161,7 +161,7 @@ public class ItemGui extends JFrame
 	private JMenuBar menuBar;
 	private JMenu file, edit, search, navigate, help, other;
 	private ImageIcon currentImage;
-//	private BufferedImage markupImage;  //Allows creation of markable raster overlays
+	private BufferedImage markupImage;  //Allows creation of markable raster overlays
 	private Font labelFont, itemFont;
 //variables used in program	
 	private final int WIDTH = 700, SMALL_WIDTH = 375;
@@ -171,9 +171,13 @@ public class ItemGui extends JFrame
 	private int location;
 	private String fileName;
 	private boolean modifyNotAdd = false; //not sure that this is required any more
-	public String loginName; //user's login name for timestamping purposes
+	public String userName; //user's login name for timestamping purposes
 	public boolean loggedIn = false; //determines whether or not a user is logged in
 	public int layoutGap = 10; //variable for adjusting gap settings in Gridlayout
+	
+
+
+//	NumberFormat money = NumberFormat.getCurrencyInstance();
 	
 	public ItemGui()
 	{
@@ -228,8 +232,8 @@ public class ItemGui extends JFrame
 		
 		
 		//Edit Menu
-		edit = new JMenu("CR");
-		JMenuItem editAdd = new JMenuItem("New CR");
+		edit = new JMenu("Edit");
+		JMenuItem editAdd = new JMenuItem("Create CR");
 		editAdd.addActionListener(new ReportListener());
 		JMenuItem editView = new JMenuItem("View CR");
 		editView.addActionListener(new EditListener());
@@ -237,18 +241,14 @@ public class ItemGui extends JFrame
 		edit.add(editAdd);
 		edit.add(editView);
 		
-/* Create a Search menu for JMenuBar.  Add a menu item to search against
- * all available fields.  Search results are loaded int to interface for
- * review / manipulation
- */
+		//Search Menu
 		search = new JMenu("Search");
 		JMenuItem searchAll = new JMenuItem("Search");
 		searchAll.addActionListener(new SearchListener());
+		
 		search.add(searchAll);
 		
-/* Create Navigate Menu for JMenuBar.  Add menu items for traversing
- * results returned from query.  
- */		
+//navigate allows a user to cycle through items within the system
 		navigate = new JMenu("Navigate");
 		JMenuItem navigateFirst = new JMenuItem("First");
 		navigateFirst.addActionListener(new MovementListener());
@@ -272,6 +272,14 @@ public class ItemGui extends JFrame
 		otherAbout.addActionListener(new OtherListener());
 		other.add(otherHelp);
 		other.add(otherAbout);
+
+		//Help Menu
+		help = new JMenu("help");
+		JMenuItem helpItem = new JMenuItem("Help"); //launches help.html
+		JMenuItem helpAbout = new JMenuItem("About");  //version info
+		
+		help.add(helpItem);
+		help.add(helpAbout);
 		
 //creates menubar and adds pulldown menus to it		
 		menuBar = new JMenuBar();
@@ -282,7 +290,7 @@ public class ItemGui extends JFrame
 		menuBar.add(other);
 		
 //create a lable for displaying ImageIcons on the JFrame		
-		currentImage = new ImageIcon("null.jpg");
+		currentImage = new ImageIcon("none.jpg");
 		imageLabel = new JLabel();
 		imageLabel.setIcon(currentImage);
 		
@@ -296,23 +304,24 @@ public class ItemGui extends JFrame
 		//Serial Number == Accession Number this project
 		serial = new JTextField(20);
 		serial.setEditable(false);
-	//	serial.setBackground(Color.WHITE);
+		//serial.setBackground(Color.WHITE);
 		JLabel serialLabel = new JLabel("Accession Number");
 		serialLabel.setFont(labelFont);
 		
 		//Description == Title of Art this project
 		description = new JTextField(20);
 		description.setEditable(false);
-//		description.setBackground(Color.WHITE);
+		//description.setBackground(Color.WHITE);
 		JLabel descriptionLabel = new JLabel("Title:");
 		descriptionLabel.setFont(labelFont);
 		
 		//Make == Artist this project
 		make = new JTextField(20);
 		make.setEditable(false);
-//		make.setBackground(Color.WHITE);
+		//make.setBackground(Color.WHITE);
 		JLabel makeLabel = new JLabel("Artist:");
 		makeLabel.setFont(labelFont);
+
 		
 //adds lables and text fields to the JPanel.
 		textPanel.add(serialLabel);
@@ -388,7 +397,6 @@ to search before any data is loaded into the program's data structure.*/
 		JOptionPane.showMessageDialog(null, arg,"Illegal Operation", 
 		JOptionPane.ERROR_MESSAGE);
 	}
-	
 	
 /*Method invoked in response to an exception being thrown and being handled
  * in one of the catch blocks.  Presents a JOptionPane dialog window. Handled by
@@ -466,12 +474,6 @@ to search before any data is loaded into the program's data structure.*/
 		
 		public void actionPerformed(ActionEvent e)
 		{
-			/*if (loggedIn == false)
-			{
-				 alert("You must log-in first.");
-	             return;
-			}*/
-			
 			analyzePath();
 		}//end of Open
 /*		hardcoding in file name for development
@@ -535,37 +537,6 @@ to search before any data is loaded into the program's data structure.*/
  *  (i.e. not blank) and a file name provided.
  * @author James
  */
- 
- /**  Method createReport() launches a JFRame for collecting information relevant to
-  * the damages on a particular inventory item.  Image of item is despalyed and is
-  * markable.  A pull down menu lists all the condition codes established by the org.
-  * A text area allows the input of free text and clarifying information. On submit,
-  * the report is stamped with the date, time and submitting user; all information 
-  * input by user is put into a ConditionReport Constructor.  The CR object is pushed
-  * to the Item's stack and the JFRame calls its dispose() method. 
-  * Returns Condition Report object.
-  */
-  
-  
-	{
-		//ConditionReport myReport = null	
-		//Construct a GUI window using Demo10's information	
-			
-		
-		
-		/*TODO On Submit
-		 * 1. get system data and time
-		 * 2. get user's login information
-		 * 3. get image markup information
-		 * 4. get condition code set
-		 * 5. read all input from textarea
-		 * 6. Submit all to ConditionReport constructor
-		 */
-		//TODO determine the datatypes to supply to constructor	
-		//myReport = new ConditionReport()
-		//return Codition report to currentItem, Item must push to stack	
-	}//end of createReport()
-  
 	public class FileSaveListener extends JFrame implements ActionListener
 	{
 		private File fileName;
@@ -623,21 +594,15 @@ to search before any data is loaded into the program's data structure.*/
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			/*if (loggedIn == false)
-			{
-				 alert("You must log-in first.");
-	             return;
-			}*/
-			
 			String junk = e.getActionCommand();
 			
 			if(localList != null) //if data structure exists already
 			{
 				switch(junk)
 				{
-					case "New CR":
+					case "Create CR":
 						new ReportListener();
-						JOptionPane.showMessageDialog(null,"New CR not defined yet.",
+						JOptionPane.showMessageDialog(null,"Create CR not defined yet.",
 						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
 						break;
 					case "View CR":
@@ -661,15 +626,8 @@ to search before any data is loaded into the program's data structure.*/
  */
 	private class SearchListener implements ActionListener
 	{
-		
 		public void actionPerformed(ActionEvent e)
 		{
-			/*if (loggedIn == false)
-			{
-				 alert("You must log-in first.");
-	             return;
-			}*/
-			
 			if (localList != null)
 			{//uses JOptionPane to collect user's search criteria
 				String userInput = setQuery();
@@ -770,18 +728,18 @@ to search before any data is loaded into the program's data structure.*/
 			
 			//render what we want to print
 			
-//			g.drawString("Accession Number:", 100, 100);
+			g.drawString("Accession Number:", 100, 100);
 			//TODO reference member variables by function
-//			g.drawString(currentItem.accessionNumber, 207, 100);
-//			g.drawString("Artist:", 100, 125);
+			g.drawString(currentItem.accessionNumber, 207, 100);
+			g.drawString("Artist:", 100, 125);
 			//TODO reference member variables by function
-//			g.drawString(currentItem.artist, 135, 125);
-//			g.drawString("Title:", 100, 150);
+			g.drawString(currentItem.artist, 135, 125);
+			g.drawString("Title:", 100, 150);
 			//TODO reference member varialbe by function
-//			g.drawString(currentItem.title, 130, 150);
-//			g.drawString("Picture File:", 100, 175);
+			g.drawString(currentItem.title, 130, 150);
+			g.drawString("Picture File:", 100, 175);
 			//TODO reference member varialbe by function
-//			g.drawString(currentItem.pictureFileName, 167, 175);
+			g.drawString(currentItem.pictureFileName, 167, 175);
 		
 			//Must return to indicate that the object is part of the printed document
 			return PAGE_EXISTS;
@@ -789,12 +747,6 @@ to search before any data is loaded into the program's data structure.*/
 	
 		public void actionPerformed(ActionEvent e)
 		{
-			/*if (loggedIn == false)
-			{
-				 alert("You must log-in first.");
-	             return;
-			}*/
-			
 			String junk = e.getActionCommand();
 			if(junk.equals("Print"))
 			{
@@ -832,28 +784,27 @@ to search before any data is loaded into the program's data structure.*/
 	        public void actionPerformed(ActionEvent e)
 	        {
 	            //username and password login options (username is global)
-	            loginName = JOptionPane.showInputDialog(new JFrame(), "Username:");
-	            
-	            //loginname validity check
-	            if(loginName.length() < 5)
+	            userName = JOptionPane.showInputDialog(new JFrame(), "Username:");
+	            String password = JOptionPane.showInputDialog(new JFrame(), "Password:");
+	        
+	            //username and password validity check
+	            if(userName.length() < 3)
 	            {
 	                JOptionPane.showMessageDialog(this, "Username was missing or too short. Please try again.", "Error",
 	                        JOptionPane.ERROR_MESSAGE);
 	                return;
 	            }
-	            
-	            String password = JOptionPane.showInputDialog(new JFrame(), "Password:");
-	        
-	            //password validity check
-	            if(password.length() < 5)
+	            else if(password.length() < 3)
 	            {
 	                JOptionPane.showMessageDialog(this, "Password was missing or too short. Please try again.", "Error",
 	                        JOptionPane.ERROR_MESSAGE);
 	                return;
 	            }
-
-	            loggedIn = true; //set user to logged in state
-	            return;
+	            else
+	            {
+	                loggedIn = true; //set user to logged in state
+	                return;
+	            }
 	        }  
 	    }
 
@@ -867,11 +818,6 @@ to search before any data is loaded into the program's data structure.*/
 	    {
 	    	public void actionPerformed(ActionEvent e) //new Condition Report requested
 	    	{
-	    		/*if (loggedIn == false)
-				{
-					 alert("You must log-in first.");
-		             return;
-				}*/
 	    		
 	    		Demo10 myMarkup = new Demo10(currentItem.getPic());
 

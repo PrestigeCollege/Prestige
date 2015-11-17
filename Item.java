@@ -1,147 +1,90 @@
-/*	CS 441 Final Project
-	File Name:			Item.java
-	Programmer:			Alexander Fairhurst
-	Date Last Modified: 11/3/2015	 	
-*/
-import java.io.Serializable;
-import java.util.Stack;
+import java.util.Date;
+import no.geosoft.cc.graphics.GScene;
+
+/** Hold data for an Item's damage conditions
+ * @(#)ConditionReport.java
+ * Last updated by James Watkins
+ *
+ * @author Alex Fairhurst
+ * @version 1.10 2015/11/15
+ */
 
 
-public class Item implements Serializable
+public class ConditionReport 
 {
-	public String accessionNumber, artist, title, pictureFileName;
-	public Stack<ConditionReport> myReports;
-//	private Stack<ConditionReport> CR = new Stack<ConditionReport>();
-
-	//The line below this was public
-//	private String accessionNumber, artist, title, pictureFileName;
+	private String damage; //one of the organization's supplied damage codes
+	private String username; //the username of the submitting individual
+	private String comments; //captures comments entered into the free-text area
+	private Date submitDate; //the date and time that a report was submited
+	private GScene markupImage; //an image of the item with damage markups
+	//TODO determine if ImageIcon is the best class for image capture.
 	
-	public Item()
-	{
-		accessionNumber = null;
-		artist = null;
-		title = null;
-		pictureFileName = null;
-		myReports = null;
-	}
-
-// this constructor creates a new item with an empty condition report stack
-	public Item(String accessNum, String maker, String description, String pictureFile)
-	{
-		accessionNumber = accessNum;
-		artist = maker;
-		title = description;
-		pictureFileName = pictureFile;
-		myReports = null;
-	}
-	public Item(String accessNum, String maker, String description, String pictureFile,
-				Stack<ConditionReport> reports)
-	{
-		accessionNumber = accessNum;
-		artist = maker;
-		title = description;
-		pictureFileName = pictureFile;
-		myReports = reports;		
-	}
-					
-	public Item(Item arg)
-	{
-		accessionNumber = arg.getAccessionNumber();
-		artist = arg.getArtist();
-		title = arg.getTitle();
-		pictureFileName = arg.getPic();
-		myReports = null;  //TODO Refine later to copy in a stack of CR
-	}
-		
-	public void setAccessionNumber(String accessNum)
-	{
-		accessionNumber = accessNum;
-	}
 	
-	public String getAccessionNumber()
-	{
-		return accessionNumber;
-	}
-	
-	public void setArtist(String maker)
-	{
-		artist = maker;
-	}
-	
-	public String getArtist()
-	{
-		return artist;
-	}
-	public void setTitle(String description)
-	{
-		title = description;
-	}
-	public String getTitle()
-	{
-		return title;
-	}
-	
-	public void setPic(String pictureFile)
-	{
-		pictureFileName = pictureFile;
-	}
-	
-	public String getPic()
-	{
-		return pictureFileName;
-	}
-
-	public String toString()
-	{
-		return ("Accession Number: \t"+accessionNumber+"\nArtist: \t"+artist+"\nTitle: \t"+
-			title+"\nPicture File: \t"+pictureFileName+"\n");
-	}
-// Methods for interacting with the stack of condition reports
-
-	/* Returns the top element from ConditionReport stack without removing
-	 * the element from the stack.  Must verify that stack is not empty 
-	 * before calling this method.
-	 */
-	 //TODO determine if top element will always be the new
-	public ConditionReport viewTopCR()
-	{
-			return myReports.peek();
-	}
-	/*  This method returns a sting representation of each CR for an Item.
-	 *  Images are not included in this method.  Method iterates through
-	 *  stack and uses Vector get to retrieve data without altering contents
-	 *  stack.  
-	 */
-	public String conditionReportSummary()
-	{
-		String junk = null;
-		int sizeOf = myReports.size();
-		ConditionReport thisReport = new ConditionReport();
-		
-		if(!myReports.empty())
-		{
-			junk = "Summary of condition reports for item " + accessionNumber + '\n';
-			for (int i = 0; i < sizeOf; i++)
-			{
-				thisReport = myReports.get(i);
-				junk += "Date of Report " + thisReport.getSubmitDate() + '\n';
-				junk += "Submitted by \t" + thisReport.getUserInfo() + '\n';
-				junk += "Damage condtion " + thisReport.getDamageCode() + '\n';
-				junk += "Notes~ " + thisReport.getComments() + '\n';	
-			}
-			junk += '\n';
-		}
-		else
-			junk = "Item " + accessionNumber + " has no reports.\n";
-			
-			return junk;
-	}
-	/* Pushes a new conditionreport to the stack of CRs for this item.  Can 
-	 * use any of CondionReports constructors for this method.  
-	 */
-	public void addConditionReport(ConditionReport report)
-	{
-		myReports.push(report);
-	}
-
+    public ConditionReport()
+    {
+		damage = null;
+		username = null;
+		comments = null;
+		submitDate = null;
+		markupImage = null;
+    }
+    
+    public ConditionReport(String newDamage, String thisUser, String notes, Date reportDate, 
+    		GScene damageImage)
+    {
+    	damage = newDamage;
+		username = thisUser;
+		comments = notes;
+		submitDate = reportDate;
+		markupImage = damageImage;
+    	
+    }
+    public void viewConditionReport()
+    {
+    	//TODO implement a method that output a CR's String values
+    	//and returns it's image
+    	//for use in printing and viewing CRs for an item
+    }
+    public String getDamageCode()
+    {
+    	return damage;
+    }
+    public void setDamageCode(String arg)
+    {
+    	damage = arg;
+    }
+    public String getUserInfo()
+    {
+    	return username;
+    }
+    public void setUserInfo(String arg)
+    {
+    	username = arg;
+    }
+    public Date getSubmitDate()
+    {
+    	//should be calling Calendar's toString method
+    	return submitDate;
+    }
+    public void setSubmitDate(Date today)
+    {
+    	submitDate = today;
+    }
+    public String getComments()
+    {
+    	return comments;
+    }
+    public void setComments(String notes)
+    {
+		comments = notes;    	
+    }
+    public GScene getDamageArea()
+    {
+    	return markupImage;
+    }
+    public void setDamageArea(GScene damage)
+    {
+    	markupImage = damage;
+    }
+	//TODO is there any use for a toString() for this class?
 }
