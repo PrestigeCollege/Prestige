@@ -32,6 +32,7 @@ public class Demo10 extends JFrame
   private int[]     xy_;
   public String selectedCondition; //condition selected in drop down box
 //  static variables for use with BorderBagLayout
+	private JTextArea textArea;
 
   private static int numberOfConditions = 62 ;//supplied by client
   public String conditionSourceFile = "DamageCodes.txt";  //input file for damage conditions
@@ -100,10 +101,10 @@ public class Demo10 extends JFrame
     
     JPanel textPanel = new JPanel();
    	textPanel.add(new JLabel("Enter damage remarks here:"), BorderLayout.PAGE_START);
-   	JTextArea textarea = new JTextArea(5, 40);
-   	textarea.setLineWrap(true);
-   	textarea.setTabSize(5);
-   	textPanel.add(textarea);
+   	textArea = new JTextArea(5, 40);
+   	textArea.setLineWrap(true);
+   	textArea.setTabSize(5);
+   	textPanel.add(textArea);
  	
   	JPanel buttonPanel2 = new JPanel(new GridLayout(1,2, 10, 10));
    	JButton button1 = new JButton("Submit");
@@ -195,14 +196,18 @@ public class Demo10 extends JFrame
     			 *stack of CRs. */
     			case "Submit": 
     				System.out.println(selectedCondition);
+    				
+    				String notes = textArea.getText();
+    					if(notes == null)
+    						notes = "No notes provided";
+    				
     				ConditionReport thisReport = new ConditionReport( selectedCondition,
-    				"username", "note from text", new Date(), scene_);
-    				/*TODO
-    				 *capture username as a string
-    				 *capture text input from textArea
-    				 *implement pushing to stack with addConditionReport(ConditionReport report)
-    				 */
-
+    				"username", notes , new Date(), scene_);
+    				//TODO - capture username as a string
+    				//TODO - port into ItemGui
+    				//TODO - after port, implement push to stack with method
+    					//addConditionReport(ConditionReport report)
+    				//TODO - VERIFY ALL INPUTS CAPTURED - HIGH
     				break;
     			case "Cancel": //close window without saving changes
     				dispose();
