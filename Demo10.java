@@ -1,15 +1,13 @@
 import java.io.File;
 import java.awt.*;
 import javax.swing.*;
-
+import java.util.Date;
 //import ItemGui.OtherListener; //commented out due to error during "New CR"
 
 import java.util.Scanner;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.*;
-//import javax.swing.AbstractButton;
 //libraries created by Jacob Dreyer
 import no.geosoft.cc.geometry.Geometry;
 import no.geosoft.cc.graphics.*;
@@ -34,9 +32,7 @@ public class Demo10 extends JFrame
   private int[]     xy_;
   public String selectedCondition; //condition selected in drop down box
 //  static variables for use with BorderBagLayout
-  final static boolean shouldFill = true;
-  final static boolean shouldWeightX = true;
-  final static boolean RIGHT_TO_LEFT = false;
+
   private static int numberOfConditions = 62 ;//supplied by client
   public String conditionSourceFile = "DamageCodes.txt";  //input file for damage conditions
    
@@ -107,7 +103,6 @@ public class Demo10 extends JFrame
    	JTextArea textarea = new JTextArea(5, 40);
    	textarea.setLineWrap(true);
    	textarea.setTabSize(5);
-   	textarea.setMaximumSize(new Dimension(5, 40));
    	textPanel.add(textarea);
  	
   	JPanel buttonPanel2 = new JPanel(new GridLayout(1,2, 10, 10));
@@ -200,10 +195,14 @@ public class Demo10 extends JFrame
     			 *stack of CRs. */
     			case "Submit": 
     				System.out.println(selectedCondition);
-    				//ConditionReport currentReport = new ConditionReport(); //create object
-    				//currentReport.damage = selectedCondition;
-    				//currentReport.userName = loginName;
-    				//currentReport.date = Date(); //may need adjustment
+    				ConditionReport thisReport = new ConditionReport( selectedCondition,
+    				"username", "note from text", new Date(), scene_);
+    				/*TODO
+    				 *capture username as a string
+    				 *capture text input from textArea
+    				 *implement pushing to stack with addConditionReport(ConditionReport report)
+    				 */
+
     				break;
     			case "Cancel": //close window without saving changes
     				dispose();
