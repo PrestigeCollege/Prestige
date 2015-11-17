@@ -101,6 +101,8 @@ public class Demo10 extends JFrame
     
     JPanel textPanel = new JPanel();
    	textPanel.add(new JLabel("Enter damage remarks here:"), BorderLayout.PAGE_START);
+   	//TODO - figure out how to limit text input to the space provided, or enforce
+   	// a char limit
    	textArea = new JTextArea(5, 40);
    	textArea.setLineWrap(true);
    	textArea.setTabSize(5);
@@ -170,7 +172,6 @@ public class Demo10 extends JFrame
       addSegment (route_);
 
       GStyle routeStyle = new GStyle();
-   	  //routeStyle.setForegroundColor (new Color (255, 0, 0)); removed for testing
 	  routeStyle.setForegroundColor(Color.RED);
       routeStyle.setLineWidth (2);
       routeStyle.setAntialiased (true);
@@ -195,6 +196,7 @@ public class Demo10 extends JFrame
     			 *new ConditionReport object.  Push CR to current Item's 
     			 *stack of CRs. */
     			case "Submit": 
+    				//TODO - no event registered if condition not changed "accretion"
     				System.out.println(selectedCondition);
     				
     				String notes = textArea.getText();
