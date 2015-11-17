@@ -107,6 +107,7 @@ public class Demo10 extends JFrame
    	JTextArea textarea = new JTextArea(5, 40);
    	textarea.setLineWrap(true);
    	textarea.setTabSize(5);
+   	textarea.setMaximumSize(new Dimension(5, 40));
    	textPanel.add(textarea);
  	
   	JPanel buttonPanel2 = new JPanel(new GridLayout(1,2, 10, 10));
