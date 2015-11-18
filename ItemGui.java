@@ -204,6 +204,7 @@ public class ItemGui extends JFrame
 
 //Create menuBars, menus and menu Items, attach ActionListeners to each
 //menuItem and add the manuItems to the menu
+		
 		//File Menu
 		file = new JMenu("File");
 		JMenuItem fileLogin = new JMenuItem("Login");
@@ -215,9 +216,6 @@ public class ItemGui extends JFrame
 		JMenuItem fileExport = new JMenuItem("Export");
 		fileExport.addActionListener(new TextFileListener());
 		JMenuItem filePrinter = new JMenuItem("Print");
-		filePrinter.addActionListener(new PrintFileListener());
-
- 
 		filePrinter.addActionListener(new PrintFileListener());
 		
 		file.add(fileLogin);
@@ -237,18 +235,22 @@ public class ItemGui extends JFrame
 		edit.add(editAdd);
 		edit.add(editView);
 		
-/* Create a Search menu for JMenuBar.  Add a menu item to search against
- * all available fields.  Search results are loaded int to interface for
- * review / manipulation
- */
+		
+		//Search Menu
+		/* Create a Search menu for JMenuBar.  Add a menu item to search against
+		 * all available fields.  Search results are loaded int to interface for
+		 * review / manipulation
+		 */
 		search = new JMenu("Search");
 		JMenuItem searchAll = new JMenuItem("Search");
 		searchAll.addActionListener(new SearchListener());
+		
 		search.add(searchAll);
 		
-/* Create Navigate Menu for JMenuBar.  Add menu items for traversing
- * results returned from query.  
- */		
+		//Navigate Menu
+		/* Create Navigate Menu for JMenuBar.  Add menu items for traversing
+		 * results returned from query.  
+		 */		
 		navigate = new JMenu("Navigate");
 		JMenuItem navigateFirst = new JMenuItem("First");
 		navigateFirst.addActionListener(new MovementListener());
@@ -258,18 +260,20 @@ public class ItemGui extends JFrame
 		navigateNext.addActionListener(new MovementListener());
 		JMenuItem navigateLast = new JMenuItem("Last");
 		navigateLast.addActionListener(new MovementListener());
+		
 		navigate.add(navigateFirst);
 		navigate.add(navigatePrevious);
 		navigate.add(navigateNext);
 		navigate.add(navigateLast);
 		
 		
-//TODO		
+		//Other Menu
 		other = new JMenu("Other");
 		JMenuItem otherHelp = new JMenuItem("Help"); //assist with program usage
 		otherHelp.addActionListener(new OtherListener());
 		JMenuItem otherAbout = new JMenuItem("About");  //version info
 		otherAbout.addActionListener(new OtherListener());
+		
 		other.add(otherHelp);
 		other.add(otherAbout);
 		
@@ -281,12 +285,12 @@ public class ItemGui extends JFrame
 		menuBar.add(navigate);
 		menuBar.add(other);
 		
-//create a lable for displaying ImageIcons on the JFrame		
+//create a label for displaying ImageIcons on the JFrame		
 		currentImage = new ImageIcon("null.jpg");
 		imageLabel = new JLabel();
 		imageLabel.setIcon(currentImage);
 		
-//create a panel to dispaly information for the current item selected
+//create a panel to display information for the current item selected
 //set panel layout, add text fields to panel
 		textPanel = new JPanel();
 		textPanel.setLayout(textAreaLayout);
@@ -765,23 +769,18 @@ to search before any data is loaded into the program's data structure.*/
 			}
 		
 			//Need to define print area, so must declare graphic then set coordinates via pageformat to show where to print on the page
-//			Graphics2D g2d = (Graphics2D)g;
-//			g2d.translate(pf.getImageIconableX(), pf.getImageIconableY());
+			Graphics2D g2d = (Graphics2D)g;
+			g2d.translate(pf.getImageableX(), pf.getImageableY());
 			
 			//render what we want to print
-			
-//			g.drawString("Accession Number:", 100, 100);
-			//TODO reference member variables by function
-//			g.drawString(currentItem.accessionNumber, 207, 100);
-//			g.drawString("Artist:", 100, 125);
-			//TODO reference member variables by function
-//			g.drawString(currentItem.artist, 135, 125);
-//			g.drawString("Title:", 100, 150);
-			//TODO reference member varialbe by function
-//			g.drawString(currentItem.title, 130, 150);
-//			g.drawString("Picture File:", 100, 175);
-			//TODO reference member varialbe by function
-//			g.drawString(currentItem.pictureFileName, 167, 175);
+			g.drawString("Accession Number:", 100, 100);
+			g.drawString(currentItem.getAccessionNumber(), 207, 100);
+			g.drawString("Artist:", 100, 125);
+			g.drawString(currentItem.getArtist(), 135, 125);
+			g.drawString("Title:", 100, 150);
+			g.drawString(currentItem.getTitle(), 130, 150);
+			g.drawString("Picture File:", 100, 175);
+			g.drawString(currentItem.getPic(), 167, 175);
 		
 			//Must return to indicate that the object is part of the printed document
 			return PAGE_EXISTS;
@@ -789,12 +788,6 @@ to search before any data is loaded into the program's data structure.*/
 	
 		public void actionPerformed(ActionEvent e)
 		{
-			/*if (loggedIn == false)
-			{
-				 alert("You must log-in first.");
-	             return;
-			}*/
-			
 			String junk = e.getActionCommand();
 			if(junk.equals("Print"))
 			{
@@ -814,7 +807,8 @@ to search before any data is loaded into the program's data structure.*/
 					}
 					catch (PrinterException ex)
 					{
-						//generate error popup window
+						final JPanel panel = new JPanel();
+						JOptionPane.showMessageDialog(panel, "Error Executing Print Request", "Printer Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				
