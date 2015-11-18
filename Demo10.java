@@ -2,6 +2,7 @@ import java.io.File;
 import java.awt.*;
 import javax.swing.*;
 import java.util.Date;
+import javax.swing.ImageIcon;
 //import ItemGui.OtherListener; //commented out due to error during "New CR"
 
 import java.util.Scanner;
@@ -35,7 +36,7 @@ public class Demo10 extends JFrame
 	private JTextArea textArea;
 
   private static int numberOfConditions = 62 ;//supplied by client
-  public String conditionSourceFile = "DamageCodes.txt";  //input file for damage conditions
+  public String conditionSourceFile = "DamageCodes.txt";  //input file for damage condition
    
   public Demo10 (String imageFileName)
   {
