@@ -1042,6 +1042,10 @@ to search before any data is loaded into the program's data structure.*/
     						notes = "No notes provided";
     					else
     						System.out.println(notes);
+    	//TODO - update as login name change
+    				if(loginName == null)
+    					loginName = "not logged in";
+    					
     				Date today = new Date();
     				if (today == null)
     					System.out.println("Date is null");
@@ -1053,7 +1057,7 @@ to search before any data is loaded into the program's data structure.*/
    // 				ConditionReport thisReport = new ConditionReport( selectedCondition,
     //				"username", notes , new Date());
     //		currentItem.addConditionReport(thisReport);
-    //				currentItem.addConditionReport(selectedCondition, "username", notes, new Date());
+    //				currentItem.addConditionReport(selectedCondition, "ItemGui.loginName", notes, new Date());
     				//TODO - capture username as a string
     				//TODO - port into ItemGui
     				//TODO - after port, implement push to stack with method
