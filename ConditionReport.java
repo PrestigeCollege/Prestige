@@ -39,6 +39,18 @@ public class ConditionReport
 		markupImage = damageImage;
     	
     }
+
+    //testing constructor for null point issue on CR submit
+    public ConditionReport(String newDamage, String thisUser, String notes, Date reportDate)
+    {
+    	damage = newDamage;
+		username = thisUser;
+		comments = notes;
+		submitDate = reportDate;
+		markupImage = null;	
+    }
+   		
+    
     public void viewConditionReport()
     {
     	//TODO implement a method that output a CR's String values

@@ -135,14 +135,18 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+
 //imports for bringing in Demo10 as a method
+import java.io.File;
 import java.util.Scanner;
+import java.util.Date;
 
 //libraries created by Jacob Dreyer
 //http://www.java2s.com/Code/Java/Advanced-Graphics/DragandDrawDemo.htm
 import no.geosoft.cc.geometry.Geometry;
 import no.geosoft.cc.graphics.*;
 
+//public class ItemGui extends JFrame
 public class ItemGui extends JFrame
 {
 	public static void main(String [] args)
@@ -174,6 +178,16 @@ public class ItemGui extends JFrame
 	public String loginName; //user's login name for timestamping purposes
 	public boolean loggedIn = false; //determines whether or not a user is logged in
 	public int layoutGap = 10; //variable for adjusting gap settings in Gridlayout
+	private static int numberOfConditions = 63 ;//supplied by client
+	public String conditionSourceFile = "DamageCodes.txt";  //input file for damage condition
+	
+	private GScene scene_;
+	private GSegment  route_, segment_;
+	private int[]     xy_;
+	private String selectedCondition; //selected condition from damage codes
+	public JTextArea textArea;	//input for notes on condition reports
+
+
 	
 	public ItemGui()
 	{
@@ -300,21 +314,18 @@ public class ItemGui extends JFrame
 		//Serial Number == Accession Number this project
 		serial = new JTextField(20);
 		serial.setEditable(false);
-	//	serial.setBackground(Color.WHITE);
 		JLabel serialLabel = new JLabel("Accession Number");
 		serialLabel.setFont(labelFont);
 		
 		//Description == Title of Art this project
 		description = new JTextField(20);
 		description.setEditable(false);
-//		description.setBackground(Color.WHITE);
 		JLabel descriptionLabel = new JLabel("Title:");
 		descriptionLabel.setFont(labelFont);
 		
 		//Make == Artist this project
 		make = new JTextField(20);
 		make.setEditable(false);
-//		make.setBackground(Color.WHITE);
 		JLabel makeLabel = new JLabel("Artist:");
 		makeLabel.setFont(labelFont);
 		
@@ -359,15 +370,15 @@ public class ItemGui extends JFrame
 		setJMenuBar(menuBar);
 		setVisible(true);
 	}	
-	
+//prompts user to input a file name for saving output	
 	private String setTextFile()
 	{
-//allows user to specify the name of a text output file
 		fileName = JOptionPane.showInputDialog(null, "Enter the " +
 		"destination file (.txt)", "Text Output", JOptionPane.PLAIN_MESSAGE);
 		
 		return fileName;
 	}
+
 /*Searches database by accession number. Return any records matching the query 
  * in any member value.
  * Returns a string value to calling function.
@@ -393,7 +404,6 @@ to search before any data is loaded into the program's data structure.*/
 		JOptionPane.ERROR_MESSAGE);
 	}
 	
-	
 /*Method invoked in response to an exception being thrown and being handled
  * in one of the catch blocks.  Presents a JOptionPane dialog window. Handled by
  * Invalid Input Exception.
@@ -404,7 +414,6 @@ to search before any data is loaded into the program's data structure.*/
 		"aborting data entry.", "Invalid Input Exception",
 		JOptionPane.ERROR_MESSAGE);
 	}
-
 	
 /*Calls an Item's ImageIcon by filename. ImageIcon is passed to the ImageIcon class
  * constructor and displayed using the ImageIconLabel class.
@@ -414,10 +423,10 @@ to search before any data is loaded into the program's data structure.*/
 		currentImage = new ImageIcon(ImageIconName);
 		imageLabel.setIcon(currentImage);
 	}
+	
 /**Updates JFrame display with new input data.  Parameter location refers to
  * 	an element number in data structure.
  */
-	
 	private void updateJFrame(int arg)
 	{
 		System.out.println("value of element item in update JFrame: " + arg);
@@ -428,18 +437,8 @@ to search before any data is loaded into the program's data structure.*/
 		description.setText(currentItem.getTitle());
 		setImageIcon(currentItem.getPic());
 	}
-/** Method createCR() launches a new JFRame for the currently displayed item.  A markable image
- * of the current item is presented.  A pull down menu allows classification of the damages
- * identified. A text area allows for the input of text remarks for the damages identified. 
- * On submit, information from markup, condition fields, text area, submitting user and a
- * date time stamp are submitted as a new CR for the current Item.
- */
- //insert function for generating condition report here
- //based on Demo10
- //TODO - need Item Stack for holding CR Item
- //TODO - CR may need to be declared as a public class, not private inne
 	
-/**  Prints selected data to a text file when user calls registered events.
+/* Prints selected data to a text file when user calls registered events.
  * UserResponse is the filename to be created.  Action only performed if the
  * data structure contains objects and a file name is provided.   
  */
@@ -540,36 +539,6 @@ to search before any data is loaded into the program's data structure.*/
  * @author James
  */
  
- /**  Method createReport() launches a JFRame for collecting information relevant to
-  * the damages on a particular inventory item.  Image of item is despalyed and is
-  * markable.  A pull down menu lists all the condition codes established by the org.
-  * A text area allows the input of free text and clarifying information. On submit,
-  * the report is stamped with the date, time and submitting user; all information 
-  * input by user is put into a ConditionReport Constructor.  The CR object is pushed
-  * to the Item's stack and the JFRame calls its dispose() method. 
-  * Returns Condition Report object.
-  */
-  
-  
-	{
-		//ConditionReport myReport = null	
-		//Construct a GUI window using Demo10's information	
-			
-		
-		
-		/*TODO On Submit
-		 * 1. get system data and time
-		 * 2. get user's login information
-		 * 3. get image markup information
-		 * 4. get condition code set
-		 * 5. read all input from textarea
-		 * 6. Submit all to ConditionReport constructor
-		 */
-		//TODO determine the datatypes to supply to constructor	
-		//myReport = new ConditionReport()
-		//return Codition report to currentItem, Item must push to stack	
-	}//end of createReport()
-  
 	public class FileSaveListener extends JFrame implements ActionListener
 	{
 		private File fileName;
@@ -696,7 +665,7 @@ to search before any data is loaded into the program's data structure.*/
 		}
 	}//end private inner class SearchListener
 	
-/**  Event listener for scrolling through the data structure.  
+/*  Event listener for scrolling through the data structure.  
  *  Click on navigation button to trigger an event that alters the
  * 	content of the JFrame.
  * @author Jonathan & James
@@ -851,23 +820,107 @@ to search before any data is loaded into the program's data structure.*/
 	        }  
 	    }
 
-/**  ReportListener launches a new JFrame window displaying an ImageIcon of the current
+/*  ReportListener launches a new JFrame window displaying an ImageIcon of the current
  * item on display, along with an ImageIcon overlay of all previously reported damage.
  * The ImageIcon and overlay are in the right JPane, text fields for anotating new damage
  * are on the left.  When the CR is submitted, it saves to the data structure housing
  * other CRs for the same Item.
  */
-	    private class ReportListener extends JFrame implements ActionListener
+ 	private class ReportListener extends JFrame implements ActionListener, GInteraction
+	{
+		public void actionPerformed(ActionEvent e) //new Condition Report requested
 	    {
-	    	public void actionPerformed(ActionEvent e) //new Condition Report requested
-	    	{
-	    		/*if (loggedIn == false)
-				{
-					 alert("You must log-in first.");
-		             return;
-				}*/
-	    		
-	    		Demo10 myMarkup = new Demo10(currentItem.getPic());
+
+			JFrame reportWindow = new JFrame("Create markup for condition Report");
+ 			setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE); 	
+    		getContentPane().setLayout (new BorderLayout());
+    		getContentPane().add (new JLabel ("Draw line on map using mouse button 1"),
+    						 BorderLayout.PAGE_START);
+    	
+    	 	// Create the graphic canvas
+    		GWindow window = new GWindow();
+    		getContentPane().add (window.getCanvas(), BorderLayout.CENTER);
+    
+    		// Create scene with default viewport and world extent settings
+    		scene_ = new GScene (window);
+  
+	    	// Create a graphic object
+	    	GObject object = new TestObject (currentItem.getPic());
+	    	scene_.add (object);
+    	
+    	    //Create a JPanel for condition pulldown and Radio Buttons
+		    JPanel inputPanel = new JPanel(new BorderLayout());
+		   	JPanel menuPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+		    JRadioButton redRadio = new JRadioButton("Red", true);
+		  	redRadio.addActionListener(new ColorListener());
+		    JRadioButton yellowRadio = new JRadioButton("Yellow");
+		 	yellowRadio.addActionListener(new ColorListener());
+		    JRadioButton greenRadio = new JRadioButton("Green");
+		  	greenRadio.addActionListener(new ColorListener());
+		   	ButtonGroup myButtons = new ButtonGroup();
+		   	myButtons.add(redRadio);
+		    myButtons.add(yellowRadio);
+		    myButtons.add(greenRadio);
+	       
+		    JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 0, 0));
+		    buttonPanel.add(redRadio);
+		    buttonPanel.add(yellowRadio);
+		    buttonPanel.add(greenRadio);
+		
+		    //Read in damage codes from DamageCodes.txt, populate to an array, display array
+		    //as a JComboBox.
+		    String [] conditions = new String[numberOfConditions];
+		    try{
+		    	Scanner input = new Scanner(new File (conditionSourceFile));
+		    	int counter = 0;
+		    	while(input.hasNext())
+		    	{
+		    		conditions[counter] = input.nextLine();
+		    		counter++;
+		    	} 
+		    	input.close();   	
+		    }
+		    catch(IOException msg)
+		    {
+		    	System.out.println("An input error has occurred. Demo10.");
+		    }
+		    
+		    JComboBox damages = new JComboBox(conditions);
+		 	menuPanel.add(buttonPanel);
+		 	menuPanel.add(damages);
+		 	damages.addActionListener(new DamagesListener());
+		    //inputPanel.add(menuPanel, BorderLayout.PAGE_START);
+		    
+		    JPanel textPanel = new JPanel();
+		   	textPanel.add(new JLabel("Enter damage remarks here:"), BorderLayout.PAGE_START);
+		   	//TODO - figure out how to limit text input to the space provided, or enforce
+		   	// a char limit
+		   	textArea = new JTextArea(5, 40);
+		   	textArea.setLineWrap(true);
+		   	textArea.setTabSize(5);
+		   	textPanel.add(textArea);
+		 	
+		  	JPanel buttonPanel2 = new JPanel(new GridLayout(1,2, 10, 10));
+		   	JButton button1 = new JButton("Submit");
+		   	button1.addActionListener(new ButtonListener());
+		   	JButton button2 = new JButton("Cancel");
+		   	button2.addActionListener(new ButtonListener());
+		   	buttonPanel2.add(button1, BorderLayout.LINE_START);
+		  	buttonPanel2.add(button2, BorderLayout.LINE_END);
+		
+			//add the radio buttons and the jcombo box to the JPanel	
+		    inputPanel.add(menuPanel, BorderLayout.PAGE_START);
+		   	inputPanel.add(textPanel, BorderLayout.CENTER);
+		   	inputPanel.add(buttonPanel2, BorderLayout.PAGE_END);
+		   	  	
+		   	add(inputPanel, BorderLayout.SOUTH);
+		     
+			//pack the contents into the jframe and make visible
+		    pack();
+		    setSize (new Dimension (500, 500));
+		    setVisible (true);
+	
+	   		window.startInteraction (this);
 
 /** TODO List:
  *	Figure out how to return CR inputs to the database
@@ -877,10 +930,39 @@ to search before any data is loaded into the program's data structure.*/
  *  Add a vertical scroll bar to the JFrame. --Maybe			
 */	   			
 	    		
-	    	}//end ActionListener
-	    }//end ReportListener
+	}//end ActionListener
+		
+ //Captures mouse events on the canvas inside of createCR() JFrame.
+		public void event (GScene scene, int event, int x, int y)
+	  	{
+		    switch (event) {
+		      case GWindow.BUTTON1_DOWN :
+		        xy_ = new int[] {x, y};
+		        route_.setGeometry (xy_);
+		        scene_.refresh();
+		        break;
+		
+		      case GWindow.BUTTON1_DRAG :
+		        int[] a = new int[xy_.length + 2];
+		        System.arraycopy (xy_, 0, a, 0, xy_.length);
+		        a[a.length-2] = x;
+		        a[a.length-1] = y;
+		        xy_ = a;
+		        route_.setGeometry (xy_);
+		        scene_.refresh();
+		        break;
+			}
+	  	} //end event()
+	    public void draw()
+	    {
+	      segment_.setGeometry (0, 0);
+	      route_.setGeometry (xy_);
+	    }  	
+  		
+	    	
+	}//end ReportListener
 	    
-/**  OtherListener provides the user with one of two options: help and about.
+/*  OtherListener provides the user with one of two options: help and about.
 * Help details the functionality of the program by opening an html file. Meanwhile, about
 * displays program information, such as the version number.
 * @author Jonathan
@@ -911,4 +993,137 @@ to search before any data is loaded into the program's data structure.*/
 				}
 	    	}
 	    }//end HelpListener
+ // Creates markup shape on the CR image file.  
+    private class TestObject extends GObject
+  	{
+    	TestObject (String imageFileName)
+    	{
+      		segment_ = new GSegment();
+      		addSegment (segment_);
+
+	     	 GImage image = new GImage (new File (imageFileName));
+	     	 image.setPositionHint (GPosition.SOUTHEAST);
+		      segment_.setImage (image);
+		
+		      route_ = new GSegment();
+		      addSegment (route_);
+		
+		      GStyle routeStyle = new GStyle();
+			  routeStyle.setForegroundColor(Color.RED);
+		      routeStyle.setLineWidth (2);
+		      routeStyle.setAntialiased (true);
+		      route_.setStyle (routeStyle);
+		}
+   	public void draw()
+    {
+      	segment_.setGeometry (0, 0);
+      	route_.setGeometry (xy_);
+    }
+  	}//end TestObject class
+/* ButtonListener is called within the CreateCR JFrame.  This class
+ * handles color change requests, JComboBox changes, report submission
+ * and cancelation of reports. On submit, a new ConditionReport object
+ * is created and pushed to the current Item's stack of condition
+ * reports.  A cancel disposes of the window.
+ */
+   private class ButtonListener implements ActionListener
+    {
+    	public void actionPerformed(ActionEvent e)
+    	{
+    		String junk = e.getActionCommand();
+    		switch(junk)
+    		{
+    			//On submit, collect user input and push to item stack
+    			case "Submit": 
+    				System.out.println(selectedCondition);
+    				
+    				String notes = textArea.getText();
+    					if(notes == null)
+    						notes = "No notes provided";
+    					else
+    						System.out.println(notes);
+    				Date today = new Date();
+    				if (today == null)
+    					System.out.println("Date is null");
+    				else
+    					System.out.println(today.toString());
+    				
+    //				ConditionReport thisReport = new ConditionReport( selectedCondition,
+    //				"username", notes , new Date(), scene_);
+   // 				ConditionReport thisReport = new ConditionReport( selectedCondition,
+    //				"username", notes , new Date());
+    //		currentItem.addConditionReport(thisReport);
+    //				currentItem.addConditionReport(selectedCondition, "username", notes, new Date());
+    				//TODO - capture username as a string
+    				//TODO - port into ItemGui
+    				//TODO - after port, implement push to stack with method
+    					//addConditionReport(ConditionReport report)
+    				//TODO - VERIFY ALL INPUTS CAPTURED - HIGH
+    				break;
+    			case "Cancel": //close window without saving changes
+    				dispose();
+    				break;
+    			default:
+    				System.out.println("Something went wrong.");
+    		}//end switch
+    	}//end actionPerformed()
+    }//end ButtonListener  	
+  	
+      public class ColorListener implements ActionListener
+      {
+      	
+      	public void actionPerformed(ActionEvent e)
+      	{
+      		String colorSelect = e.getActionCommand();
+    		switch(colorSelect)
+    		{
+    			case "Green":
+    				System.out.println("Green event fired");
+    			    GStyle style1 = new GStyle();
+    			    style1.setForegroundColor(Color.GREEN);
+    			    style1.setLineWidth (2);
+    			    style1.setAntialiased (true);
+    			    route_.setStyle (style1);
+    				break;
+    			case "Red":
+    				System.out.println("Red event fired");
+    			    GStyle style2 = new GStyle();
+    			    style2.setForegroundColor(Color.RED);
+    			    style2.setLineWidth (2);
+    			    style2.setAntialiased (true);
+    			    route_.setStyle (style2);
+    				break;
+    			case "Yellow":
+    				System.out.println("Yellow event fired");
+    			    GStyle style3 = new GStyle();
+    			    style3.setForegroundColor(Color.YELLOW);
+    			    style3.setLineWidth (2);
+    			    style3.setAntialiased (true);
+    			    route_.setStyle (style3);
+    				break;
+    			default:
+    				System.out.println("Something went wrong.");
+    			
+    		}//end switch
+      	}//end actionPerformed()
+      }//end ColorListener()
+   
+/** DamagesListener allows a user to select the type of condition or damages
+ * have occurred at the selected spot from a list of 62 items in a drop
+ * down box.
+ * @author Jonathan
+ */
+   private class DamagesListener implements ActionListener
+   {
+   	
+   	public void actionPerformed(ActionEvent e)
+   	{
+   		JComboBox cb = (JComboBox)e.getSource();
+   		String sc = (String)cb.getSelectedItem();
+   		selectedCondition = sc;	
+   		System.out.println(sc);	
+   	}//end actionPerformed()
+   }//end DamagesListener()  	
+  	
+  	
 }//end ItemGui

@@ -6,7 +6,7 @@
 import java.io.Serializable;
 import java.util.Stack;
 
-
+//testing purposes
 
 public class Item implements Serializable
 {
@@ -19,7 +19,7 @@ public class Item implements Serializable
 		artist = null;
 		title = null;
 		pictureFileName = null;
-		myReports = null;
+		myReports = new Stack<ConditionReport>();
 	}
 
 // this constructor creates a new item with an empty condition report stack
@@ -29,7 +29,7 @@ public class Item implements Serializable
 		artist = maker;
 		title = description;
 		pictureFileName = pictureFile;
-		myReports = null;
+		myReports = new Stack<ConditionReport>();
 	}
 	public Item(String accessNum, String maker, String description, String pictureFile,
 				Stack<ConditionReport> reports)
@@ -140,5 +140,4 @@ public class Item implements Serializable
 	{
 		myReports.push(report);
 	}
-
 }
