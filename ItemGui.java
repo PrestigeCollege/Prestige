@@ -195,7 +195,7 @@ public class ItemGui extends JFrame
 		super("Condition Report System");
 
 	//	super("Inventory Management");
-		setTitle("SDMA Condition Reports");
+		setTitle("San Diego Museum of Art - Condition Report System");
 		setSize(WIDTH, HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true); //allows window to be resized
@@ -300,7 +300,7 @@ public class ItemGui extends JFrame
 		menuBar.add(other);
 		
 //create a label for displaying ImageIcons on the JFrame		
-		currentImage = new ImageIcon("null.jpg");
+		currentImage = new ImageIcon("welcome.jpg");
 		imageLabel = new JLabel();
 		imageLabel.setIcon(currentImage);
 		
@@ -352,9 +352,10 @@ public class ItemGui extends JFrame
 //create buttons and actionListeners for each button
 		
 //TODO modify listener functions to support
-		first = new JButton("Search");
-		first.addActionListener(new SearchListener());
-		second = new JButton("View Mark-Up");
+		first = new JButton("Login");
+		first.addActionListener(new LoginListener());
+		second = new JButton("Search");
+		second.addActionListener(new SearchListener());
 		third = new JButton("New CR");
 		third.addActionListener(new ReportListener());
 		fourth = new JButton("Print");
@@ -516,7 +517,7 @@ to search before any data is loaded into the program's data structure.*/
  *ProperyList, set the current location to slot 0 and update the display.
  *calculate the value of the PropertyList.*/
 				localList = new PropertyList();
-				localList.readFromFile("testdata2.dat");  //TODO remove later
+				localList.readFromFile("testdata.dat");  //TODO remove later
 //				localList.readFromFile(name.getName());	
 				updateJFrame(0);
 				location = 0;
@@ -794,24 +795,35 @@ to search before any data is loaded into the program's data structure.*/
 	    {
 	        public void actionPerformed(ActionEvent e)
 	        {
-	            //username and password login options (username is global)
-	            loginName = JOptionPane.showInputDialog(new JFrame(), "Username:");
+	        	//alert user if already logged in
+	        	if(loggedIn == true)
+	        	 {
+	                JOptionPane.showMessageDialog(this, "You have been logged out. You can now log in with a new username.", "Alert",
+	                        JOptionPane.ERROR_MESSAGE);
+	                loggedIn = false;
+	            }
+	        	
+	        	//request username
+	        	loginName = JOptionPane.showInputDialog(new JFrame(), "Username:");
 	            
 	            //loginname validity check
 	            if(loginName.length() < 5)
 	            {
-	                JOptionPane.showMessageDialog(this, "Username was missing or too short. Please try again.", "Error",
+	                JOptionPane.showMessageDialog(this, "Username was missing or too short. Please try again.", "Alert",
 	                        JOptionPane.ERROR_MESSAGE);
+	                loggedIn = false;
 	                return;
 	            }
 	            
+	            //request password
 	            String password = JOptionPane.showInputDialog(new JFrame(), "Password:");
 	        
 	            //password validity check
 	            if(password.length() < 5)
 	            {
-	                JOptionPane.showMessageDialog(this, "Password was missing or too short. Please try again.", "Error",
+	                JOptionPane.showMessageDialog(this, "Password was missing or too short. Please try again.", "Alert",
 	                        JOptionPane.ERROR_MESSAGE);
+	                loggedIn = false;
 	                return;
 	            }
 
@@ -903,10 +915,7 @@ to search before any data is loaded into the program's data structure.*/
 		  	JPanel buttonPanel2 = new JPanel(new GridLayout(1,2, 10, 10));
 		   	JButton button1 = new JButton("Submit");
 		   	button1.addActionListener(new ButtonListener());
-		   	JButton button2 = new JButton("Cancel");
-		   	button2.addActionListener(new ButtonListener());
 		   	buttonPanel2.add(button1, BorderLayout.LINE_START);
-		  	buttonPanel2.add(button2, BorderLayout.LINE_END);
 		
 			//add the radio buttons and the jcombo box to the JPanel	
 		    inputPanel.add(menuPanel, BorderLayout.PAGE_START);
@@ -985,7 +994,7 @@ to search before any data is loaded into the program's data structure.*/
 				}
 				else if (navSelection.equals("About"))
 				{
-					JOptionPane.showMessageDialog(null,"Version Number: Beta");
+					JOptionPane.showMessageDialog(null,"Version Number:\nv1.00\n\nCreated By:\nJames Watkins\nJonathan Leack\nCody Solley\nWilliam Nelson\nAlexander Fairhurst");
 				}
 				else
 				{
@@ -1052,16 +1061,17 @@ to search before any data is loaded into the program's data structure.*/
     				else
     					System.out.println(today.toString());
     				
-    			//	System.out.println("The size of stack before push " +currentItem.myReports.isEmpty());
-    				
-    				ConditionReport thisReport = new ConditionReport( selectedCondition,
-    				"loginName", notes , new Date(), scene_);
+    //				ConditionReport thisReport = new ConditionReport( selectedCondition,
+    //				"username", notes , new Date(), scene_);
+   // 				ConditionReport thisReport = new ConditionReport( selectedCondition,
+    //				"username", notes , new Date());
+    //		currentItem.addConditionReport(thisReport);
+    //				currentItem.addConditionReport(selectedCondition, "ItemGui.loginName", notes, new Date());
+    				//TODO - capture username as a string
+    				//TODO - port into ItemGui
     				//TODO - after port, implement push to stack with method
-    				currentItem.addConditionReport(thisReport);
+    					//addConditionReport(ConditionReport report)
     				//TODO - VERIFY ALL INPUTS CAPTURED - HIGH
-    				break;
-    			case "Cancel": //close window without saving changes
-    				dispose(); //TODO - Cancel is closing the main window and not the secondary
     				break;
     			default:
     				System.out.println("Something went wrong.");
