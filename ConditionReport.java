@@ -1,5 +1,6 @@
 import no.geosoft.cc.graphics.GScene;
 import java.util.Date;
+import java.io.Serializable;
 
 /** Hold data for an Item's damage conditions
  * @(#)ConditionReport.java
@@ -10,7 +11,7 @@ import java.util.Date;
  */
 
 
-public class ConditionReport 
+public class ConditionReport implements Serializable
 {
 	private String damage; //one of the organization's supplied damage codes
 	private String username; //the username of the submitting individual

@@ -1,0 +1,25 @@
+Item Number 1
+Serial Number	1234
+Title	Mona Lisa
+Artist	Leonardo da Vinci
+
+Item Number 2
+Serial Number	1235
+Title	Starry Night
+Artist	Vincent van Gogh
+
+Item Number 3
+Serial Number	1236
+Title	Sunset Over the River
+Artist	Albert Bierstadt
+
+Item Number 4
+Serial Number	1237
+Title	Bygone Summers
+Artist	Josephine Wall
+
+Item Number 5
+Serial Number	1238
+Title	Water Lillies
+Artist	Claude Monet
+

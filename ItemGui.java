@@ -516,7 +516,7 @@ to search before any data is loaded into the program's data structure.*/
  *ProperyList, set the current location to slot 0 and update the display.
  *calculate the value of the PropertyList.*/
 				localList = new PropertyList();
-				localList.readFromFile("testdata.dat");  //TODO remove later
+				localList.readFromFile("testdata2.dat");  //TODO remove later
 //				localList.readFromFile(name.getName());	
 				updateJFrame(0);
 				location = 0;
@@ -1052,20 +1052,16 @@ to search before any data is loaded into the program's data structure.*/
     				else
     					System.out.println(today.toString());
     				
-    //				ConditionReport thisReport = new ConditionReport( selectedCondition,
-    //				"username", notes , new Date(), scene_);
-   // 				ConditionReport thisReport = new ConditionReport( selectedCondition,
-    //				"username", notes , new Date());
-    //		currentItem.addConditionReport(thisReport);
-    //				currentItem.addConditionReport(selectedCondition, "ItemGui.loginName", notes, new Date());
-    				//TODO - capture username as a string
-    				//TODO - port into ItemGui
+    			//	System.out.println("The size of stack before push " +currentItem.myReports.isEmpty());
+    				
+    				ConditionReport thisReport = new ConditionReport( selectedCondition,
+    				"loginName", notes , new Date(), scene_);
     				//TODO - after port, implement push to stack with method
-    					//addConditionReport(ConditionReport report)
+    				currentItem.addConditionReport(thisReport);
     				//TODO - VERIFY ALL INPUTS CAPTURED - HIGH
     				break;
     			case "Cancel": //close window without saving changes
-    				dispose();
+    				dispose(); //TODO - Cancel is closing the main window and not the secondary
     				break;
     			default:
     				System.out.println("Something went wrong.");
