@@ -20,8 +20,8 @@ public class Item implements Serializable
 		artist = null;
 		title = null;
 		pictureFileName = null;
-		//myReports = new Stack<ConditionReport>();
-		myReports = null;
+		myReports = new Stack<ConditionReport>();
+		
 	}
 
 // this constructor creates a new item with an empty condition report stack
@@ -43,15 +43,6 @@ public class Item implements Serializable
 		myReports = reports;		
 	}
 					
-	public Item(Item arg)
-	{
-		accessionNumber = arg.getAccessionNumber();
-		artist = arg.getArtist();
-		title = arg.getTitle();
-		pictureFileName = arg.getPic();
-		myReports = null;  //TODO Refine later to copy in a stack of CR
-	}
-		
 	public void setAccessionNumber(String accessNum)
 	{
 		accessionNumber = accessNum;

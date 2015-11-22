@@ -174,7 +174,6 @@ public class ItemGui extends JFrame
 	private Item currentItem;
 	private int location;
 	private String fileName;
-	private boolean modifyNotAdd = false; //not sure that this is required any more
 	public String loginName; //user's login name for timestamping purposes
 	public boolean loggedIn = false; //determines whether or not a user is logged in
 	public int layoutGap = 10; //variable for adjusting gap settings in Gridlayout
@@ -404,6 +403,10 @@ to search before any data is loaded into the program's data structure.*/
 		JOptionPane.showMessageDialog(null, arg,"Illegal Operation", 
 		JOptionPane.ERROR_MESSAGE);
 	}
+	private void closeWindow(JFrame arg)
+	{
+		arg.dispose();
+	}
 	
 /*Method invoked in response to an exception being thrown and being handled
  * in one of the catch blocks.  Presents a JOptionPane dialog window. Handled by
@@ -517,7 +520,7 @@ to search before any data is loaded into the program's data structure.*/
  *ProperyList, set the current location to slot 0 and update the display.
  *calculate the value of the PropertyList.*/
 				localList = new PropertyList();
-				localList.readFromFile("testdata.dat");  //TODO remove later
+				localList.readFromFile("testdata2.dat");  //TODO remove later
 //				localList.readFromFile(name.getName());	
 				updateJFrame(0);
 				location = 0;
@@ -843,7 +846,8 @@ to search before any data is loaded into the program's data structure.*/
 		public void actionPerformed(ActionEvent e) //new Condition Report requested
 	    {
 
-			JFrame reportWindow = new JFrame("Create markup for condition Report");
+			JFrame reportWindow = new JFrame();
+			setTitle("Create a condition report");
  			setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE); 	
     		getContentPane().setLayout (new BorderLayout());
     		getContentPane().add (new JLabel ("Draw line on map using mouse button 1"),
@@ -1055,21 +1059,18 @@ to search before any data is loaded into the program's data structure.*/
     				if(loginName == null)
     					loginName = "not logged in";
     					
-    				Date today = new Date();
-    				if (today == null)
+    				Date now = new Date();
+    				if (now == null)
     					System.out.println("Date is null");
     				else
-    					System.out.println(today.toString());
-    				
-    //				ConditionReport thisReport = new ConditionReport( selectedCondition,
-    //				"username", notes , new Date(), scene_);
-   // 				ConditionReport thisReport = new ConditionReport( selectedCondition,
-    //				"username", notes , new Date());
-    //		currentItem.addConditionReport(thisReport);
-    //				currentItem.addConditionReport(selectedCondition, "ItemGui.loginName", notes, new Date());
-    				//TODO - capture username as a string
-    				//TODO - port into ItemGui
-    				//TODO - after port, implement push to stack with method
+    					System.out.println(now.toString());
+    //Collect all user information from the Condition Report window and push to a CR 
+    //constructor.  Add the ConditionReport to the Item's stack.				
+    				ConditionReport thisReport = new ConditionReport( selectedCondition,
+    				loginName, notes , now, scene_);
+  		    		currentItem.addConditionReport(thisReport);
+					inputWindow.dispose();
+  		    			//TODO - after port, implement push to stack with method
     					//addConditionReport(ConditionReport report)
     				//TODO - VERIFY ALL INPUTS CAPTURED - HIGH
     				break;
