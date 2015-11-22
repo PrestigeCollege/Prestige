@@ -154,7 +154,9 @@ public class ItemGui extends JFrame
 		ItemGui window = new ItemGui();
 	}
 //GUI Components
-	private JFrame inputWindow, reportWindow;
+//	private JFrame inputWindow, reportWindow;
+//	private JFrame reportWindow;
+	private JDialog reportWindow;
 	private JPanel textPanel, centerPanel, buttonPanel;
 	private JButton first, second, third, fourth;
 	private JTextField description, make, model, serial, year, price, qty;
@@ -846,10 +848,10 @@ to search before any data is loaded into the program's data structure.*/
 		public void actionPerformed(ActionEvent e) //new Condition Report requested
 	    {
 
-			JFrame reportWindow = new JFrame();
+			reportWindow = new JDialog();
 			setTitle("Create a condition report");
- 			setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE); 	
-    		getContentPane().setLayout (new BorderLayout());
+ 			setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE); 
+     		getContentPane().setLayout (new BorderLayout());
     		getContentPane().add (new JLabel ("Draw line on map using mouse button 1"),
     						 BorderLayout.PAGE_START);
     	
@@ -898,7 +900,7 @@ to search before any data is loaded into the program's data structure.*/
 		    }
 		    catch(IOException msg)
 		    {
-		    	System.out.println("An input error has occurred. Demo10.");
+		    	System.out.println("An input error has occurred.");
 		    }
 		    
 		    JComboBox damages = new JComboBox(conditions);
@@ -1069,7 +1071,8 @@ to search before any data is loaded into the program's data structure.*/
     				ConditionReport thisReport = new ConditionReport( selectedCondition,
     				loginName, notes , now, scene_);
   		    		currentItem.addConditionReport(thisReport);
-					inputWindow.dispose();
+  		    		//TODO - force window to close on submit or cancel
+  		    //		reportWindow.dispatchEvent(new WindowEvent(reportWindow, WindowEvent.WINDOW_CLOSING));
   		    			//TODO - after port, implement push to stack with method
     					//addConditionReport(ConditionReport report)
     				//TODO - VERIFY ALL INPUTS CAPTURED - HIGH
