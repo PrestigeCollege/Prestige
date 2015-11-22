@@ -140,6 +140,7 @@ import javax.swing.border.LineBorder;
 import java.io.File;
 import java.util.Scanner;
 import java.util.Date;
+import java.util.Stack;
 
 //libraries created by Jacob Dreyer
 //http://www.java2s.com/Code/Java/Advanced-Graphics/DragandDrawDemo.htm
@@ -154,8 +155,6 @@ public class ItemGui extends JFrame
 		ItemGui window = new ItemGui();
 	}
 //GUI Components
-//	private JFrame inputWindow, reportWindow;
-//	private JFrame reportWindow;
 	private JDialog reportWindow;
 	private JPanel textPanel, centerPanel, buttonPanel;
 	private JButton first, second, third, fourth;
@@ -187,15 +186,12 @@ public class ItemGui extends JFrame
 	private int[]     xy_;
 	private String selectedCondition; //selected condition from damage codes
 	public JTextArea textArea;	//input for notes on condition reports
+	private Stack<ConditionReport> reportStack;
 
 
 	
 	public ItemGui()
 	{
-
-		super("Condition Report System");
-
-	//	super("Inventory Management");
 		setTitle("San Diego Museum of Art - Condition Report System");
 		setSize(WIDTH, HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -370,6 +366,7 @@ public class ItemGui extends JFrame
 		add(buttonPanel, BorderLayout.SOUTH);
 		add(centerPanel, BorderLayout.CENTER);
 		setJMenuBar(menuBar);
+		pack();
 		setVisible(true);
 	}	
 //prompts user to input a file name for saving output	
@@ -602,22 +599,27 @@ to search before any data is loaded into the program's data structure.*/
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			/*if (loggedIn == false)
+			if (loggedIn == false)
 			{
 				 alert("You must log-in first.");
 	             return;
-			}*/
-			
-			String junk = e.getActionCommand();
-			
-			if(localList != null) //if data structure exists already
+			}
+			else //User has selected ViewCR to view condition report Items associated with Item
 			{
+				reportStack = new Stack();
+				reportStack = currentItem.getConditionStack();
+				
+				System.out.println("Is the stack empty: " + reportStack.empty());
+				System.out.println("Size of the stack: " + reportStack.size());
+				
+			}//end else in EditListener
+	/*		
 				switch(junk)
 				{
 					case "New CR":
 						new ReportListener();
-						JOptionPane.showMessageDialog(null,"New CR not defined yet.",
-						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
+//						JOptionPane.showMessageDialog(null,"New CR not defined yet.",
+//						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
 						break;
 					case "View CR":
 						JOptionPane.showMessageDialog(null,"View CR not defined yet.",
@@ -629,7 +631,7 @@ to search before any data is loaded into the program's data structure.*/
 				}//end switch
 			}
 			else
-				alert("No Editing before loading data");
+				alert("No Editing before loading data"); */
 		}
 	}//end private inner class EditListener	
 

@@ -134,4 +134,8 @@ public class Item implements Serializable
 		
 		myReports.push(report);
 	}
+	public Stack<ConditionReport> getConditionStack()
+	{
+		return myReports;
+	}
 }

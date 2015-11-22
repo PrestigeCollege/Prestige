@@ -18,6 +18,9 @@ public class testRun
 		Item five = new Item("1238", "Claude Monet", "Water Lillies", "lillies.png" );
 
 		one.addConditionReport(new ConditionReport("Alabama", "Red", "Taco", new Date()) );
+		one.addConditionReport(new ConditionReport("Banana", "Taco", "Enchilada", new Date()) );
+		one.addConditionReport(new ConditionReport("Camber", "Green", "Tortas", new Date()) );
+		one.addConditionReport(new ConditionReport("Damage", "Yellow", "Salsa", new Date()) );
 //		ConditionReport report1 = new ConditionReport("Alabama", "Red", "Taco", new Date());
 //		ConditionReport report2 = new ConditionReport("Banana", "Parrot", "Taco", new Date());
 //		ConditionReport report3 = new ConditionReport("Spider", "Hair", "Dog", new Date());
