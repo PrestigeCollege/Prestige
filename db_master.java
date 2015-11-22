@@ -11,7 +11,8 @@ public class db_master {
 	public Connection connection = null;
 	private String StoredHost ="jdbc:mysql://sql3.freemysqlhosting.net:3306/sql397372?&relaxAutoCommit=true";
 	private String StoreduName = "sql397372";
-	private String StoreduPass = "nI3!rL7!";	
+	private String StoreduPass = "nI3!rL7!";
+	public String dbName = "sql397372";
 	public db_master(){	}
 	public Connection connect() {
 		Connection conn = null;

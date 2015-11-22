@@ -8,6 +8,9 @@ public class user_data_entry extends data_entry{
 		pass= newPass;
 		status = newStatus;
 	}
+	public user_data_entry(){
+		super();
+	}
 	
 	public String get_name(){
 		return name;

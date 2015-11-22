@@ -16,7 +16,8 @@ public class user_model extends db_master{
 		try{
 			connection = connect();
 			Statement stmt = connection.createStatement();
-			ResultSet query = stmt.executeQuery("SELECT * FROM users WHERE id=input_id");
+			ResultSet query = stmt.executeQuery("SELECT * FROM users WHERE id=" + input_id);
+			query.next();
 			result = new user_data_entry(query.getInt("id"), query.getString("name"), query.getString("pass"), query.getInt("status"));
 			connection.close();
             return result;

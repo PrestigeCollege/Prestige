@@ -4,9 +4,15 @@ public class testRun
 {
 	public static void main(String [] args)
 	{
-		boolean test= true;
-		damage_model testDamage = new damage_model();
-		testDamage.add_damage(1, 1, "testDamage", "fakeURI", test);
+		user_model testUser = new user_model();
+		user_data_entry query= testUser.getUserByID(1);
+		String name = query.get_name();
+		System.out.println(name);
+		/*DATABASE MODEL ACCESSES
+		testUser.add_user("testAdmin", "fakePass", 1);
+		testUser.add_user("testUser", "fakePass", 2);
+		testUser.add_user("testGuest", "fakePass", 3);
+		*/
 /*
 		String file = "testdata2.dat";
 		
