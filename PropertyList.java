@@ -196,14 +196,15 @@ public class PropertyList implements Serializable
 			if (!dataBase.isEmpty())
 			{
 				outputStream.writeObject((ArrayList<Item>)dataBase);
-				outputStream.close();
 				System.out.println("Attempting to write.");
-			}
-			System.out.println("WriteToFile complete.");	
+				outputStream.close();
+				System.out.println("WriteToFile complete.");
+			}		
 		}
 		catch(IOException e)
 		{
-			System.err.println("(IO)Error creating binary file " + fileName);
+			System.err.println(e.getCause());
+		//	System.err.println("(IO)Error creating binary file " + fileName);
 		}	
 	}
 	public void readFromFile(String fileName)
@@ -220,7 +221,8 @@ public class PropertyList implements Serializable
 		}
 		catch(FileNotFoundException e)
 		{
-			System.out.println("Can not find binary file " + fileName);
+		//	System.out.println("Can not find binary file " + fileName);
+			System.out.println(e.getCause());
 		}
 		catch(ClassNotFoundException e)
 		{
@@ -228,6 +230,7 @@ public class PropertyList implements Serializable
 		}
 		catch(IOException e)
 		{
+			System.out.println(e.getCause());
 			System.out.println("(IO)Can not find binary file " + fileName);
 		}
 	}

@@ -155,7 +155,7 @@ public class ItemGui extends JFrame
 		ItemGui window = new ItemGui();
 	}
 //GUI Components
-	private JDialog reportWindow;
+	private JDialog reportWindow, viewWindow;
 	private JPanel textPanel, centerPanel, buttonPanel;
 	private JButton first, second, third, fourth;
 	private JTextField description, make, model, serial, year, price, qty;
@@ -402,10 +402,6 @@ to search before any data is loaded into the program's data structure.*/
 		JOptionPane.showMessageDialog(null, arg,"Illegal Operation", 
 		JOptionPane.ERROR_MESSAGE);
 	}
-	private void closeWindow(JFrame arg)
-	{
-		arg.dispose();
-	}
 	
 /*Method invoked in response to an exception being thrown and being handled
  * in one of the catch blocks.  Presents a JOptionPane dialog window. Handled by
@@ -520,6 +516,7 @@ to search before any data is loaded into the program's data structure.*/
  *calculate the value of the PropertyList.*/
 				localList = new PropertyList();
 				localList.readFromFile("testdata2.dat");  //TODO remove later
+//				localList.readFromFile("testingCR.dat");
 //				localList.readFromFile(name.getName());	
 				updateJFrame(0);
 				location = 0;
@@ -595,43 +592,61 @@ to search before any data is loaded into the program's data structure.*/
 	}//end private inner class FileSaveListener
 	
 
-	private class EditListener implements ActionListener
+	private class EditListener extends JDialog implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			if (loggedIn == false)
+			if (!loggedIn)
 			{
 				 alert("You must log-in first.");
 	             return;
 			}
 			else //User has selected ViewCR to view condition report Items associated with Item
 			{
+				viewWindow = new JDialog();
+				setTitle("CRs for item: " + currentItem.getAccessionNumber());
+				setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				
 				reportStack = new Stack();
 				reportStack = currentItem.getConditionStack();
+				ConditionReport thisReport = new ConditionReport();
+				thisReport = reportStack.peek();
+				
+				//Testing to see if the stack of reports is actually loaded:
+				System.out.println(currentItem.conditionReportSummary());
 				
 				System.out.println("Is the stack empty: " + reportStack.empty());
 				System.out.println("Size of the stack: " + reportStack.size());
 				
+	
+				
+				JPanel markUpPanel = new JPanel();
+				viewWindow.add(markUpPanel, BorderLayout.CENTER);
+				
+				JPanel notesPanel = new JPanel(new GridLayout(2,1,0,0));
+				
+				JPanel textPanel = new JPanel();
+				textPanel.setLayout(new GridLayout(1,3, 10, 10));
+				JLabel dateCR = new JLabel (thisReport.getSubmitDate());
+				JLabel userCR = new JLabel (thisReport.getUserInfo());
+				JLabel damageCR = new JLabel (thisReport.getDamageCode());
+				textPanel.add(dateCR);
+				textPanel.add(userCR);
+				textPanel.add(damageCR);
+			//	viewWindow.add(textPanel);
+				notesPanel.add(textPanel, BorderLayout.PAGE_START);
+				
+				JTextArea notesCR = new JTextArea(thisReport.getComments());
+				notesCR.setEditable(false);
+				notesCR.setLineWrap(true);
+				notesPanel.add(notesCR, BorderLayout.PAGE_END);
+				viewWindow.add(notesPanel, BorderLayout.PAGE_END);
+				
+				
+				setSize(new Dimension(500,500));
+				pack();
+				setVisible(true);
 			}//end else in EditListener
-	/*		
-				switch(junk)
-				{
-					case "New CR":
-						new ReportListener();
-//						JOptionPane.showMessageDialog(null,"New CR not defined yet.",
-//						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
-						break;
-					case "View CR":
-						JOptionPane.showMessageDialog(null,"View CR not defined yet.",
-						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
-						break;
-					default:
-						JOptionPane.showMessageDialog(null,"Something Unexpected Happened",
-						"Edit Menu Stub", JOptionPane.ERROR_MESSAGE);
-				}//end switch
-			}
-			else
-				alert("No Editing before loading data"); */
 		}
 	}//end private inner class EditListener	
 
@@ -642,7 +657,6 @@ to search before any data is loaded into the program's data structure.*/
  */
 	private class SearchListener implements ActionListener
 	{
-		
 		public void actionPerformed(ActionEvent e)
 		{
 			/*if (loggedIn == false)
@@ -845,14 +859,14 @@ to search before any data is loaded into the program's data structure.*/
  * are on the left.  When the CR is submitted, it saves to the data structure housing
  * other CRs for the same Item.
  */
- 	private class ReportListener extends JFrame implements ActionListener, GInteraction
+ 	private class ReportListener extends JDialog implements ActionListener, GInteraction
 	{
 		public void actionPerformed(ActionEvent e) //new Condition Report requested
 	    {
 
 			reportWindow = new JDialog();
 			setTitle("Create a condition report");
- 			setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE); 
+ 			setDefaultCloseOperation (JDialog.DISPOSE_ON_CLOSE); 
      		getContentPane().setLayout (new BorderLayout());
     		getContentPane().add (new JLabel ("Draw line on map using mouse button 1"),
     						 BorderLayout.PAGE_START);
@@ -1073,6 +1087,7 @@ to search before any data is loaded into the program's data structure.*/
     				ConditionReport thisReport = new ConditionReport( selectedCondition,
     				loginName, notes , now, scene_);
   		    		currentItem.addConditionReport(thisReport);
+  		    		
   		    		//TODO - force window to close on submit or cancel
   		    //		reportWindow.dispatchEvent(new WindowEvent(reportWindow, WindowEvent.WINDOW_CLOSING));
   		    			//TODO - after port, implement push to stack with method
@@ -1087,7 +1102,6 @@ to search before any data is loaded into the program's data structure.*/
   	
       public class ColorListener implements ActionListener
       {
-      	
       	public void actionPerformed(ActionEvent e)
       	{
       		String colorSelect = e.getActionCommand();
@@ -1118,8 +1132,7 @@ to search before any data is loaded into the program's data structure.*/
     			    route_.setStyle (style3);
     				break;
     			default:
-    				System.out.println("Something went wrong.");
-    			
+    				System.out.println("Something went wrong.");	
     		}//end switch
       	}//end actionPerformed()
       }//end ColorListener()

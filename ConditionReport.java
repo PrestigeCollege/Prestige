@@ -74,10 +74,11 @@ public class ConditionReport implements Serializable
     {
     	username = arg;
     }
-    public Date getSubmitDate()
+    public String getSubmitDate()
     {
     	//should be calling Calendar's toString method
-    	return submitDate;
+    	//changed from return type Date
+    	return submitDate.toString();
     }
     public void setSubmitDate(Date today)
     {
