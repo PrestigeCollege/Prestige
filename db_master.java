@@ -9,7 +9,7 @@ import java.util.*;
 
 public class db_master {
 	public Connection connection = null;
-	private String StoredHost ="sql3.freemysqlhosting.net";
+	private String StoredHost ="jdbc:mysql://sql3.freemysqlhosting.net:3306/sql397372?&relaxAutoCommit=true";
 	private String StoreduName = "sql397372";
 	private String StoreduPass = "nI3!rL7!";	
 	public db_master(){	}
