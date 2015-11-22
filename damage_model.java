@@ -13,14 +13,14 @@ public class damage_model extends db_master{
 		super();	
 	}
 
-	public damage_data_entry getDamageByID(int input_id){
+public damage_data_entry getDamageByID(int input_id){
 		damage_data_entry result;
 		try{
 			connection = connect();
 			Statement stmt = connection.createStatement();
-			ResultSet query = stmt.executeQuery("SELECT * FROM damage WHERE id=input_id");
-			
+			ResultSet query = stmt.executeQuery("SELECT * FROM damage WHERE id=" + input_id);
 			//converts SQL date to Java Date.
+			query.next();
 			java.sql.Date sqlDate = query.getDate("edit_date");
 			java.util.Date javaDate = new java.util.Date(sqlDate.getTime());
 

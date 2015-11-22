@@ -16,12 +16,13 @@ public class art_model extends db_master{
 		try{
 			connection = connect();
 			Statement stmt = connection.createStatement();
-			ResultSet query = stmt.executeQuery("SELECT * FROM art WHERE id=input_id");
+			ResultSet query = stmt.executeQuery("SELECT * FROM art WHERE id=" + input_id);
+			query.next();
 			result = new art_data_entry(
 					query.getInt("id"),
 					query.getString("name"),
 					query.getString("artist"),
-					query.getString("imagePath")
+					query.getString("image_Path")
 			);
 			connection.close();
             return result;
@@ -37,7 +38,7 @@ public class art_model extends db_master{
 		try{
 			connection = connect();
 			Statement stmt = connection.createStatement();
-			ResultSet query = stmt.executeQuery("SELECT * FROM art WHERE artist=queryName");
+			ResultSet query = stmt.executeQuery("SELECT * FROM art WHERE artist= '" + queryName +"'");
 			ArrayList<art_data_entry> list= new ArrayList<art_data_entry>();
 			while (query.next()) {
 			    list.add(new art_data_entry(

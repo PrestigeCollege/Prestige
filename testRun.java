@@ -4,11 +4,33 @@ public class testRun
 {
 	public static void main(String [] args)
 	{
+		
+		
+		/*DATABASE MODEL ACCESS
+		
+		//request paintings by Artist
+		art_model art = new art_model();
+		art_data_entry[] query = art.getByArtist("TestArtist");
+		String name = query[0].get_name();
+		System.out.println(name);
+	
+		
+		//add painting to DB
+		art_model art = new art_model();
+		art.add_art("testName", "TestArtist", "Fake img Path");
+		
+		//Pull Data For Art Damage
+		damage_model damages = new damage_model();
+		damage_data_entry query = damages.getDamageByID(1);
+		String name = query.get_damage_type();
+		System.out.println(name);
+		//Pull data for Users
 		user_model testUser = new user_model();
 		user_data_entry query= testUser.getUserByID(1);
 		String name = query.get_name();
 		System.out.println(name);
-		/*DATABASE MODEL ACCESSES
+		//Add users to DB
+		user_model testUser = new user_model();
 		testUser.add_user("testAdmin", "fakePass", 1);
 		testUser.add_user("testUser", "fakePass", 2);
 		testUser.add_user("testGuest", "fakePass", 3);
