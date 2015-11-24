@@ -607,6 +607,9 @@ to search before any data is loaded into the program's data structure.*/
 				setTitle("CRs for item: " + currentItem.getAccessionNumber());
 				setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				
+				//Would like to make this more elegant, but doing so will require generating
+				//a new data input file.  Will wait to see how database integration goes 
+				//before reworking.
 				reportStack = new Stack();
 				reportStack = currentItem.getConditionStack();
 				ConditionReport thisReport = new ConditionReport();
@@ -618,12 +621,11 @@ to search before any data is loaded into the program's data structure.*/
 				System.out.println("Is the stack empty: " + reportStack.empty());
 				System.out.println("Size of the stack: " + reportStack.size());
 				
-	
+				//TODO - change to display markup images (having issues bringing in GScene
+				JLabel reportImage = new JLabel(new ImageIcon(currentItem.getPic()));
+				add(reportImage, BorderLayout.CENTER);
 				
-				JPanel markUpPanel = new JPanel();
-				viewWindow.add(markUpPanel, BorderLayout.CENTER);
-				
-				JPanel notesPanel = new JPanel(new GridLayout(2,1,0,0));
+				JPanel notesPanel = new JPanel(new GridLayout(3,1,0,0));
 				
 				JPanel textPanel = new JPanel();
 				textPanel.setLayout(new GridLayout(1,3, 10, 10));
@@ -639,15 +641,71 @@ to search before any data is loaded into the program's data structure.*/
 				JTextArea notesCR = new JTextArea(thisReport.getComments());
 				notesCR.setEditable(false);
 				notesCR.setLineWrap(true);
-				notesPanel.add(notesCR, BorderLayout.PAGE_END);
-				viewWindow.add(notesPanel, BorderLayout.PAGE_END);
+				notesPanel.add(notesCR, BorderLayout.CENTER);
+								
+				JPanel reportButtons = new JPanel(new GridLayout(1, 5, 10, 10));
+				JButton next = new JButton("Next->");
+				next.addActionListener(new ReportNavigator());
+				JButton previous = new JButton("<-Previous");
+				previous.addActionListener(new ReportNavigator());
+				JButton newest = new JButton("|<-Newest");
+				newest.addActionListener(new ReportNavigator());
+				JButton oldest = new JButton("Oldest->|");
+				newest.addActionListener(new ReportNavigator());
+				JButton cancel = new JButton("Cancel");
+				cancel.addActionListener(new ReportNavigator());
+				reportButtons.add(newest);
+				reportButtons.add(previous);
+				reportButtons.add(next);
+				reportButtons.add(oldest);
+				reportButtons.add(cancel);
+				notesPanel.add(reportButtons, BorderLayout.PAGE_END);
 				
+				add(notesPanel, BorderLayout.PAGE_END);
 				
 				setSize(new Dimension(500,500));
 				pack();
 				setVisible(true);
 			}//end else in EditListener
 		}
+		
+		private class ReportNavigator implements ActionListener
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				//code to navigate through stack
+				if ( reportStack.empty() )
+				{
+					JOptionPane.showMessageDialog(null, "No reports on " +
+						"this item.", "View CR Error", JOptionPane.ERROR_MESSAGE);
+				}
+				else //This item has condition reports to review
+				{
+					switch(e.getActionCommand())
+					{
+						//int sizeOfStack = my
+						
+						case("Next->"):
+							System.out.println("Display Next CR");
+							break;
+						case ("Previous"):
+							System.out.println("Display previous CR");
+							break;
+						case ("Oldest"):
+							System.out.println("Display oldest CR");
+							break;
+						case ("Newest"):
+							System.out.println("Display newest CR");
+							break;
+						case ("Cancel"):
+							dispose();
+							break;								
+						default:
+							alert("Error within CR Navigation.");
+					}//end switch
+				}//end else	
+			}// end inner class ReportNavigator
+		}//end ReportNavigator
 	}//end private inner class EditListener	
 
 /**  SearchListener is the observer for search requests.  Query performed
