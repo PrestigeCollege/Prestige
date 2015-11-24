@@ -590,7 +590,6 @@ to search before any data is loaded into the program's data structure.*/
 			}
 		}
 	}//end private inner class FileSaveListener
-	
 
 	private class EditListener extends JDialog implements ActionListener
 	{
@@ -651,7 +650,7 @@ to search before any data is loaded into the program's data structure.*/
 				JButton newest = new JButton("|<-Newest");
 				newest.addActionListener(new ReportNavigator());
 				JButton oldest = new JButton("Oldest->|");
-				newest.addActionListener(new ReportNavigator());
+				oldest.addActionListener(new ReportNavigator());
 				JButton cancel = new JButton("Cancel");
 				cancel.addActionListener(new ReportNavigator());
 				reportButtons.add(newest);
@@ -688,13 +687,13 @@ to search before any data is loaded into the program's data structure.*/
 						case("Next->"):
 							System.out.println("Display Next CR");
 							break;
-						case ("Previous"):
+						case ("<-Previous"):
 							System.out.println("Display previous CR");
 							break;
-						case ("Oldest"):
+						case ("Oldest->|"):
 							System.out.println("Display oldest CR");
 							break;
-						case ("Newest"):
+						case ("|<-Newest"):
 							System.out.println("Display newest CR");
 							break;
 						case ("Cancel"):
