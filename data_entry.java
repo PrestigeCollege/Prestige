@@ -1,5 +1,7 @@
 public class data_entry{
 	private int id;
+	
+	
 	public data_entry(int newid){
 		id = newid;
 	}

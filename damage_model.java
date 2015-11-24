@@ -13,14 +13,14 @@ public class damage_model extends db_master{
 		super();	
 	}
 
-	public damage_data_entry getDamageByID(int input_id){
+public damage_data_entry getDamageByID(int input_id){
 		damage_data_entry result;
 		try{
 			connection = connect();
 			Statement stmt = connection.createStatement();
-			ResultSet query = stmt.executeQuery("SELECT * FROM damage WHERE id=input_id");
-			
+			ResultSet query = stmt.executeQuery("SELECT * FROM damage WHERE id=" + input_id);
 			//converts SQL date to Java Date.
+			query.next();
 			java.sql.Date sqlDate = query.getDate("edit_date");
 			java.util.Date javaDate = new java.util.Date(sqlDate.getTime());
 
@@ -76,24 +76,20 @@ public class damage_model extends db_master{
         return new damage_data_entry[0];
 	}
 
-	public void add_damage (int newPaintingId, int newUserId, String newDamageType, String newLayerPath, int archiveStatus){
+	public void add_damage (int newUserId, int newPaintingId, String newDamageType, String newLayerPath, boolean archiveStatus){
 		java.util.Date javaDate;
-		if( (archiveStatus != 1) || (archiveStatus != 0)){
-			System.out.println("MYSQL MODEL ERROR: ARCHIVE STATUS NOT A BOOLEAN (MUST BE 0 OR 1)");
-			return;
-		}
 		try{
 			connection = connect();
-			String query= "INSERT INTO users (painting_id, user_id, damage_type, layer_path, edit_date, archived) VALUES (?, ?, ?, ?, ?, ?)";
+			String query= "INSERT INTO damage (user_id, painting_id, damage_type, layer_path, edit_date, archived) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setInt(1, newPaintingId);
-			preparedStatement.setInt(2, newUserId);
+			preparedStatement.setInt(1, newUserId);
+			preparedStatement.setInt(2, newPaintingId);
 			preparedStatement.setString(3, newDamageType);
 			preparedStatement.setString(4, newLayerPath);
 			javaDate = new java.util.Date();
 			java.sql.Date sqlDate = new java.sql.Date(javaDate.getTime());
 			preparedStatement.setDate(5, sqlDate);
-			preparedStatement.setInt(6, archiveStatus);
+			preparedStatement.setBoolean(6, archiveStatus);
 			preparedStatement.executeUpdate();
 			connection.commit();
 			connection.close();
