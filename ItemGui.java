@@ -186,7 +186,7 @@ public class ItemGui extends JFrame
 	private int[]     xy_;
 	private String selectedCondition; //selected condition from damage codes
 	public JTextArea textArea;	//input for notes on condition reports
-	private Stack<ConditionReport> reportStack;
+//	private Stack<ConditionReport> reportStack;
 
 
 	
@@ -593,6 +593,21 @@ to search before any data is loaded into the program's data structure.*/
 
 	private class EditListener extends JDialog implements ActionListener
 	{
+		
+			//Would like to make this more elegant, but doing so will require generating
+			//a new data input file.  Will wait to see how database integration goes 
+			//before reworking.
+			Stack<ConditionReport> reportStack = new Stack<ConditionReport>();
+			ConditionReport thisReport = new ConditionReport();
+			String dateString;
+			String user;
+			String damageCode;
+			String damageNotes;
+			int location;
+			int size;
+			JLabel reportImage, dateCR, userCR, damageCR;
+			JTextArea notesCR;
+
 		public void actionPerformed(ActionEvent e)
 		{
 			if (!loggedIn)
@@ -606,50 +621,42 @@ to search before any data is loaded into the program's data structure.*/
 				setTitle("CRs for item: " + currentItem.getAccessionNumber());
 				setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				
-				//Would like to make this more elegant, but doing so will require generating
-				//a new data input file.  Will wait to see how database integration goes 
-				//before reworking.
-				reportStack = new Stack();
+				//Load the newest element from stack
 				reportStack = currentItem.getConditionStack();
-				ConditionReport thisReport = new ConditionReport();
+				size = reportStack.size();
+				location = size - 1;
 				thisReport = reportStack.peek();
-				
-				//Testing to see if the stack of reports is actually loaded:
-				System.out.println(currentItem.conditionReportSummary());
-				
-				System.out.println("Is the stack empty: " + reportStack.empty());
-				System.out.println("Size of the stack: " + reportStack.size());
-				
-				//TODO - change to display markup images (having issues bringing in GScene
-				JLabel reportImage = new JLabel(new ImageIcon(currentItem.getPic()));
+								
+				//TODO - change to display markup images (having issues bringing in GScene)
+				reportImage = new JLabel(new ImageIcon(currentItem.getPic()));
 				add(reportImage, BorderLayout.CENTER);
 				
 				JPanel notesPanel = new JPanel(new GridLayout(3,1,0,0));
 				
 				JPanel textPanel = new JPanel();
 				textPanel.setLayout(new GridLayout(1,3, 10, 10));
-				JLabel dateCR = new JLabel (thisReport.getSubmitDate());
-				JLabel userCR = new JLabel (thisReport.getUserInfo());
-				JLabel damageCR = new JLabel (thisReport.getDamageCode());
+				dateCR = new JLabel (thisReport.getSubmitDate());
+				userCR = new JLabel (thisReport.getUserInfo());
+				damageCR = new JLabel (thisReport.getDamageCode());
 				textPanel.add(dateCR);
 				textPanel.add(userCR);
 				textPanel.add(damageCR);
-			//	viewWindow.add(textPanel);
+
 				notesPanel.add(textPanel, BorderLayout.PAGE_START);
 				
-				JTextArea notesCR = new JTextArea(thisReport.getComments());
+				notesCR = new JTextArea(thisReport.getComments());
 				notesCR.setEditable(false);
 				notesCR.setLineWrap(true);
 				notesPanel.add(notesCR, BorderLayout.CENTER);
 								
 				JPanel reportButtons = new JPanel(new GridLayout(1, 5, 10, 10));
-				JButton next = new JButton("Next->");
+				JButton next = new JButton("Next >");
 				next.addActionListener(new ReportNavigator());
-				JButton previous = new JButton("<-Previous");
+				JButton previous = new JButton("< Previous");
 				previous.addActionListener(new ReportNavigator());
-				JButton newest = new JButton("|<-Newest");
+				JButton newest = new JButton("|< Newest");
 				newest.addActionListener(new ReportNavigator());
-				JButton oldest = new JButton("Oldest->|");
+				JButton oldest = new JButton("Oldest >|");
 				oldest.addActionListener(new ReportNavigator());
 				JButton cancel = new JButton("Cancel");
 				cancel.addActionListener(new ReportNavigator());
@@ -666,6 +673,16 @@ to search before any data is loaded into the program's data structure.*/
 				pack();
 				setVisible(true);
 			}//end else in EditListener
+		}
+		public void updateWindow(int arg)
+		{
+			
+			thisReport = reportStack.get(arg);
+			dateCR.setText( thisReport.getSubmitDate() );
+			userCR.setText( thisReport.getUserInfo() );
+			damageCR.setText( thisReport.getDamageCode() );
+			notesCR.setText( thisReport.getComments() );
+			location = arg;	
 		}
 		
 		private class ReportNavigator implements ActionListener
@@ -684,17 +701,21 @@ to search before any data is loaded into the program's data structure.*/
 					{
 						//int sizeOfStack = my
 						
-						case("Next->"):
+						case("Next >"):
 							System.out.println("Display Next CR");
+							updateWindow( (location + 1) % size );
 							break;
-						case ("<-Previous"):
+						case ("< Previous"):
 							System.out.println("Display previous CR");
+							updateWindow( (location + (size -1)) % size );
 							break;
-						case ("Oldest->|"):
+						case ("Oldest >|"):
 							System.out.println("Display oldest CR");
+							updateWindow( 0 );
 							break;
-						case ("|<-Newest"):
+						case ("|< Newest"):
 							System.out.println("Display newest CR");
+							updateWindow ( (size -1) );
 							break;
 						case ("Cancel"):
 							dispose();
@@ -953,7 +974,7 @@ to search before any data is loaded into the program's data structure.*/
 		    myButtons.add(yellowRadio);
 		    myButtons.add(greenRadio);
 	       
-		    JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 0, 0));
+		    JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 0, 0));
 		    buttonPanel.add(redRadio);
 		    buttonPanel.add(yellowRadio);
 		    buttonPanel.add(greenRadio);
@@ -994,7 +1015,10 @@ to search before any data is loaded into the program's data structure.*/
 		  	JPanel buttonPanel2 = new JPanel(new GridLayout(1,2, 10, 10));
 		   	JButton button1 = new JButton("Submit");
 		   	button1.addActionListener(new ButtonListener());
+		   	JButton button2 = new JButton("Cancel");
+		   	button2.addActionListener(new ButtonListener());
 		   	buttonPanel2.add(button1, BorderLayout.LINE_START);
+		   	buttonPanel2.add(button2, BorderLayout.LINE_END);
 		
 			//add the radio buttons and the jcombo box to the JPanel	
 		    inputPanel.add(menuPanel, BorderLayout.PAGE_START);
@@ -1046,9 +1070,106 @@ to search before any data is loaded into the program's data structure.*/
 	      segment_.setGeometry (0, 0);
 	      route_.setGeometry (xy_);
 	    }  	
-  		
-	    	
-	}//end ReportListener
+ /* ButtonListener is called within the CreateCR JFrame.  This class handles
+ *  color change requests, JComboBox changes, report submission and
+ *  cancelation of reports. On submit, a new ConditionReport object is created 
+ *  and pushed to the current Item's stack of condition reports. 
+ *  A cancel disposes of the window.
+ */
+	   private class ButtonListener implements ActionListener
+	    {
+	    	public void actionPerformed(ActionEvent e)
+	    	{
+	    		String junk = e.getActionCommand();
+	    		switch(junk)
+	    		{
+	    			//On submit, collect user input and push to item stack
+	    			case "Submit": 
+	    				System.out.println(selectedCondition);
+	    				
+	    				String notes = textArea.getText();
+	    					if(notes == null)
+	    						notes = "No notes provided";
+	    					else
+	    						System.out.println(notes);
+	    	//TODO - update as login name change
+	    				if(loginName == null)
+	    					loginName = "not logged in";
+	    					
+	    				Date now = new Date();
+	    				if (now == null)
+	    					System.out.println("Date is null");
+	    				else
+	    					System.out.println(now.toString());
+	    //Collect all user information from the Condition Report window and push to a CR 
+	    //constructor.  Add the ConditionReport to the Item's stack.				
+	    				ConditionReport thisReport = new ConditionReport( selectedCondition,
+	    				loginName, notes , now, scene_);
+	  		    		currentItem.addConditionReport(thisReport);
+	    				break;
+	    			case ("Cancel"):
+	    				dispose();
+	    				break;
+	    			default:
+	    				System.out.println("Something went wrong.");
+	    		}//end switch
+	    	}//end actionPerformed()
+	  }//end ButtonListener  	
+  	
+      public class ColorListener implements ActionListener
+      {
+      	public void actionPerformed(ActionEvent e)
+      	{
+      		String colorSelect = e.getActionCommand();
+    		switch(colorSelect)
+    		{
+    			case "Green":
+    				System.out.println("Green event fired");
+    			    GStyle style1 = new GStyle();
+    			    style1.setForegroundColor(Color.GREEN);
+    			    style1.setLineWidth (2);
+    			    style1.setAntialiased (true);
+    			    route_.setStyle (style1);
+    				break;
+    			case "Red":
+    				System.out.println("Red event fired");
+    			    GStyle style2 = new GStyle();
+    			    style2.setForegroundColor(Color.RED);
+    			    style2.setLineWidth (2);
+    			    style2.setAntialiased (true);
+    			    route_.setStyle (style2);
+    				break;
+    			case "Yellow":
+    				System.out.println("Yellow event fired");
+    			    GStyle style3 = new GStyle();
+    			    style3.setForegroundColor(Color.YELLOW);
+    			    style3.setLineWidth (2);
+    			    style3.setAntialiased (true);
+    			    route_.setStyle (style3);
+    				break;
+    			default:
+    				System.out.println("Something went wrong.");	
+    		}//end switch
+      	}//end actionPerformed()
+      }//end ColorListener()
+   
+/** DamagesListener allows a user to select the type of condition or damages
+ * have occurred at the selected spot from a list of 62 items in a drop
+ * down box.
+ * @author Jonathan
+ */
+	   private class DamagesListener implements ActionListener
+	   {
+	   	
+	   	public void actionPerformed(ActionEvent e)
+	   	{
+	   		JComboBox cb = (JComboBox)e.getSource();
+	   		String sc = (String)cb.getSelectedItem();
+	   		selectedCondition = sc;	
+	   		System.out.println(sc);	
+	   	}//end actionPerformed()
+	   }//end DamagesListener()  	
+	}//end ReportListener  
 	    
 /*  OtherListener provides the user with one of two options: help and about.
 * Help details the functionality of the program by opening an html file. Meanwhile, about
@@ -1108,108 +1229,7 @@ to search before any data is loaded into the program's data structure.*/
       	route_.setGeometry (xy_);
     }
   	}//end TestObject class
-/* ButtonListener is called within the CreateCR JFrame.  This class
- * handles color change requests, JComboBox changes, report submission
- * and cancelation of reports. On submit, a new ConditionReport object
- * is created and pushed to the current Item's stack of condition
- * reports.  A cancel disposes of the window.
- */
-   private class ButtonListener implements ActionListener
-    {
-    	public void actionPerformed(ActionEvent e)
-    	{
-    		String junk = e.getActionCommand();
-    		switch(junk)
-    		{
-    			//On submit, collect user input and push to item stack
-    			case "Submit": 
-    				System.out.println(selectedCondition);
-    				
-    				String notes = textArea.getText();
-    					if(notes == null)
-    						notes = "No notes provided";
-    					else
-    						System.out.println(notes);
-    	//TODO - update as login name change
-    				if(loginName == null)
-    					loginName = "not logged in";
-    					
-    				Date now = new Date();
-    				if (now == null)
-    					System.out.println("Date is null");
-    				else
-    					System.out.println(now.toString());
-    //Collect all user information from the Condition Report window and push to a CR 
-    //constructor.  Add the ConditionReport to the Item's stack.				
-    				ConditionReport thisReport = new ConditionReport( selectedCondition,
-    				loginName, notes , now, scene_);
-  		    		currentItem.addConditionReport(thisReport);
-  		    		
-  		    		//TODO - force window to close on submit or cancel
-  		    //		reportWindow.dispatchEvent(new WindowEvent(reportWindow, WindowEvent.WINDOW_CLOSING));
-  		    			//TODO - after port, implement push to stack with method
-    					//addConditionReport(ConditionReport report)
-    				//TODO - VERIFY ALL INPUTS CAPTURED - HIGH
-    				break;
-    			default:
-    				System.out.println("Something went wrong.");
-    		}//end switch
-    	}//end actionPerformed()
-    }//end ButtonListener  	
-  	
-      public class ColorListener implements ActionListener
-      {
-      	public void actionPerformed(ActionEvent e)
-      	{
-      		String colorSelect = e.getActionCommand();
-    		switch(colorSelect)
-    		{
-    			case "Green":
-    				System.out.println("Green event fired");
-    			    GStyle style1 = new GStyle();
-    			    style1.setForegroundColor(Color.GREEN);
-    			    style1.setLineWidth (2);
-    			    style1.setAntialiased (true);
-    			    route_.setStyle (style1);
-    				break;
-    			case "Red":
-    				System.out.println("Red event fired");
-    			    GStyle style2 = new GStyle();
-    			    style2.setForegroundColor(Color.RED);
-    			    style2.setLineWidth (2);
-    			    style2.setAntialiased (true);
-    			    route_.setStyle (style2);
-    				break;
-    			case "Yellow":
-    				System.out.println("Yellow event fired");
-    			    GStyle style3 = new GStyle();
-    			    style3.setForegroundColor(Color.YELLOW);
-    			    style3.setLineWidth (2);
-    			    style3.setAntialiased (true);
-    			    route_.setStyle (style3);
-    				break;
-    			default:
-    				System.out.println("Something went wrong.");	
-    		}//end switch
-      	}//end actionPerformed()
-      }//end ColorListener()
-   
-/** DamagesListener allows a user to select the type of condition or damages
- * have occurred at the selected spot from a list of 62 items in a drop
- * down box.
- * @author Jonathan
- */
-   private class DamagesListener implements ActionListener
-   {
-   	
-   	public void actionPerformed(ActionEvent e)
-   	{
-   		JComboBox cb = (JComboBox)e.getSource();
-   		String sc = (String)cb.getSelectedItem();
-   		selectedCondition = sc;	
-   		System.out.println(sc);	
-   	}//end actionPerformed()
-   }//end DamagesListener()  	
+	
   	
   	
 }//end ItemGui
