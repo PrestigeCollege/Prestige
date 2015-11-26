@@ -252,7 +252,7 @@ public class ItemGui extends JFrame
 		 * all available fields.  Search results are loaded int to interface for
 		 * review / manipulation
 		 */
-		search = new JMenu("Search");
+		search = new JMenu("Find CR");
 		JMenuItem searchAll = new JMenuItem("Search");
 		searchAll.addActionListener(new SearchListener());
 		
@@ -355,8 +355,8 @@ public class ItemGui extends JFrame
 		second.addActionListener(new SearchListener());
 		third = new JButton("New CR");
 		third.addActionListener(new ReportListener());
-		fourth = new JButton("Print");
-		fourth.addActionListener(new PrintFileListener());
+		fourth = new JButton("View CR");
+		fourth.addActionListener(new EditListener());
 //add the buttons to the button panel		
 		buttonPanel.add(first);
 		buttonPanel.add(second);
@@ -468,11 +468,11 @@ to search before any data is loaded into the program's data structure.*/
 		
 		public void actionPerformed(ActionEvent e)
 		{
-			/*if (loggedIn == false)
+			if (loggedIn == false)
 			{
 				 alert("You must log-in first.");
 	             return;
-			}*/
+			}
 			
 			analyzePath();
 		}//end of Open
@@ -605,7 +605,7 @@ to search before any data is loaded into the program's data structure.*/
 			String damageNotes;
 			int location;
 			int size;
-			JLabel reportImage, dateCR, userCR, damageCR;
+			JLabel reportImage, dateText, dateCR, userText, userCR, damageText, damageCR, notesText;
 			JTextArea notesCR;
 
 		public void actionPerformed(ActionEvent e)
@@ -618,7 +618,7 @@ to search before any data is loaded into the program's data structure.*/
 			else //User has selected ViewCR to view condition report Items associated with Item
 			{
 				viewWindow = new JDialog();
-				setTitle("CRs for item: " + currentItem.getAccessionNumber());
+				setTitle("Condition Reports For Item #" + currentItem.getAccessionNumber());
 				setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				
 				//Load the newest element from stack
@@ -631,25 +631,34 @@ to search before any data is loaded into the program's data structure.*/
 				reportImage = new JLabel(new ImageIcon(currentItem.getPic()));
 				add(reportImage, BorderLayout.CENTER);
 				
-				JPanel notesPanel = new JPanel(new GridLayout(3,1,0,0));
+				JPanel notesPanel = new JPanel(new GridLayout(3,2,0,0));
 				
 				JPanel textPanel = new JPanel();
-				textPanel.setLayout(new GridLayout(1,3, 10, 10));
+				textPanel.setLayout(new GridLayout(4,2, 1, 1));
+				dateText = new JLabel("Submit Date: ");
 				dateCR = new JLabel (thisReport.getSubmitDate());
-				userCR = new JLabel (thisReport.getUserInfo());
-				damageCR = new JLabel (thisReport.getDamageCode());
+				textPanel.add(dateText);
 				textPanel.add(dateCR);
+				userText = new JLabel("Submitted By: ");
+				userCR = new JLabel (thisReport.getUserInfo());
+				textPanel.add(userText);
 				textPanel.add(userCR);
+				damageText = new JLabel("Condition: ");
+				damageCR = new JLabel (thisReport.getDamageCode());
+				textPanel.add(damageText);
 				textPanel.add(damageCR);
 
 				notesPanel.add(textPanel, BorderLayout.PAGE_START);
-				
+			
+				notesText = new JLabel("Notes: ");
+				textPanel.add(notesText);
+
 				notesCR = new JTextArea(thisReport.getComments());
 				notesCR.setEditable(false);
 				notesCR.setLineWrap(true);
 				notesPanel.add(notesCR, BorderLayout.CENTER);
 								
-				JPanel reportButtons = new JPanel(new GridLayout(1, 5, 10, 10));
+				JPanel reportButtons = new JPanel(new GridLayout(1, 5, 10, 20));
 				JButton next = new JButton("Next >");
 				next.addActionListener(new ReportNavigator());
 				JButton previous = new JButton("< Previous");
@@ -737,11 +746,11 @@ to search before any data is loaded into the program's data structure.*/
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			/*if (loggedIn == false)
+			if (!loggedIn)
 			{
 				 alert("You must log-in first.");
 	             return;
-			}*/
+			}
 			
 			if (localList != null)
 			{//uses JOptionPane to collect user's search criteria
@@ -943,10 +952,10 @@ to search before any data is loaded into the program's data structure.*/
 	    {
 
 			reportWindow = new JDialog();
-			setTitle("Create a condition report");
+			setTitle("New Condition Report");
  			setDefaultCloseOperation (JDialog.DISPOSE_ON_CLOSE); 
      		getContentPane().setLayout (new BorderLayout());
-    		getContentPane().add (new JLabel ("Draw line on map using mouse button 1"),
+    		getContentPane().add (new JLabel ("Draw a circle on the art to mark-up"),
     						 BorderLayout.PAGE_START);
     	
     	 	// Create the graphic canvas
@@ -1004,7 +1013,7 @@ to search before any data is loaded into the program's data structure.*/
 		    //inputPanel.add(menuPanel, BorderLayout.PAGE_START);
 		    
 		    JPanel textPanel = new JPanel();
-		   	textPanel.add(new JLabel("Enter damage remarks here:"), BorderLayout.PAGE_START);
+		   	textPanel.add(new JLabel("Enter condition remarks below:"), BorderLayout.PAGE_START);
 		   	//TODO - figure out how to limit text input to the space provided, or enforce
 		   	// a char limit
 		   	textArea = new JTextArea(5, 40);
@@ -1094,7 +1103,7 @@ to search before any data is loaded into the program's data structure.*/
 	    						System.out.println(notes);
 	    	//TODO - update as login name change
 	    				if(loginName == null)
-	    					loginName = "not logged in";
+	    					loginName = "Not logged in";
 	    					
 	    				Date now = new Date();
 	    				if (now == null)
@@ -1104,7 +1113,7 @@ to search before any data is loaded into the program's data structure.*/
 	    //Collect all user information from the Condition Report window and push to a CR 
 	    //constructor.  Add the ConditionReport to the Item's stack.				
 	    				ConditionReport thisReport = new ConditionReport( selectedCondition,
-	    				loginName, notes , now, scene_);
+	    				loginName, notes , now);
 	  		    		currentItem.addConditionReport(thisReport);
 	    				break;
 	    			case ("Cancel"):
@@ -1194,7 +1203,8 @@ to search before any data is loaded into the program's data structure.*/
 				}
 				else if (navSelection.equals("About"))
 				{
-					JOptionPane.showMessageDialog(null,"Version Number:\nv1.00\n\nCreated By:\nJames Watkins\nJonathan Leack\nCody Solley\nWilliam Nelson\nAlexander Fairhurst");
+					final ImageIcon icon = new ImageIcon("Prestige.jpg");
+					JOptionPane.showMessageDialog(null,"<html><h3>Condition Report System</h2>\n\nVersion Number:\nv1.00\n\nTeam Prestige:\nJames Watkins\nJonathan Leack\nCody Solley\nWilliam Nelson\nAlexander Fairhurst", "About", JOptionPane.INFORMATION_MESSAGE, icon );
 				}
 				else
 				{
