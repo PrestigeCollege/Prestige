@@ -79,13 +79,10 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
-
-//imports for bringing in Demo10 as a method
 import java.io.File;
 import java.util.Scanner;
 import java.util.Date;
 import java.util.Stack;
-import javax.imageio.ImageIO;
 
 //libraries created by Jacob Dreyer
 //http://www.java2s.com/Code/Java/Advanced-Graphics/DragandDrawDemo.htm
