@@ -163,7 +163,7 @@ public class GWindow
    * 
    * @param scene  Scene to add.
    */
-  void addScene (GScene scene)
+  public void addScene (GScene scene)
   {
     scenes_.add (scene);
   }

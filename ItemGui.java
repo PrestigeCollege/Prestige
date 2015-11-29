@@ -141,6 +141,7 @@ import java.io.File;
 import java.util.Scanner;
 import java.util.Date;
 import java.util.Stack;
+import javax.imageio.ImageIO;
 
 //libraries created by Jacob Dreyer
 //http://www.java2s.com/Code/Java/Advanced-Graphics/DragandDrawDemo.htm
@@ -593,16 +594,8 @@ to search before any data is loaded into the program's data structure.*/
 
 	private class EditListener extends JDialog implements ActionListener
 	{
-		
-			//Would like to make this more elegant, but doing so will require generating
-			//a new data input file.  Will wait to see how database integration goes 
-			//before reworking.
 			Stack<ConditionReport> reportStack = new Stack<ConditionReport>();
 			ConditionReport thisReport = new ConditionReport();
-			String dateString;
-			String user;
-			String damageCode;
-			String damageNotes;
 			int location;
 			int size;
 			JLabel reportImage, dateText, dateCR, userText, userCR, damageText, damageCR, notesText;
@@ -626,10 +619,20 @@ to search before any data is loaded into the program's data structure.*/
 				size = reportStack.size();
 				location = size - 1;
 				thisReport = reportStack.peek();
-								
-				//TODO - change to display markup images (having issues bringing in GScene)
+				
+				//Temporary fix, displays a clean image of the Item		
+				//TODO - change to display markup images once image writing fixed
 				reportImage = new JLabel(new ImageIcon(currentItem.getPic()));
 				add(reportImage, BorderLayout.CENTER);
+				
+				//TODO - impliment this code once issue with BufferedImage dimensions resolved
+				/*
+				if(thisReport.getDamage() == null)
+					reportImage = new JLabel(new ImageIcon("null.jpg"));
+				else
+					reportImage = new JLabel(new ImageIcon(thisReport.getDamage()));
+				add(reportImage, BorderLayout.CENTER);
+				*/
 				
 				JPanel notesPanel = new JPanel(new GridLayout(3,2,0,0));
 				
@@ -711,19 +714,15 @@ to search before any data is loaded into the program's data structure.*/
 						//int sizeOfStack = my
 						
 						case("Next >"):
-							System.out.println("Display Next CR");
 							updateWindow( (location + 1) % size );
 							break;
 						case ("< Previous"):
-							System.out.println("Display previous CR");
 							updateWindow( (location + (size -1)) % size );
 							break;
 						case ("Oldest >|"):
-							System.out.println("Display oldest CR");
 							updateWindow( 0 );
 							break;
 						case ("|< Newest"):
-							System.out.println("Display newest CR");
 							updateWindow ( (size -1) );
 							break;
 						case ("Cancel"):
@@ -948,6 +947,10 @@ to search before any data is loaded into the program's data structure.*/
  */
  	private class ReportListener extends JDialog implements ActionListener, GInteraction
 	{
+		
+		GWindow window;
+		BufferedImage myScreenShot;
+		
 		public void actionPerformed(ActionEvent e) //new Condition Report requested
 	    {
 
@@ -959,7 +962,8 @@ to search before any data is loaded into the program's data structure.*/
     						 BorderLayout.PAGE_START);
     	
     	 	// Create the graphic canvas
-    		GWindow window = new GWindow();
+  	 //		GWindow window = new GWindow();
+  	 		window = new GWindow();
     		getContentPane().add (window.getCanvas(), BorderLayout.CENTER);
     
     		// Create scene with default viewport and world extent settings
@@ -968,6 +972,7 @@ to search before any data is loaded into the program's data structure.*/
 	    	// Create a graphic object
 	    	GObject object = new TestObject (currentItem.getPic());
 	    	scene_.add (object);
+	    //ystem.out.println("Screen area bounds = " + screenArea.width + " " + screenArea.height);
     	
     	    //Create a JPanel for condition pulldown and Radio Buttons
 		    JPanel inputPanel = new JPanel(new BorderLayout());
@@ -1046,9 +1051,8 @@ to search before any data is loaded into the program's data structure.*/
 /** TODO List:
  *	Figure out how to return CR inputs to the database
  *  Fix Cancel Button operation --Done
- *	Add Action Listener to Cancel Button -- No longer Required
- *  Add action Listener to the Submit button that writes any changes to the Item's Queue 
- *  Add a vertical scroll bar to the JFrame. --Maybe			
+ *	Add Action Listener to Cancel Button -- Done
+ *  Add action Listener to the Submit button that writes any changes to the Item's Queue -- Done			
 */	   			
 	    		
 	}//end ActionListener
@@ -1074,11 +1078,7 @@ to search before any data is loaded into the program's data structure.*/
 		        break;
 			}
 	  	} //end event()
-	    public void draw()
-	    {
-	      segment_.setGeometry (0, 0);
-	      route_.setGeometry (xy_);
-	    }  	
+	  		
  /* ButtonListener is called within the CreateCR JFrame.  This class handles
  *  color change requests, JComboBox changes, report submission and
  *  cancelation of reports. On submit, a new ConditionReport object is created 
@@ -1094,6 +1094,8 @@ to search before any data is loaded into the program's data structure.*/
 	    		{
 	    			//On submit, collect user input and push to item stack
 	    			case "Submit": 
+	    				
+	    	//Test points for validating data values.  Remove on final release
 	    				System.out.println(selectedCondition);
 	    				
 	    				String notes = textArea.getText();
@@ -1101,7 +1103,7 @@ to search before any data is loaded into the program's data structure.*/
 	    						notes = "No notes provided";
 	    					else
 	    						System.out.println(notes);
-	    	//TODO - update as login name change
+	    	
 	    				if(loginName == null)
 	    					loginName = "Not logged in";
 	    					
@@ -1110,11 +1112,42 @@ to search before any data is loaded into the program's data structure.*/
 	    					System.out.println("Date is null");
 	    				else
 	    					System.out.println(now.toString());
-	    //Collect all user information from the Condition Report window and push to a CR 
-	    //constructor.  Add the ConditionReport to the Item's stack.				
+		/*This constructor is skips all graphic components.  It is for development
+		 * and testing only.  Not intended for final version.
+		 * Collect all user information from the Condition Report window and push to a CR 
+	     * constructor.  Add the ConditionReport to the Item's stack.
+		 */  				
+	    //				ConditionReport thisReport = new ConditionReport( selectedCondition,
+	    //				loginName, notes , now);
+	    
+		/*This constructor uses graphics of type GScene.  Graphics components did not display
+		 * correctly.  Not suited for final release.
+		 * Collect all user information from the Condition Report window and push to a CR 
+		 * constructor.  Add the ConditionReport to the Item's stack.
+		 */
+		//	    		ConditionReport thisReport = new ConditionReport( selectedCondition,
+		//				loginName, notes , now, scene_ );
+		
+	    /* This verion of constructor pushes a BufferedImage class object to the constructor.
+	     * Graphics are not visible when ConditionReport viewed in report window.  This is 
+	     * best candidat for final release.
+	     */
+	     			//Should capture the entire region of the JDialog as a BufferedImage object.
+	     			// getBounds is currently passing bounds of (0,0), hardcoding to prevent crash
+	     			/* 
+	     				Rectangle rec = reportWindow.getBounds();
+	     				BufferedImage bufferdImage = new BufferedImage(rec.width, rec.height, 
+	     				BufferedImage.TYPE_INT_ARGB );
+	     				reportWindow.paint(bufferedImage.getGraphics());
+	     				ConditionReport thisReport = new ConditionReport (selectedCondition,
+	     				loginName, notes, now, bufferedImage);
+	     				
+	     			*/
+	     			// temporary work-around for buffered image problem
 	    				ConditionReport thisReport = new ConditionReport( selectedCondition,
-	    				loginName, notes , now);
-	  		    		currentItem.addConditionReport(thisReport);
+	    				loginName, notes , now );
+	  		    		currentItem.addConditionReport(thisReport);  //push report to stack
+	  		    		dispose();
 	    				break;
 	    			case ("Cancel"):
 	    				dispose();
@@ -1177,7 +1210,35 @@ to search before any data is loaded into the program's data structure.*/
 	   		selectedCondition = sc;	
 	   		System.out.println(sc);	
 	   	}//end actionPerformed()
-	   }//end DamagesListener()  	
+	   }//end DamagesListener()  
+	   
+	    // Creates markup shape on the CR image file.  
+	    private class TestObject extends GObject
+	  	{
+	    	TestObject (String imageFileName)
+	    	{
+	      		segment_ = new GSegment();
+	      		addSegment (segment_);
+	
+		     	 GImage image = new GImage (new File (imageFileName));
+		     	 image.setPositionHint (GPosition.SOUTHEAST);
+			      segment_.setImage (image);
+			
+			      route_ = new GSegment();
+			      addSegment (route_);
+			
+			      GStyle routeStyle = new GStyle();
+				  routeStyle.setForegroundColor(Color.RED);
+			      routeStyle.setLineWidth (2);
+			      routeStyle.setAntialiased (true);
+			      route_.setStyle (routeStyle);
+			}
+		   	public void draw()
+		    {
+		      	segment_.setGeometry (0, 0);
+		      	route_.setGeometry (xy_);
+		    }
+		}//end TestObject class		
 	}//end ReportListener  
 	    
 /*  OtherListener provides the user with one of two options: help and about.
@@ -1212,34 +1273,4 @@ to search before any data is loaded into the program's data structure.*/
 				}
 	    	}
 	    }//end HelpListener
- // Creates markup shape on the CR image file.  
-    private class TestObject extends GObject
-  	{
-    	TestObject (String imageFileName)
-    	{
-      		segment_ = new GSegment();
-      		addSegment (segment_);
-
-	     	 GImage image = new GImage (new File (imageFileName));
-	     	 image.setPositionHint (GPosition.SOUTHEAST);
-		      segment_.setImage (image);
-		
-		      route_ = new GSegment();
-		      addSegment (route_);
-		
-		      GStyle routeStyle = new GStyle();
-			  routeStyle.setForegroundColor(Color.RED);
-		      routeStyle.setLineWidth (2);
-		      routeStyle.setAntialiased (true);
-		      route_.setStyle (routeStyle);
-		}
-   	public void draw()
-    {
-      	segment_.setGeometry (0, 0);
-      	route_.setGeometry (xy_);
-    }
-  	}//end TestObject class
-	
-  	
-  	
 }//end ItemGui

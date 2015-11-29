@@ -131,7 +131,6 @@ public class Item implements Serializable
 	 */
 	public void addConditionReport(ConditionReport report)
 	{
-		
 		myReports.push(report);
 	}
 	public Stack<ConditionReport> getConditionStack()

@@ -1,6 +1,7 @@
-import no.geosoft.cc.graphics.GScene;
+//import no.geosoft.cc.graphics.GScene;
 import java.util.Date;
 import java.io.Serializable;
+import java.awt.image.BufferedImage;
 
 /** Hold data for an Item's damage conditions
  * @(#)ConditionReport.java
@@ -17,8 +18,9 @@ public class ConditionReport implements Serializable
 	private String username; //the username of the submitting individual
 	private String comments; //captures comments entered into the free-text area
 	private Date submitDate; //the date and time that a report was submited
-	private GScene markupImage; //an image of the item with damage markups
+//	private GScene markupImage; //an image of the item with damage markups
 	//TODO determine if ImageIcon is the best class for image capture.
+	private BufferedImage markupImage;
 	
 	
     public ConditionReport()
@@ -31,7 +33,7 @@ public class ConditionReport implements Serializable
     }
     
     public ConditionReport(String newDamage, String thisUser, String notes, Date reportDate, 
-    		GScene damageImage)
+    		BufferedImage damageImage)
     {
     	damage = newDamage;
 		username = thisUser;
@@ -52,7 +54,7 @@ public class ConditionReport implements Serializable
     }
    		
     
-    public void viewConditionReport()
+    public void printConditionReport()
     {
     	//TODO implement a method that output a CR's String values
     	//and returns it's image
@@ -92,6 +94,15 @@ public class ConditionReport implements Serializable
     {
 		comments = notes;    	
     }
+    public void setDamage(BufferedImage damPic)
+    {
+    	markupImage = damPic;
+    }
+    public BufferedImage getDamage()
+    {
+    	return markupImage;
+    }
+/*  
     public void setDamage(GScene damPic)
     {
     	markupImage = damPic;
@@ -100,6 +111,6 @@ public class ConditionReport implements Serializable
     {
     	return markupImage;
     }
-    
+*/    
 	//TODO is there any use for a toString() for this class?
 }
