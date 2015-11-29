@@ -8,10 +8,8 @@ import java.awt.image.BufferedImage;
  * Last updated by James Watkins
  *
  * @author Alex Fairhurst
- * @version 1.10 2015/11/15
+ * @version 1.15 2015/11/29
  */
-
-
 public class ConditionReport implements Serializable
 {
 	private String damage; //one of the organization's supplied damage codes
@@ -53,7 +51,6 @@ public class ConditionReport implements Serializable
 		markupImage = null;	
     }
    		
-    
     public void printConditionReport()
     {
     	//TODO implement a method that output a CR's String values
@@ -102,7 +99,7 @@ public class ConditionReport implements Serializable
     {
     	return markupImage;
     }
-/*  
+/*  Commented out for testing of BufferedImage solution
     public void setDamage(GScene damPic)
     {
     	markupImage = damPic;
