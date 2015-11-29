@@ -21,7 +21,6 @@ public class Item implements Serializable
 		title = null;
 		pictureFileName = null;
 		myReports = new Stack<ConditionReport>();
-		
 	}
 
 // this constructor creates a new item with an empty condition report stack
@@ -80,7 +79,7 @@ public class Item implements Serializable
 	{
 		return pictureFileName;
 	}
-
+	
 	public String toString()
 	{
 		return ("Accession Number: \t"+accessionNumber+"\nArtist: \t"+artist+"\nTitle: \t"+
@@ -136,5 +135,9 @@ public class Item implements Serializable
 	public Stack<ConditionReport> getConditionStack()
 	{
 		return myReports;
+	}
+	public boolean stackIsEmpty()
+	{
+		return myReports.empty();
 	}
 }

@@ -5,7 +5,7 @@
    						Will Nelson
    						Cody Solley
    						James Wakins
-   Date Last Modified: 	Nov. 12 2015
+   Date Last Modified: 	Nov. 29 2015
 
    Problem Statement: Define a Gui interface which allows a user search a
    database of art items and submit condition reports for each item.
@@ -17,115 +17,59 @@
    
 GUI Components
    1. Create a main JFrame with a BorderLayout and a menuBar.
-   2. Populate the menuBar with menus: File, Edit, Navigate, Search, and Help.
+   2. Populate the menuBar with menus: File, CR, Find CR, Navigate, and Other.
    3. The File menu enables user login, loading files, saving files, and printing
    	  reports.  The ability to Export files may be added in later releases.
-   4. The Edit menu allows the viewing and creation of condition reports.
-   5. Create a Panel to be applied to the CENTER region of the JFrame, divide
-   the JPanel into 1 row and two columns.
-   5. The search menu permits a search by accession number, artist or title.
+   4. The CR menu allows the viewing and creation of condition reports.
+   5. Find CR searches for a query term and returns any matches.
    7. The navigation menu allows a user to move through all returned results.
-//TODO - update the rest of the header
-   7. The Right Column of the will be subdivided into two columns and 9 rows.
-   These subdivision will be used for labeling and displaying the variables
-   associated with the item displayed. One row will be used for displaying
-   the total value of all assets.
-   8. Create a panel for displaying JButtons allowing navigation through
-   the PropertyList's elements.  Apply this panel to the main JFrame's SOUTH
-   region.  Divide this Panel into 1 row and 5 columns.
-   9. Create the JButtons for navigation. Buttons will allow navigation to
-   the first, last, next and previous elements.
+   8. The Other menu access the help and about files.
+   9. JPanels provide for formatting internal to the JFrame.
+   10. JButtons provide one click access to common functions.
+   11. The main function launches an instance of ItemGui.
 ****End Of GUI components
 *Methods
-	1. Provide a method which launches a JOPtionPane Input dialog in order to
-	collect and return the String name of a text file.
-	2. Provide a method which launches a JOption Pane Input dialog to collect
-	and return a user's search criteria.
-	3. Provide a method to alert the user to illegal operations using a
-	JOptionPane ERROR_MESSAGE dialog.
-	4. Provide a method to alert the user of too many failed attempts at data
-	entry using JOptionPane ERROR_MESSAGE dialog.
-	5. Provide a method with uses a JOptionPane YES_NO dialog to allow the
-	user to confirm deletions prior to execution.
-	6. Specify a method which retrieves the name of the currentItem's ImageIcon
-	file and then passes that name to be displayed on the main JFrame.
-	7. Method createItem() will launch a new JFrame which has labels and
-	textfields for the entry of information pertinent to the creation of a
-	new Item. The JFrame will have a submission button and a cancel button.
-	When one of the buttons is depressed, it fires an event to the
-	AddItemListener class.
-	8. Specify a method to allow the modification of existing Items.  The
-	method behaves just like the createItem() method, except the modify()
-	method calls up the variables of the Item currently displayed in the
-	main JFrame.  The user modifies existing data and submits via submit or
-	cancel buttons.
-	9. Method updateJFrame() is used to update the information and ImageIcons
-	displayed on the main JFrame.  It calls up the current element's
-	variables and passes them to the JFrame's components.
-	10. The clearJFrame() method uses a String parameter to overwrite the
-	text fields of the main JFrame.
-End of Methods***
+	1. setTextFile() Uses a JOptionPane to collect a file name for a .txt output file.
+	2. setQuery() Presents a JOptionPane to collect user query terms, returns a String.
+	3. alert() is a general purpose error notification JOptionPane. Method is overloaded.
+	4. failure() is a alerts user to an Invalid Input exception.
+	5. setImageIcon takes a String filename and updates the GUI's ImageIcon object.
+	6. updateJFrame() takes an integer argument for location (within the ArrayList)
+		and updates the GUI's ouput for item at location i.
+***End of ItemGui methods
 *Inner Classes
-	1. The text FileListener class is used for exporting the PropertyList
+	1. FileListener class is used for exporting the PropertyList
 	to a text file. The class collects a String name for the file and then
 	passes that name to PropertyList's printTextFile() method.
-	2. Class OpenFileListener uses the JFileChooser class permitting the user
+	2. OpenFileListener uses the JFileChooser class permitting the user
 	to navigate folders and select an input file. Once the user selects a
 	file, its information is loaded into a PropertyList ArrayList and the
 	JFrame is updated to display element zero. The class also uses
-	PropertyList's readFromFile() method for data I/O.
-	3. SaveFileListner uses JFileChooser to allow the user to browse to the
-	a desired destination folder and then specify a file name.  When the
-	user inputs a file name and clicks save, the JFileChooser passes the
-	file name to PropertyList's writeToFile() method.
-	4. EditListener class is wholly associated with the Edit menu and
-	facilitates the addition, removal, modification and erasure of Items of
-	the	PropertyList.  The class requests user confirmation before any
-	deletion, and passes all inputs to be verified against the try/catch
-	criteria. The class relies on implementations of PropertyList's 
-	ArrayList methods.
-	5. Class SearchListener collects a search query as input from the user
-	and then passes the query to PropertyList searchDataBase() method.
+	PropertyList's readFromFile() method for data I/O.  Support for this
+	class may not be required after database integration.
+	3. FileSaveListener uses JFileChooser to allow browser based navigation
+	to a folder and file. JFileChooser passes the file name to 
+	PropertyList's writeToFile() method.
+	4. EditListener facilitates the viewing of condition reports. Class uses
+	JDialog windows to present information contained in condition reports for a given
+	Item. User may browse through all reports for the current Item.  Uses Stack to
+	display reports from newest to oldest.
+	5. SearchListener receives a search query from the user.  Term passed to the
+	to PropertyList searchDataBase() method.
 	6. The MovementListener class is responsible for user navigation through
-	the PropertyList.  The buttons are associated to the numeric values of
-	ArrayList elements and scale in response to additions and deletions.
-	7. The AddItemListner class is responsible for ensuring data integrity
-	and handel inputs from the createItem() and modifyItem() methods. The
-	class collects data from the text fields of the create and modify JFrames
-	using setText() and getText(). Once the inputs are collected they are
-	temporarily assigned to variables and passed through a battery of test
-	inside of try / catch blocks. If an input fails its test, an exception
-	is triggered and the user is given one additional chance to correct the
-	mistake. A subsequent failur terminates the modification or addition.
-	If all data passes verification, then it is passed to either a method
-	for modification of existing elements or a constructor for the creation
-	of new Items.  New Items are added to the database and updateJFrame is
-	invoked to display the addtion. The total value of all assets is 
-	re-calculated and passed to the JFrame.
-	
-   Classes needed and Purpose (Input, Processing, Output)
-   String - input, output					LineBorder - formatting (view)
-   Integer - input, output					GridLayout - formatting (view)
-   Double - input, output					BorderLayout - formatting (view)
-   JFileChooser - input, output				BorderFactory - formatting (view)
-   JFrame - input, output					JPanel - formatting (view)
-   JTextField - input, output				Font - formatting (view)
-   File - input, output						NumberFormat - output
-   JButton - processing						JLabel - output
-   JMenuBar - Processing					ImageIcon - output
-   JMenu - Processing						JmenuItem - Processing
-   ActionListener - processing
-   JOptionPane - input, output, processing
-   InvalidInputException - error handling
-   PropertyList - input, output, processing
-   Item - input, output, processing
-   FileListener - output
-   OpenFileListener - input
-   SaveFileListener - output
-   EditFileListener - processing
-   SearchFileListener - output
-   MovementFileListener - Processing
-   AddItemListener - input
+	the PropertyList.  Movement selected using JButtons on ItemGui display.  
+	Navigation possible using an int location variable.  Number of elements in
+	ArrayList determined by the query submitted by user.
+	7. PrintFileListener uses Printable interface to send current Item's information
+	to the default printer
+	8. LoginListener enforces collects and submits user names and passwords.  Also
+	performs front end input validation of submitted information.
+	9. ReportListener generates a new Condition Report for the Item currently displayed.
+	JDialog window displays pertinent informtion for item and provides a markable image
+	for recording damage location. On submit, new ConditionReport is created and pushed
+	to Item's stack.
+	10. OtherListener provides support for the Other menu, including access to the help
+	document and about information.
 */
 import java.awt.*;
 import java.awt.image.*;
@@ -155,41 +99,34 @@ public class ItemGui extends JFrame
 	{
 		ItemGui window = new ItemGui();
 	}
-//GUI Components
-	private JDialog reportWindow, viewWindow;
+//GUI component variables
 	private JPanel textPanel, centerPanel, buttonPanel;
 	private JButton first, second, third, fourth;
-	private JTextField description, make, model, serial, year, price, qty;
 	private JTextField descriptionText, makeText, modelText, serialText,
-					   pictureText;
+					   pictureText, serial, description, make;
 	private JLabel imageLabel;
 	private LineBorder trim;
 	private JMenuBar menuBar;
 	private JMenu file, edit, search, navigate, help, other;
 	private ImageIcon currentImage;
-//	private BufferedImage markupImage;  //Allows creation of markable raster overlays
 	private Font labelFont, itemFont;
-//variables used in program	
+	public JTextArea textArea;	//input for notes on condition reports
 	private final int WIDTH = 700, SMALL_WIDTH = 375;
 	private final int HEIGHT = 500, SMALL_HEIGHT = 300;
-	private PropertyList localList = null;
-	private Item currentItem;
+	public int layoutGap = 10; //variable for adjusting gap settings in Gridlayout
+//variables used by GUI
 	private int location;
-	private String fileName;
+	private String fileName, selectedCondition;
 	public String loginName; //user's login name for timestamping purposes
 	public boolean loggedIn = false; //determines whether or not a user is logged in
-	public int layoutGap = 10; //variable for adjusting gap settings in Gridlayout
 	private static int numberOfConditions = 63 ;//supplied by client
 	public String conditionSourceFile = "DamageCodes.txt";  //input file for damage condition
-	
+//Structures and classes for handling data	
+	private PropertyList localList = null;
+	private Item currentItem;
 	private GScene scene_;
 	private GSegment  route_, segment_;
-	private int[]     xy_;
-	private String selectedCondition; //selected condition from damage codes
-	public JTextArea textArea;	//input for notes on condition reports
-//	private Stack<ConditionReport> reportStack;
-
-
+	private int[] xy_;
 	
 	public ItemGui()
 	{
@@ -213,7 +150,6 @@ public class ItemGui extends JFrame
 		itemFont = new Font("COURIER", Font.BOLD, 14); //font style for text output
 		trim = (LineBorder)BorderFactory.createLineBorder(Color.BLACK, 2);
 		
-
 //Create menuBars, menus and menu Items, attach ActionListeners to each
 //menuItem and add the manuItems to the menu
 		
@@ -236,7 +172,6 @@ public class ItemGui extends JFrame
 		file.add(fileExport);
 		file.add(filePrinter);
 		
-		
 		//Edit Menu
 		edit = new JMenu("CR");
 		JMenuItem editAdd = new JMenuItem("New CR");
@@ -247,8 +182,6 @@ public class ItemGui extends JFrame
 		edit.add(editAdd);
 		edit.add(editView);
 		
-		
-		//Search Menu
 		/* Create a Search menu for JMenuBar.  Add a menu item to search against
 		 * all available fields.  Search results are loaded int to interface for
 		 * review / manipulation
@@ -256,7 +189,6 @@ public class ItemGui extends JFrame
 		search = new JMenu("Find CR");
 		JMenuItem searchAll = new JMenuItem("Search");
 		searchAll.addActionListener(new SearchListener());
-		
 		search.add(searchAll);
 		
 		//Navigate Menu
@@ -277,7 +209,6 @@ public class ItemGui extends JFrame
 		navigate.add(navigatePrevious);
 		navigate.add(navigateNext);
 		navigate.add(navigateLast);
-		
 		
 		//Other Menu
 		other = new JMenu("Other");
@@ -315,13 +246,13 @@ public class ItemGui extends JFrame
 		JLabel serialLabel = new JLabel("Accession Number");
 		serialLabel.setFont(labelFont);
 		
-		//Description == Title of Art this project
+		//Description == Title of Art being displayed
 		description = new JTextField(20);
 		description.setEditable(false);
 		JLabel descriptionLabel = new JLabel("Title:");
 		descriptionLabel.setFont(labelFont);
 		
-		//Make == Artist this project
+		//Make == Artist of Item being displayed
 		make = new JTextField(20);
 		make.setEditable(false);
 		JLabel makeLabel = new JLabel("Artist:");
@@ -340,7 +271,6 @@ public class ItemGui extends JFrame
 		centerPanel = new JPanel();
 		centerPanel.setLayout(centerLayout);
 		centerPanel.setBorder(trim);
-//		centerPanel.add(ImageIconPanel);
 		centerPanel.add(imageLabel);
 		centerPanel.add(textPanel);		
 		
@@ -349,7 +279,6 @@ public class ItemGui extends JFrame
 		buttonPanel.setLayout(buttonLayout);
 //create buttons and actionListeners for each button
 		
-//TODO modify listener functions to support
 		first = new JButton("Login");
 		first.addActionListener(new LoginListener());
 		second = new JButton("Search");
@@ -370,7 +299,7 @@ public class ItemGui extends JFrame
 		pack();
 		setVisible(true);
 	}	
-//prompts user to input a file name for saving output	
+//prompts user to input a file name for saving output to text file	
 	private String setTextFile()
 	{
 		fileName = JOptionPane.showInputDialog(null, "Enter the " +
@@ -404,9 +333,8 @@ to search before any data is loaded into the program's data structure.*/
 		JOptionPane.ERROR_MESSAGE);
 	}
 	
-/*Method invoked in response to an exception being thrown and being handled
- * in one of the catch blocks.  Presents a JOptionPane dialog window. Handled by
- * Invalid Input Exception.
+/*Method invoked in response to an exception being thrown and handled in one of
+ * the catch blocks.  Presents a JOptionPane dialog window. Handled by
  */
 	private void failure()
 	{  
@@ -457,7 +385,7 @@ to search before any data is loaded into the program's data structure.*/
 				alert();
 		}
 	}//end private inner class TextFileListener
-/**  OpenFileListener launches a JFileChooser window allowin user to navigate
+/* OpenFileListener launches a JFileChooser window allowin user to navigate
  *  to the file to load.  Filename and path returned to the calling object.
  *  Filename and path are validated to prevent blank and / or empty values.
  *  Objects from file are loaded into the data structure for manipulation.
@@ -539,7 +467,6 @@ to search before any data is loaded into the program's data structure.*/
  *  (i.e. not blank) and a file name provided.
  * @author James
  */
- 
 	public class FileSaveListener extends JFrame implements ActionListener
 	{
 		private File fileName;
@@ -598,7 +525,8 @@ to search before any data is loaded into the program's data structure.*/
 			ConditionReport thisReport = new ConditionReport();
 			int location;
 			int size;
-			JLabel reportImage, dateText, dateCR, userText, userCR, damageText, damageCR, notesText;
+			JLabel reportImage, dateText, dateCR, userText, userCR, damageText, 
+					damageCR, notesText;
 			JTextArea notesCR;
 
 		public void actionPerformed(ActionEvent e)
@@ -608,9 +536,13 @@ to search before any data is loaded into the program's data structure.*/
 				 alert("You must log-in first.");
 	             return;
 			}
+			if (currentItem.stackIsEmpty())
+			{
+				alert("No reports on file for this item");
+			}
 			else //User has selected ViewCR to view condition report Items associated with Item
 			{
-				viewWindow = new JDialog();
+				JDialog viewWindow = new JDialog();
 				setTitle("Condition Reports For Item #" + currentItem.getAccessionNumber());
 				setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				
@@ -685,10 +617,12 @@ to search before any data is loaded into the program's data structure.*/
 				pack();
 				setVisible(true);
 			}//end else in EditListener
-		}
+		}//end ActionPerformed
+		//Updates the information displayed in the JDialog based
+		//on user input.
 		public void updateWindow(int arg)
 		{
-			
+			//TODO - add method for updating image displayed
 			thisReport = reportStack.get(arg);
 			dateCR.setText( thisReport.getSubmitDate() );
 			userCR.setText( thisReport.getUserInfo() );
@@ -696,7 +630,9 @@ to search before any data is loaded into the program's data structure.*/
 			notesCR.setText( thisReport.getComments() );
 			location = arg;	
 		}
-		
+		/* Provides navigation support for the Condition Report JDialog.
+		 * Navigation is circular.
+		 */
 		private class ReportNavigator implements ActionListener
 		{
 			public void actionPerformed(ActionEvent e)
@@ -947,14 +883,13 @@ to search before any data is loaded into the program's data structure.*/
  */
  	private class ReportListener extends JDialog implements ActionListener, GInteraction
 	{
-		
 		GWindow window;
 		BufferedImage myScreenShot;
 		
 		public void actionPerformed(ActionEvent e) //new Condition Report requested
 	    {
 
-			reportWindow = new JDialog();
+			JDialog reportWindow = new JDialog();
 			setTitle("New Condition Report");
  			setDefaultCloseOperation (JDialog.DISPOSE_ON_CLOSE); 
      		getContentPane().setLayout (new BorderLayout());
@@ -1141,7 +1076,6 @@ to search before any data is loaded into the program's data structure.*/
 	     				reportWindow.paint(bufferedImage.getGraphics());
 	     				ConditionReport thisReport = new ConditionReport (selectedCondition,
 	     				loginName, notes, now, bufferedImage);
-	     				
 	     			*/
 	     			// temporary work-around for buffered image problem
 	    				ConditionReport thisReport = new ConditionReport( selectedCondition,
