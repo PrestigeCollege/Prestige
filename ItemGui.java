@@ -255,7 +255,7 @@ public class ItemGui extends JFrame
 		JLabel makeLabel = new JLabel("Artist:");
 		makeLabel.setFont(labelFont);
 		
-//adds lables and text fields to the JPanel.
+//adds labels and text fields to the JPanel.
 		textPanel.add(serialLabel);
 		textPanel.add(serial);
 		textPanel.add(descriptionLabel);
@@ -382,6 +382,7 @@ to search before any data is loaded into the program's data structure.*/
 				alert();
 		}
 	}//end private inner class TextFileListener
+	
 /* OpenFileListener launches a JFileChooser window allowin user to navigate
  *  to the file to load.  Filename and path returned to the calling object.
  *  Filename and path are validated to prevent blank and / or empty values.
@@ -426,6 +427,7 @@ to search before any data is loaded into the program's data structure.*/
 			}
 			return fileName;
 		} */ //hard coding file name for testing remove later
+		
 		public void analyzePath()
 		{
 
@@ -617,6 +619,7 @@ to search before any data is loaded into the program's data structure.*/
 		}//end ActionPerformed
 		//Updates the information displayed in the JDialog based
 		//on user input.
+		
 		public void updateWindow(int arg)
 		{
 			//TODO - add method for updating image displayed
@@ -630,6 +633,7 @@ to search before any data is loaded into the program's data structure.*/
 		/* Provides navigation support for the Condition Report JDialog.
 		 * Navigation is circular.
 		 */
+		
 		private class ReportNavigator implements ActionListener
 		{
 			public void actionPerformed(ActionEvent e)
@@ -1078,6 +1082,19 @@ to search before any data is loaded into the program's data structure.*/
 	    				ConditionReport thisReport = new ConditionReport( selectedCondition,
 	    				loginName, notes , now );
 	  		    		currentItem.addConditionReport(thisReport);  //push report to stack
+	  		    	//TODO Preparing to implement database functions
+	  		    		try
+	  		    		{
+	  		    			/*TODO this needs work.... the first entry is superID so we need some kind of counter I would assume, next is the painting ID which we dont have ID numbers,
+	  		    		      next is the userID but we only have strings so users need a number, the next two are our strings, then the date, then the archive boolean */
+	  		    			damage_data_entry thisEntry = new damage_data_entry(1, 1, 1, selectedCondition, currentItem.getPic(), now, 0);
+	  		    		} 
+	  		    		finally
+	  		    		{
+	  		    			
+	  		    		}
+	  		    		
+	  		    	//End database functions
 	  		    		dispose();
 	    				break;
 	    			case ("Cancel"):

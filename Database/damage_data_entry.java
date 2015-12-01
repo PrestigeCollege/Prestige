@@ -9,13 +9,21 @@ public class damage_data_entry extends data_entry{
 	private int archived;
 
 	public damage_data_entry (int newid, int newPaintingId, int newUserId, String newDamageType, String newLayerPath, Date newDate, int archiveState){
+		//adding println to verify writing is happening in the function
 		super(newid);
+		System.out.println("Wrote newid");
 		painting_id = newPaintingId;
+		System.out.println("Wrote painting_id");
 		user_id = newUserId;
+		System.out.println("Wrote user_id");
 		damage_type = newDamageType;
+		System.out.println("Wrote damage_type");
 		layer_path = newLayerPath;
+		System.out.println("Wrote layer_path");
 		edit_date = newDate;
+		System.out.println("Wrote edit_date");
 		archived = archiveState;
+		System.out.println("Wrote archived");
 	}
 	
 	public int get_painting_id(){
