@@ -11,7 +11,6 @@ import java.util.Stack;
 public class Item implements Serializable
 {
 	public String accessionNumber, artist, title, pictureFileName;
-//	public Stack<ConditionReport> myReports;
 	public Stack<ConditionReport> myReports = new Stack<ConditionReport>();
 	
 	public Item()

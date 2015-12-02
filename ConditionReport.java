@@ -16,9 +16,6 @@ public class ConditionReport implements Serializable
 	private String username; //the username of the submitting individual
 	private String comments; //captures comments entered into the free-text area
 	private Date submitDate; //the date and time that a report was submited
-//	private GScene markupImage; //an image of the item with damage markups
-	//TODO determine if ImageIcon is the best class for image capture.
-//	private BufferedImage markupImage;
 	private GWindow markupImage;
 	
 	
@@ -93,27 +90,7 @@ public class ConditionReport implements Serializable
     public void setComments(String notes)
     {
 		comments = notes;    	
-    }
-/*    
-    public void setDamage(BufferedImage damPic)
-    {
-    	markupImage = damPic;
-    }
-    public BufferedImage getDamage()
-    {
-    	return markupImage;
-    }
-*/
-/*  Commented out for testing of BufferedImage solution
-    public void setDamage(GScene damPic)
-    {
-    	markupImage = damPic;
-    }
-    public GScene getDamage()
-    {
-    	return markupImage;
-    }
-*/    
+    } 
 	public void setDamage (GWindow damPic)
 	{
 		markupImage = damPic;
