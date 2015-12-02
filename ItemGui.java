@@ -5,7 +5,7 @@
    						Will Nelson
    						Cody Solley
    						James Wakins
-   Date Last Modified: 	Nov. 29 2015
+   Date Last Modified: 	Nov. 30 2015
 
    Problem Statement: Define a Gui interface which allows a user search a
    database of art items and submit condition reports for each item.
@@ -188,7 +188,6 @@ public class ItemGui extends JFrame
 		searchAll.addActionListener(new SearchListener());
 		search.add(searchAll);
 		
-		//Navigate Menu
 		/* Create Navigate Menu for JMenuBar.  Add menu items for traversing
 		 * results returned from query.  
 		 */		
@@ -255,7 +254,7 @@ public class ItemGui extends JFrame
 		JLabel makeLabel = new JLabel("Artist:");
 		makeLabel.setFont(labelFont);
 		
-//adds labels and text fields to the JPanel.
+//adds lables and text fields to the JPanel.
 		textPanel.add(serialLabel);
 		textPanel.add(serial);
 		textPanel.add(descriptionLabel);
@@ -382,11 +381,12 @@ to search before any data is loaded into the program's data structure.*/
 				alert();
 		}
 	}//end private inner class TextFileListener
-	
 /* OpenFileListener launches a JFileChooser window allowin user to navigate
  *  to the file to load.  Filename and path returned to the calling object.
  *  Filename and path are validated to prevent blank and / or empty values.
  *  Objects from file are loaded into the data structure for manipulation.
+ *
+ *  This class may be removed or adopted once database integration achieved.
  * @author James
  */
 	private class OpenFileListener extends JFrame implements ActionListener
@@ -427,7 +427,6 @@ to search before any data is loaded into the program's data structure.*/
 			}
 			return fileName;
 		} */ //hard coding file name for testing remove later
-		
 		public void analyzePath()
 		{
 
@@ -553,17 +552,14 @@ to search before any data is loaded into the program's data structure.*/
 				
 				//Temporary fix, displays a clean image of the Item		
 				//TODO - change to display markup images once image writing fixed
-				reportImage = new JLabel(new ImageIcon(currentItem.getPic()));
-				add(reportImage, BorderLayout.CENTER);
-				
+	//			reportImage = new JLabel(new ImageIcon(currentItem.getPic()));
+	//			add(reportImage, BorderLayout.CENTER);
+	
 				//TODO - impliment this code once issue with BufferedImage dimensions resolved
-				/*
 				if(thisReport.getDamage() == null)
-					reportImage = new JLabel(new ImageIcon("null.jpg"));
+					getContentPane().add(new JLabel(new ImageIcon("null.jpg")), BorderLayout.CENTER);
 				else
-					reportImage = new JLabel(new ImageIcon(thisReport.getDamage()));
-				add(reportImage, BorderLayout.CENTER);
-				*/
+					getContentPane().add(thisReport.getDamage().getCanvas(), BorderLayout.CENTER);
 				
 				JPanel notesPanel = new JPanel(new GridLayout(3,2,0,0));
 				
@@ -617,23 +613,10 @@ to search before any data is loaded into the program's data structure.*/
 				setVisible(true);
 			}//end else in EditListener
 		}//end ActionPerformed
-		//Updates the information displayed in the JDialog based
-		//on user input.
-		
-		public void updateWindow(int arg)
-		{
-			//TODO - add method for updating image displayed
-			thisReport = reportStack.get(arg);
-			dateCR.setText( thisReport.getSubmitDate() );
-			userCR.setText( thisReport.getUserInfo() );
-			damageCR.setText( thisReport.getDamageCode() );
-			notesCR.setText( thisReport.getComments() );
-			location = arg;	
-		}
+
 		/* Provides navigation support for the Condition Report JDialog.
 		 * Navigation is circular.
 		 */
-		
 		private class ReportNavigator implements ActionListener
 		{
 			public void actionPerformed(ActionEvent e)
@@ -669,8 +652,26 @@ to search before any data is loaded into the program's data structure.*/
 							alert("Error within CR Navigation.");
 					}//end switch
 				}//end else	
-			}// end inner class ReportNavigator
+			}// end actionPerformed ReportNavigator
 		}//end ReportNavigator
+		//Updates the information displayed in the JDialog based
+		//on user input.
+		public void updateWindow(int arg)
+		{
+			thisReport = reportStack.get(arg);
+			//TODO - add method for updating image displayed
+			if(thisReport.getDamage() == null)
+				getContentPane().add(new JLabel(new ImageIcon("null.jpg")), BorderLayout.CENTER);
+			else
+				getContentPane().add(thisReport.getDamage().getCanvas(), BorderLayout.CENTER);
+			
+			
+			dateCR.setText( thisReport.getSubmitDate() );
+			userCR.setText( thisReport.getUserInfo() );
+			damageCR.setText( thisReport.getDamageCode() );
+			notesCR.setText( thisReport.getComments() );
+			location = arg;	
+		}	
 	}//end private inner class EditListener	
 
 /**  SearchListener is the observer for search requests.  Query performed
@@ -1061,8 +1062,8 @@ to search before any data is loaded into the program's data structure.*/
 		 * Collect all user information from the Condition Report window and push to a CR 
 		 * constructor.  Add the ConditionReport to the Item's stack.
 		 */
-		//	    		ConditionReport thisReport = new ConditionReport( selectedCondition,
-		//				loginName, notes , now, scene_ );
+			    		ConditionReport thisReport = new ConditionReport( selectedCondition,
+						loginName, notes , now, window );
 		
 	    /* This verion of constructor pushes a BufferedImage class object to the constructor.
 	     * Graphics are not visible when ConditionReport viewed in report window.  This is 
@@ -1079,22 +1080,10 @@ to search before any data is loaded into the program's data structure.*/
 	     				loginName, notes, now, bufferedImage);
 	     			*/
 	     			// temporary work-around for buffered image problem
-	    				ConditionReport thisReport = new ConditionReport( selectedCondition,
-	    				loginName, notes , now );
+	    //11/30
+	    //				ConditionReport thisReport = new ConditionReport( selectedCondition,
+	    //				loginName, notes , now );
 	  		    		currentItem.addConditionReport(thisReport);  //push report to stack
-	  		    	//TODO Preparing to implement database functions
-	  		    		try
-	  		    		{
-	  		    			/*TODO this needs work.... the first entry is superID so we need some kind of counter I would assume, next is the painting ID which we dont have ID numbers,
-	  		    		      next is the userID but we only have strings so users need a number, the next two are our strings, then the date, then the archive boolean */
-	  		    			damage_data_entry thisEntry = new damage_data_entry(1, 1, 1, selectedCondition, currentItem.getPic(), now, 0);
-	  		    		} 
-	  		    		finally
-	  		    		{
-	  		    			
-	  		    		}
-	  		    		
-	  		    	//End database functions
 	  		    		dispose();
 	    				break;
 	    			case ("Cancel"):

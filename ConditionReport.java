@@ -1,4 +1,4 @@
-//import no.geosoft.cc.graphics.GScene;
+import no.geosoft.cc.graphics.GWindow;
 import java.util.Date;
 import java.io.Serializable;
 import java.awt.image.BufferedImage;
@@ -18,7 +18,8 @@ public class ConditionReport implements Serializable
 	private Date submitDate; //the date and time that a report was submited
 //	private GScene markupImage; //an image of the item with damage markups
 	//TODO determine if ImageIcon is the best class for image capture.
-	private BufferedImage markupImage;
+//	private BufferedImage markupImage;
+	private GWindow markupImage;
 	
 	
     public ConditionReport()
@@ -30,8 +31,10 @@ public class ConditionReport implements Serializable
 		markupImage = null;
     }
     
-    public ConditionReport(String newDamage, String thisUser, String notes, Date reportDate, 
-    		BufferedImage damageImage)
+/*    public ConditionReport(String newDamage, String thisUser, String notes, Date reportDate, 
+    		BufferedImage damageImage)  */
+       public ConditionReport(String newDamage, String thisUser, String notes, Date reportDate, 
+    		GWindow damageImage)
     {
     	damage = newDamage;
 		username = thisUser;
@@ -91,6 +94,7 @@ public class ConditionReport implements Serializable
     {
 		comments = notes;    	
     }
+/*    
     public void setDamage(BufferedImage damPic)
     {
     	markupImage = damPic;
@@ -99,6 +103,7 @@ public class ConditionReport implements Serializable
     {
     	return markupImage;
     }
+*/
 /*  Commented out for testing of BufferedImage solution
     public void setDamage(GScene damPic)
     {
@@ -109,5 +114,13 @@ public class ConditionReport implements Serializable
     	return markupImage;
     }
 */    
+	public void setDamage (GWindow damPic)
+	{
+		markupImage = damPic;
+	}
+	public GWindow getDamage ()
+	{
+		return markupImage;
+	}
 	//TODO is there any use for a toString() for this class?
 }
