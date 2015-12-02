@@ -825,8 +825,7 @@ to search before any data is loaded into the program's data structure.*/
 						final JPanel panel = new JPanel();
 						JOptionPane.showMessageDialog(panel, "Error Executing Print Request", "Printer Error", JOptionPane.ERROR_MESSAGE);
 					}
-				}
-				
+				}	
 			}
 		}
 	}//end PrintFileListener
